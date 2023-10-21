@@ -1,3 +1,14 @@
+.DS_Store
+
+target/
+.idea
+*.iml
+*.iws
+
+.classpath
+.project
+.settings
+
 # Compiled class file
 *.class
 
