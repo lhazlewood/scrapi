@@ -120,21 +120,21 @@
 
     <modules>
         <module>api</module>
-<!--        <module>impl</module>-->
+        <!--        <module>impl</module>-->
     </modules>
 
     <dependencyManagement>
         <dependencies>
-<!--            <dependency>-->
-<!--                <groupId>scrapi</groupId>-->
-<!--                <artifactId>scrapi-api</artifactId>-->
-<!--                <version>${project.version}</version>-->
-<!--            </dependency>-->
-<!--            <dependency>-->
-<!--                <groupId>scrapi</groupId>-->
-<!--                <artifactId>scrapi-impl</artifactId>-->
-<!--                <version>${project.version}</version>-->
-<!--            </dependency>-->
+            <!--            <dependency>-->
+            <!--                <groupId>scrapi</groupId>-->
+            <!--                <artifactId>scrapi-api</artifactId>-->
+            <!--                <version>${project.version}</version>-->
+            <!--            </dependency>-->
+            <!--            <dependency>-->
+            <!--                <groupId>scrapi</groupId>-->
+            <!--                <artifactId>scrapi-impl</artifactId>-->
+            <!--                <version>${project.version}</version>-->
+            <!--            </dependency>-->
             <!-- Used only during testing for PS256, PS384 and PS512 since JDK <= 10 doesn't support them: -->
             <dependency>
                 <groupId>org.bouncycastle</groupId>
@@ -222,10 +222,9 @@
                         <licenseSets>
                             <licenseSet>
                                 <header>${scrapi.root}/src/license/header.txt</header>
-                                <excludes>
-                                    <exclude>**/license/header.txt</exclude>
-                                    <exclude>LICENSE</exclude>
-                                </excludes>
+                                <!--                                <excludes>-->
+                                <!--                                    <exclude>LICENSE</exclude>-->
+                                <!--                                </excludes>-->
                             </licenseSet>
                         </licenseSets>
                     </configuration>
@@ -273,7 +272,7 @@
                                 <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
                                 <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
                             </manifest>
-<!--                            <manifestFile>${project.build.outputDirectory}/META-INF/MANIFEST.MF</manifestFile>-->
+                            <!--                            <manifestFile>${project.build.outputDirectory}/META-INF/MANIFEST.MF</manifestFile>-->
                         </archive>
                     </configuration>
                 </plugin>
@@ -453,19 +452,17 @@
                 <surefire.argLine>${test.addOpens}, --illegal-access=debug</surefire.argLine>
             </properties>
             <build>
-                <pluginManagement>
-                    <plugins>
-                        <plugin>
-                            <groupId>org.apache.maven.plugins</groupId>
-                            <artifactId>maven-compiler-plugin</artifactId>
-                            <version>${maven.compiler.version}</version>
-                            <configuration>
-                                <release>${jdk.version}</release>
-                                <encoding>${project.build.sourceEncoding}</encoding>
-                            </configuration>
-                        </plugin>
-                    </plugins>
-                </pluginManagement>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-compiler-plugin</artifactId>
+                        <version>${maven.compiler.version}</version>
+                        <configuration>
+                            <release>${jdk.version}</release>
+                            <encoding>${project.build.sourceEncoding}</encoding>
+                        </configuration>
+                    </plugin>
+                </plugins>
             </build>
         </profile>
         <profile>
@@ -474,7 +471,7 @@
                 <jdk>[17,)</jdk>
             </activation>
             <properties>
-<!--                <maven.javadoc.additionalOptions>-html5</maven.javadoc.additionalOptions>-->
+                <!--                <maven.javadoc.additionalOptions>-html5</maven.javadoc.additionalOptions>-->
                 <surefire.argLine>${test.addOpens}</surefire.argLine>
             </properties>
         </profile>
