@@ -127,4 +127,4 @@ jobs:
 #      #        run: sleep 90s
 #      #        shell: bash
 #      - name: Code Coverage
-#        run: ${{env.MVN_CMD}} clover:setup test && ${{env.MVN_CMD}} -pl . clover:clover clover:check
+#        run: ${{env.MVN_CMD}} clover:setup test && ${{env.MVN_CMD}} -pl . clover:clover clover:check 
