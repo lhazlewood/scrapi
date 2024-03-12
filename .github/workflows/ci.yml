@@ -102,29 +102,29 @@ jobs:
         # This adds about 1 minute to any build, which is why we don't want to do it on every other build:
         run: ${{env.MVN_CMD}} license:check
 
-  code-coverage:
-    # (commented out for now - see the comments in 'Wait to start' below for why.  Keeping this here as a placeholder
-    # as it may be better to use instead of an artificial delay once we no longer need to build on JDK 7):
-    #needs: zulu # wait until others finish so a coverage failure doesn't cancel others accidentally
-    runs-on: 'ubuntu-latest'
-    steps:
-      - uses: actions/checkout@v3
-      - name: Set up JDK
-        uses: actions/setup-java@v3
-        with:
-          distribution: 'zulu'
-          java-version: '21'
-          cache: 'maven'
-          check-latest: true
-      #      - name: Wait to start
-      #        # wait a little to start: code coverage usually only takes about 1 1/2 minutes.  If coverage fails, it will
-      #        # cancel the other running builds, and we don't want that (because we want to see if jobs fail due to
-      #        # build issues, not due to the code-coverage job causing the others to cancel).  We could have used the
-      #        # 'need' property (commented out above), and that would wait until all the other jobs have finished before
-      #        # starting this one, but that introduces unnecessary (sometimes 2 1/2 minute) delay, whereas delaying the
-      #        # start of the code coverage checks a bit should allow everything to finish around the same time without having
-      #        # much of an adverse effect on the other jobs above.
-      #        run: sleep 90s
-      #        shell: bash
-      - name: Code Coverage
-        run: ${{env.MVN_CMD}} clover:setup test && ${{env.MVN_CMD}} -pl . clover:clover clover:check
+#  code-coverage:
+#    # (commented out for now - see the comments in 'Wait to start' below for why.  Keeping this here as a placeholder
+#    # as it may be better to use instead of an artificial delay once we no longer need to build on JDK 7):
+#    #needs: zulu # wait until others finish so a coverage failure doesn't cancel others accidentally
+#    runs-on: 'ubuntu-latest'
+#    steps:
+#      - uses: actions/checkout@v3
+#      - name: Set up JDK
+#        uses: actions/setup-java@v3
+#        with:
+#          distribution: 'zulu'
+#          java-version: '21'
+#          cache: 'maven'
+#          check-latest: true
+#      #      - name: Wait to start
+#      #        # wait a little to start: code coverage usually only takes about 1 1/2 minutes.  If coverage fails, it will
+#      #        # cancel the other running builds, and we don't want that (because we want to see if jobs fail due to
+#      #        # build issues, not due to the code-coverage job causing the others to cancel).  We could have used the
+#      #        # 'need' property (commented out above), and that would wait until all the other jobs have finished before
+#      #        # starting this one, but that introduces unnecessary (sometimes 2 1/2 minute) delay, whereas delaying the
+#      #        # start of the code coverage checks a bit should allow everything to finish around the same time without having
+#      #        # much of an adverse effect on the other jobs above.
+#      #        run: sleep 90s
+#      #        shell: bash
+#      - name: Code Coverage
+#        run: ${{env.MVN_CMD}} clover:setup test && ${{env.MVN_CMD}} -pl . clover:clover clover:check
