@@ -1,5 +1,5 @@
 /*
- * Copyright © 2023 Les Hazlewood
+ * Copyright © 2024 Les Hazlewood
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,18 +15,8 @@
  */
 package scrapi;
 
-/**
- * Supplies the length in bits (not bytes) of the implementing object.
- *
- * @since SCRAPI_RELEASE_VERSION
- */
 @FunctionalInterface
 public interface BitLength {
 
-    /**
-     * Returns the length in bits <em>(not bytes)</em> of the associated object.
-     *
-     * @return the length in bits <em>(not bytes)</em> of the associated object.
-     */
-    long getBitLength();
+    int bitLength();
 }

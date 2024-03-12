@@ -13,8 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package scrapi;
+package scrapi.key;
 
-public interface Curve {
+import scrapi.Destroyable;
 
+public interface PrivateKey<R extends java.security.PrivateKey, U extends PublicKey<?>> extends AsymmetricKey<R>, Destroyable {
+
+    U publicKey();
 }

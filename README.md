@@ -89,17 +89,92 @@ This project is experimental and still in initial design stages.  There are no r
 
 ## Design Tenets
 
+### Standard Taxonomy
+
+Cryptographic primitives have a standard taxonomy used by cryptographers and mathematicians around the world, and it's
+important to retain that taxonomy (and name Java classes) accurately so APIs are as intuitive (and 
+semantically correct) where possible.  The existing JCA diverges from this philosophy enough, and that often causes 
+problems and confusion for application developers.
+
+For example, `java.security.Signature` is _not_ actually a cryptographic signature. Instead, that class represents
+behaviors for an _algorithm_ implementation that can be used to produce or verify signatures.
+
+Similarly, `java.security.MessageDigest` is not actually a cryptographic digest.  It represents algorithm operations
+that eventually _produce_ an actual digest.
+
+Conversely, scrapi has `Algorithm` implementations that do produce actual `Digest` instances, and like good OO design,
+those `Digest` instances can be inspected and interacted with as the primitives they represent.
+
+### Polymorphism
+
+A sufficient number of JCA classes (such as `java.security.Signature`, `javax.crypto.Mac`, 
+`java.security.MessageDigest`) support base identical behaviors (consume some bytes, produce a result, or verify
+a previous result), but their APIs are completely different, they don't use the same (or parent) interface behaviors
+to ensure API consistency.  Similar divergences occur with , or `java.security.interfaces.XECKey` and
+`java.security.interfaces.EdECKey`, etc.
+
+An argument could be made that, by having different APIs that do the nearly identical things, the original JCA 
+designers purposefully prevented polymorphic use to ensure application developers cannot accidentally use one where 
+another should be used (which otherwise could weaken security).  Instead, scrapi favors 
+[SOLID design principles](https://en.wikipedia.org/wiki/SOLID), relying on 
+other forms of API usage assertions (e.g. throwing an exception if an API is used incorrectly).  This still affords 
+security while having a cleaner, easier to maintain and understand API that is more readable and usable for 
+developers of all experience levels.
+
+### Lifecycle API Separation
+
+In many JCA APIs, object instances have lifecycle management methods combined with usage methods.  Calling them out of
+order will always produce exceptions.  For example, using `javax.crypto.Mac`, this is possible at compile time:
+
+```java
+Mac mac = Mac.getInstance("HmacSHA256");
+mac.update(aByteArray);
+mac.init(aSecretKey);
+```
+but clearly this code would fail at runtime because a `Mac` instance must be initialized with a `SecretKey` first
+before data can be consumed for mac calculation.  Alternatively, an instance cannot be `init`ialized after data is
+consumed.
+
+Similarly, for a `java.security.Signature`:
+
+```java
+import java.security.Signature;
+
+Signature sig = Signature.getInstance("SHA256withRSA");
+sig.update(aByteArray);
+sig.initVerify(aPublicKey);
+sig.initSign(aPrivateKey);
+```
+
+Notice that signing and verification methods also exist on the same entity, when only one of the two may be used.
+
+Ideally, the two code examples above _should not even be possible_ because they are always wrong.
+
+Scrapi instead separates instance creation and initialization APIs from instance usage APIs.  Once an object is 
+created and initialized, its API can only support operations that are 'legal' after creation.
+
+For example, scrapi has a `SignatureAlgorithm` concept which can be configured, and that produces a `Signer` instance
+that can only be used to sign data, or a `Verifier` instance that can only be used to verify data.  It is not possible
+to compile code with invalid API usages.  For example:
+
+```java
+SignatureAlgorithm alg = Digests.RS256; // SHA256WithRSA
+Signer signer = alg.key(aPrivateKey); // 'signer' is fully initialized and can _only_ be used to sign data
+Verifier<?> verifier = alg.key(aPublicKey) // 'verifier' can _only_ be used to verify a data signature
+```
+
+
 ### Keys
 
 #### Encoding/Decoding
 
-Unlike `java.security.Key`, `scrapi.Key` instances do not have `getFormat()` or `getEncoded()` methods; formatting
+Unlike `java.security.Key`, `scrapi.key.Key` instances do not have `getFormat()` or `getEncoded()` methods; formatting
 and encoding/decoding key material is an orthogonal concern to key usage and such concepts should not be
 tightly coupled to a `Key` concept.
 
 Consequently, key encoders/decoders should exist to handle such concerns.
 
-Additionally, also unlike `java.security.Key`, `scrapi.Key` instances should not extend `java.io.Serializable`, which 
+Additionally, also unlike `java.security.Key`, `scrapi.key.Key` instances should not extend `java.io.Serializable`, which 
 imposes an often-unnecessary implementation burden that many (most?) applications never need as long as the 
 aforementioned Key encoders/decoders exist.  PEM, DER, and JWK formats are better serialization mechanisms as they are 
 IANA/IETF global standards and not Java-specific.  Custom (even Java-specific) serializations can be implemented with 
@@ -141,7 +216,7 @@ Additionally, even if a key's encoded bytes are not available (e.g. external in 
 to supply length metadata even without supplying the key material/encoded bytes, but `java.security.Key` and its
 sub-interfaces do not support such introspection.
 
-Consequently all `scrapi.Key` instances extend `scrapi.BitLength` (providing a `getBitLength()` method) to ensure key 
+Consequently, all `scrapi.key.Key` instances have a `Optional<Integer> bitLength()` method to ensure key 
 size can be represented if possible, even if they key material may not be present.
 
 #### Public Key derivation

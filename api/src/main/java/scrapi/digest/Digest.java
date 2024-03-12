@@ -13,8 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package scrapi;
+package scrapi.digest;
 
-public interface Curve {
+import scrapi.BitLength;
 
+import java.util.function.Supplier;
+
+public interface Digest<A extends DigestAlgorithm<A>> extends Supplier<byte[]>, BitLength {
+
+    A algorithm();
 }

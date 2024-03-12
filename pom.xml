@@ -119,23 +119,34 @@
     </properties>
 
     <modules>
+        <module>lang</module>
         <module>api</module>
-        <!--        <module>impl</module>-->
+        <module>util</module>
+        <module>impl</module>
     </modules>
 
     <dependencyManagement>
         <dependencies>
-            <!--            <dependency>-->
-            <!--                <groupId>scrapi</groupId>-->
-            <!--                <artifactId>scrapi-api</artifactId>-->
-            <!--                <version>${project.version}</version>-->
-            <!--            </dependency>-->
-            <!--            <dependency>-->
-            <!--                <groupId>scrapi</groupId>-->
-            <!--                <artifactId>scrapi-impl</artifactId>-->
-            <!--                <version>${project.version}</version>-->
-            <!--            </dependency>-->
-            <!-- Used only during testing for PS256, PS384 and PS512 since JDK <= 10 doesn't support them: -->
+            <dependency>
+                <groupId>scrapi</groupId>
+                <artifactId>scrapi-lang</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>scrapi</groupId>
+                <artifactId>scrapi-util</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>scrapi</groupId>
+                <artifactId>scrapi-api</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>scrapi</groupId>
+                <artifactId>scrapi-impl</artifactId>
+                <version>${project.version}</version>
+            </dependency>
             <dependency>
                 <groupId>org.bouncycastle</groupId>
                 <artifactId>bcprov-jdk18on</artifactId>

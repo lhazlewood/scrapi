@@ -25,8 +25,8 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>scrapi-api</artifactId>
-    <name>SCRAPI :: API</name>
+    <artifactId>scrapi-util</artifactId>
+    <name>SCRAPI :: Util</name>
     <packaging>jar</packaging>
 
     <properties>
@@ -37,10 +37,6 @@
         <dependency>
             <groupId>scrapi</groupId>
             <artifactId>scrapi-lang</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>scrapi</groupId>
-            <artifactId>scrapi-util</artifactId>
         </dependency>
     </dependencies>
 

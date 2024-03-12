@@ -29,14 +29,14 @@ public interface Pair<A, B> {
      *
      * @return the first element in the pair.
      */
-    A getA();
+    A a();
 
     /**
      * Returns the second element in the pair.
      *
      * @return the second element in the pair.
      */
-    B getB();
+    B b();
 
     /**
      * Creates and returns a new {@code Pair} instance with the specified {@code a} and {@code b} values.

@@ -15,6 +15,8 @@
  */
 package scrapi;
 
-public interface Curve {
+import scrapi.jca.Providable;
+import scrapi.lang.Identifiable;
 
+public interface Algorithm<A extends Algorithm<A>> extends Identifiable<String>, Providable<A> {
 }

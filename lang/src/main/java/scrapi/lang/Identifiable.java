@@ -1,5 +1,5 @@
 /*
- * Copyright © 2024 Les Hazlewood
+ * Copyright © 2023 Les Hazlewood
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,8 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package scrapi;
+package scrapi.lang;
 
-public interface Curve {
+/**
+ * An object that may be uniquely identified by an {@link #id() id} relative to other instances of the same type.
+ *
+ * @since SCRAPI_RELEASE_VERSION
+ */
+@FunctionalInterface
+public interface Identifiable<T> {
 
+    /**
+     * Returns the unique identifier of the associated object.
+     *
+     * @return the unique identifier of the associated object.
+     */
+    T id();
 }

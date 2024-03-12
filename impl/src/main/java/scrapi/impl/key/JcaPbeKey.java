@@ -13,8 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package scrapi;
+package scrapi.impl.key;
 
-public interface Curve {
+import scrapi.key.PbeKey;
 
+import javax.crypto.interfaces.PBEKey;
+
+public class JcaPbeKey extends AbstractSymmetricKey<PBEKey> implements PbeKey {
+
+    public JcaPbeKey(PBEKey key) {
+        super(key);
+    }
+
+    @Override
+    public char[] password() {
+        return this.key.getPassword();
+    }
+
+    @Override
+    public byte[] salt() {
+        return this.key.getSalt();
+    }
+
+    @Override
+    public int iterations() {
+        return this.key.getIterationCount();
+    }
 }

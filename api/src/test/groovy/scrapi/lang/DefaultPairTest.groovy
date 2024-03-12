@@ -49,8 +49,8 @@ class DefaultPairTest {
 
     @Test
     void newInstance() {
-        assertEquals 'a', pair.getA()
-        assertEquals 'b', pair.getB()
+        assertEquals 'a', pair.a()
+        assertEquals 'b', pair.b()
     }
 
     @Test

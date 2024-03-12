@@ -25,8 +25,8 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>scrapi-api</artifactId>
-    <name>SCRAPI :: API</name>
+    <artifactId>scrapi-impl</artifactId>
+    <name>SCRAPI :: Impl</name>
     <packaging>jar</packaging>
 
     <properties>
@@ -41,6 +41,15 @@
         <dependency>
             <groupId>scrapi</groupId>
             <artifactId>scrapi-util</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>scrapi</groupId>
+            <artifactId>scrapi-api</artifactId>
+        </dependency>
+        <!-- Test dependencies: -->
+        <dependency>
+            <groupId>org.bouncycastle</groupId>
+            <artifactId>bcprov-jdk18on</artifactId>
         </dependency>
     </dependencies>
 

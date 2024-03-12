@@ -13,8 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package scrapi;
+package scrapi.digest;
 
-public interface Curve {
+import scrapi.key.KeyBuilder;
+import scrapi.key.KeyBuilderSupplier;
+import scrapi.key.Keyed;
+import scrapi.key.SecretKey;
 
+public interface MacAlgorithm<K extends SecretKey<?>, KB extends KeyBuilder<K, KB>>
+        extends DigestAlgorithm<MacAlgorithm<K, KB>>, Keyed<K, Hasher>, KeyBuilderSupplier<K, KB> {
 }

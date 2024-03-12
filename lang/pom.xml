@@ -25,23 +25,12 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>scrapi-api</artifactId>
-    <name>SCRAPI :: API</name>
+    <artifactId>scrapi-lang</artifactId>
+    <name>SCRAPI :: Lang</name>
     <packaging>jar</packaging>
 
     <properties>
         <scrapi.root>${basedir}/..</scrapi.root>
     </properties>
-
-    <dependencies>
-        <dependency>
-            <groupId>scrapi</groupId>
-            <artifactId>scrapi-lang</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>scrapi</groupId>
-            <artifactId>scrapi-util</artifactId>
-        </dependency>
-    </dependencies>
 
 </project>

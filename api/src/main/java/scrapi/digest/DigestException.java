@@ -13,8 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package scrapi;
+package scrapi.digest;
 
-public interface Curve {
+import scrapi.SecurityException;
 
+public class DigestException extends SecurityException {
+
+    public DigestException(String message, Throwable t) {
+        super(message, t);
+    }
 }

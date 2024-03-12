@@ -13,8 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package scrapi;
+package scrapi.key;
 
-public interface Curve {
+import java.util.Optional;
 
+public interface Key<T extends java.security.Key> {
+
+    Optional<Integer> bitLength();
+
+    T toJcaKey();
 }

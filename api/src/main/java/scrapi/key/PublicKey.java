@@ -1,5 +1,5 @@
 /*
- * Copyright © 2023 Les Hazlewood
+ * Copyright © 2024 Les Hazlewood
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package scrapi;
+package scrapi.key;
 
-public interface Key extends BitLength {
+public interface PublicKey<T extends java.security.PublicKey> extends AsymmetricKey<T> {
 }

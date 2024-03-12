@@ -13,8 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package scrapi;
+package scrapi.key;
 
-public interface Curve {
+public interface AsymmetricKey<T extends java.security.Key> extends Key<T> {
 
 }

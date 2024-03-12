@@ -13,8 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package scrapi;
+package scrapi.key;
 
-public interface Curve {
+import javax.crypto.interfaces.PBEKey;
 
+public interface PbeKey extends SecretKey<PBEKey> {
+
+    char[] password();
+
+    byte[] salt();
+
+    int iterations();
+
+    interface Builder extends KeyBuilder<PbeKey, Builder> {
+        Builder password(char[] password);
+
+        Builder salt(byte[] salt);
+
+        Builder iterations(int iterations);
+    }
 }

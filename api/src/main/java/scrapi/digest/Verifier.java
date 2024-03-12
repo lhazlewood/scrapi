@@ -1,5 +1,5 @@
 /*
- * Copyright © 2023 Les Hazlewood
+ * Copyright © 2024 Les Hazlewood
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,20 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package scrapi;
+package scrapi.digest;
 
-/**
- * An object that may be uniquely identified by an {@link #getId() id} relative to other instances of the same type.
- *
- * @since SCRAPI_RELEASE_VERSION
- */
-@FunctionalInterface
-public interface Identifiable {
+import scrapi.DataConsumer;
 
-    /**
-     * Returns the unique string identifier of the associated object.
-     *
-     * @return the unique string identifier of the associated object.
-     */
-    String getId();
+import java.util.function.Predicate;
+
+public interface Verifier<T extends Verifier<T>> extends DataConsumer<T>, Predicate<byte[]> {
+
 }

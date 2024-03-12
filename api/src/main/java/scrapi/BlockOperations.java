@@ -15,6 +15,18 @@
  */
 package scrapi;
 
-public interface Curve {
+import java.nio.ByteBuffer;
+import java.util.function.Function;
 
+public interface BlockOperations extends Function<byte[], byte[]> {
+
+    byte[] apply(byte[] input);
+
+    byte[] apply(byte[] input, int inputOffset, int inputLen);
+
+    int apply(byte[] input, int inputOffset, int inputLen, byte[] output);
+
+    int apply(byte[] input, int inputOffset, int inputLen, byte[] output, int outputOffset);
+
+    int apply(ByteBuffer input, ByteBuffer output);
 }

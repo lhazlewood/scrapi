@@ -17,7 +17,14 @@ package scrapi.lang;
 
 import java.util.Objects;
 
-class DefaultPair<A, B> implements Pair<A, B> {
+/**
+ * Default {@link Pair} implementation.
+ *
+ * @param <A> type of the pair's first element.
+ * @param <B> type of the pair's second element.
+ * @since SCRAPI_RELEASE_VERSION
+ */
+final class DefaultPair<A, B> implements Pair<A, B> {
 
     private final A a;
     private final B b;
@@ -28,12 +35,12 @@ class DefaultPair<A, B> implements Pair<A, B> {
     }
 
     @Override
-    public A getA() {
+    public A a() {
         return this.a;
     }
 
     @Override
-    public B getB() {
+    public B b() {
         return this.b;
     }
 
@@ -49,7 +56,7 @@ class DefaultPair<A, B> implements Pair<A, B> {
         }
         if (obj instanceof Pair) {
             Pair<?, ?> other = (Pair<?, ?>) obj;
-            return this.a.equals(other.getA()) && this.b.equals(other.getB());
+            return this.a.equals(other.a()) && this.b.equals(other.b());
         }
         return false;
     }

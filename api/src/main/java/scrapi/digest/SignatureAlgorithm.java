@@ -13,8 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package scrapi;
+package scrapi.digest;
 
-public interface Curve {
+import scrapi.jca.Randomizable;
+import scrapi.key.PrivateKey;
+import scrapi.key.PublicKey;
 
+public interface SignatureAlgorithm<U extends PublicKey<?>, R extends PrivateKey<?, U>>
+        extends DigestAlgorithm<SignatureAlgorithm<U, R>>, Randomizable<SignatureAlgorithm<U, R>> {
+
+    Digester<?> key(R privateKey);
+
+    Verifier<?> key(U publicKey);
 }

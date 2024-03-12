@@ -13,8 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package scrapi;
+package scrapi.impl.lang;
 
-public interface Curve {
-
+public abstract class AbstractChainable<T extends AbstractChainable<T>> {
+    @SuppressWarnings("unchecked")
+    protected final T self() {
+        return (T) this;
+    }
 }

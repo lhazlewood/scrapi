@@ -13,8 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package scrapi;
+package scrapi.impl.lang;
 
-public interface Curve {
+import scrapi.lang.Identifiable;
 
+import java.util.Collection;
+
+public class IdentifiableRegistry<K, V extends Identifiable<K>> extends DefaultRegistry<K, V> {
+
+    public IdentifiableRegistry(String name, Collection<? extends V> values) {
+        super(name, "id", values, Identifiable::id);
+    }
 }
