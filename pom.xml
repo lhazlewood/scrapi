@@ -87,16 +87,16 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <arguments/>
 
-        <maven.compiler.version>3.11.0</maven.compiler.version>
-        <maven.failsafe.version>3.1.2</maven.failsafe.version>
-        <maven.gpg.version>3.1.0</maven.gpg.version>
+        <maven.compiler.version>3.12.1</maven.compiler.version>
+        <maven.failsafe.version>3.2.5</maven.failsafe.version>
+        <maven.gpg.version>3.2.0</maven.gpg.version>
         <maven.jar.version>3.3.0</maven.jar.version>
-        <maven.javadoc.version>3.6.0</maven.javadoc.version>
+        <maven.javadoc.version>3.6.3</maven.javadoc.version>
         <maven.javadoc.additionalOptions/>
 
         <maven.resources.version>3.3.1</maven.resources.version>
         <maven.source.version>3.3.0</maven.source.version>
-        <maven.surefire.version>3.1.2</maven.surefire.version>
+        <maven.surefire.version>3.2.5</maven.surefire.version>
         <groovy.version>4.0.15</groovy.version>
         <gmavenplus.version>3.0.2</gmavenplus.version>
         <maven.license.version>4.2.rc3</maven.license.version>
@@ -283,7 +283,7 @@
                                 <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
                                 <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
                             </manifest>
-                            <!--                            <manifestFile>${project.build.outputDirectory}/META-INF/MANIFEST.MF</manifestFile>-->
+                            <!-- <manifestFile>${project.build.outputDirectory}/META-INF/MANIFEST.MF</manifestFile>-->
                         </archive>
                     </configuration>
                 </plugin>
@@ -310,10 +310,36 @@
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>${maven.compiler.version}</version>
                     <configuration>
-                        <source>${jdk.version}</source>
-                        <target>${jdk.version}</target>
                         <encoding>${project.build.sourceEncoding}</encoding>
                     </configuration>
+                    <executions>
+                        <execution>
+                            <id>default-compile</id>
+                            <phase>compile</phase>
+                            <goals>
+                                <goal>compile</goal>
+                            </goals>
+                            <configuration>
+                                <compilerArgs>
+                                    <arg>-Xlint:all</arg>
+                                    <arg>-Xlint:-options</arg> <!-- JDK 8 target -->
+                                </compilerArgs>
+                            </configuration>
+                        </execution>
+                        <execution>
+                            <id>default-testCompile</id>
+                            <phase>test-compile</phase>
+                            <goals>
+                                <goal>testCompile</goal>
+                            </goals>
+                            <configuration>
+                                <compilerArgs>
+                                    <arg>-Xlint:-options</arg> <!-- JDK 8 target -->
+                                    <arg>-Xlint:-rawtypes</arg> <!-- Groovy tests often don't need qualified types -->
+                                </compilerArgs>
+                            </configuration>
+                        </execution>
+                    </executions>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -452,29 +478,25 @@
     </build>
     <profiles>
         <profile>
-            <!-- Added profile to address https://github.com/jwtk/scrapi/issues/364 -->
-            <id>jdk9AndLater</id>
+            <id>jdk8</id>
             <activation>
-                <jdk>[1.9,)</jdk>
+                <jdk>1.8</jdk>
             </activation>
             <properties>
-                <jdk.version>8</jdk.version>
+                <maven.compiler.source>${jdk.version}</maven.compiler.source>
+                <maven.compiler.target>${jdk.version}</maven.compiler.target>
+            </properties>
+        </profile>
+        <profile>
+            <id>jdk9AndLater</id>
+            <activation>
+                <jdk>[9,)</jdk>
+            </activation>
+            <properties>
                 <maven.javadoc.additionalOptions>-html5</maven.javadoc.additionalOptions>
                 <surefire.argLine>${test.addOpens}, --illegal-access=debug</surefire.argLine>
+                <maven.compiler.release>${jdk.version}</maven.compiler.release>
             </properties>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-compiler-plugin</artifactId>
-                        <version>${maven.compiler.version}</version>
-                        <configuration>
-                            <release>${jdk.version}</release>
-                            <encoding>${project.build.sourceEncoding}</encoding>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
         </profile>
         <profile>
             <id>jdk17AndLater</id>
@@ -482,7 +504,6 @@
                 <jdk>[17,)</jdk>
             </activation>
             <properties>
-                <!--                <maven.javadoc.additionalOptions>-html5</maven.javadoc.additionalOptions>-->
                 <surefire.argLine>${test.addOpens}</surefire.argLine>
             </properties>
         </profile>

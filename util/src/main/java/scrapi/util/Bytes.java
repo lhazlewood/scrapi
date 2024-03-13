@@ -205,7 +205,7 @@ public final class Bytes {
      *     <code>Base64urlUInt</code> definition</li>
      *     <li>Elliptic Curve <code>Integer-to-OctetString</code> conversion defined by Section 2.3.7 of the
      *     <a href="http://www.secg.org/sec1-v2.pdf">Standards for Efficient Cryptography Group,
-     *     &qupt;SEC 1: Elliptic Curve Cryptography&quot; Version 2.0, May 2009</a> (as required by
+     *     &quot;SEC 1: Elliptic Curve Cryptography&quot; Version 2.0, May 2009</a> (as required by
      *     <a href="https://www.rfc-editor.org/rfc/rfc7518.html#section-3.4">RFC 7518, Section 3.4</a>)</li>
      *     <li>and others.</li>
      * </ul>
