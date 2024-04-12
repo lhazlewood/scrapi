@@ -26,6 +26,7 @@ public interface PbeKey extends SecretKey<PBEKey> {
     int iterations();
 
     interface Builder extends KeyBuilder<PbeKey, Builder> {
+
         Builder password(char[] password);
 
         Builder salt(byte[] salt);

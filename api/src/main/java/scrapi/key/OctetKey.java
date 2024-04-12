@@ -15,10 +15,21 @@
  */
 package scrapi.key;
 
+/**
+ * An {@code OctetKey} is a {@code SecretKey} where the key material is a single byte array value.
+ */
 public interface OctetKey extends SecretKey<javax.crypto.SecretKey> {
+
+    //TODO: Ed448 and ED25519 keys can be considered 'octet' keys as well, even though they are public and private keys
+    // perhaps we should change OctetKey to be an interface that extends from Key?
+    // And then this interface would be renamed to OctetSecretKey?
+    // Hrm - but the Ed448 and Ed25519 PublicKeys would have 'x' properties, not 'octets' correct?
+    // and Ed448 and Ed25519 PrivateKeys would have 'd' properties and not 'octets'?
 
     byte[] octets();
 
     interface Builder extends KeyBuilder<OctetKey, Builder> {
+
+        Builder octets(byte[] octets);
     }
 }
