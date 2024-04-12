@@ -17,6 +17,8 @@ package scrapi.key;
 
 /**
  * An {@code OctetKey} is a {@code SecretKey} where the key material is a single byte array value.
+ *
+ * @since 0.1
  */
 public interface OctetKey extends SecretKey<javax.crypto.SecretKey> {
 
