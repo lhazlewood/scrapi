@@ -15,13 +15,16 @@
  */
 package scrapi.impl.jca;
 
-import scrapi.jca.SecurityBuilder;
+import scrapi.jca.Providable;
+import scrapi.jca.Randomizable;
+import scrapi.lang.Builder;
 import scrapi.util.Assert;
 
 import java.security.Provider;
 import java.security.SecureRandom;
 
-public abstract class AbstractSecurityBuilder<T, B extends SecurityBuilder<T, B>> implements SecurityBuilder<T, B> {
+public abstract class AbstractSecurityBuilder<T, B extends Providable<B> & Randomizable<B> & Builder<T>>
+        implements Providable<B>, Randomizable<B>, Builder<T> {
 
     protected final String jcaName;
 

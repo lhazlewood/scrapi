@@ -15,7 +15,9 @@
  */
 package scrapi.key;
 
-import scrapi.jca.SecurityBuilder;
+import scrapi.jca.Providable;
+import scrapi.jca.Randomizable;
+import scrapi.lang.Builder;
 
 /**
  * A {@code KeyBuilder} produces {@link Key}s suitable for use with an associated cryptographic algorithm.
@@ -27,5 +29,5 @@ import scrapi.jca.SecurityBuilder;
  * @param <B> the type of the builder, for subtype method chaining
  * @see KeyBuilderSupplier
  */
-public interface KeyBuilder<K extends Key<?>, B extends KeyBuilder<K, B>> extends SecurityBuilder<K, B> {
+public interface KeyBuilder<K extends Key<?>, B extends KeyBuilder<K, B>> extends Providable<B>, Randomizable<B>, Builder<K> {
 }
