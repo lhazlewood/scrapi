@@ -80,6 +80,7 @@ public final class Collections {
      * @return a type-safe immutable {@code List} containing the specified array elements.
      */
     @SafeVarargs
+    @SuppressWarnings("varargs")
     public static <T> List<T> of(T... elements) {
         if (elements == null || elements.length == 0) {
             return java.util.Collections.emptyList();
@@ -113,6 +114,7 @@ public final class Collections {
      * @return a type-safe immutable {@code Set} containing the specified array elements.
      */
     @SafeVarargs
+    @SuppressWarnings("varargs")
     public static <T> Set<T> setOf(T... elements) {
         if (elements == null || elements.length == 0) {
             return java.util.Collections.emptySet();
@@ -270,6 +272,7 @@ public final class Collections {
      * @return a new {@link LinkedHashSet} with the array elements appended to the end of the original set.
      */
     @SafeVarargs
+    @SuppressWarnings("varargs")
     public static <T> Set<T> concat(Set<T> c, T... elements) {
         int size = Math.max(1, Collections.size(c) + length(elements));
         Set<T> set = new LinkedHashSet<>(size);

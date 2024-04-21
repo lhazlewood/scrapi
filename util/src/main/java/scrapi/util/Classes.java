@@ -232,7 +232,7 @@ public final class Classes {
      * @return the newly created object
      */
     public static <T> T newInstance(Class<T> clazz, Object... args) {
-        Class<?>[] argTypes = new Class[args.length];
+        Class<?>[] argTypes = new Class<?>[args.length];
         for (int i = 0; i < args.length; i++) {
             argTypes[i] = args[i].getClass();
         }

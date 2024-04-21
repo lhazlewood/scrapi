@@ -15,6 +15,12 @@
  */
 package scrapi.key;
 
+/**
+ * An object that accepts configuration or specification of a {@link Key}.
+ *
+ * @param <K> the type of key accepted.
+ * @param <T> the type of object returned after accepting the key.
+ */
 @FunctionalInterface
 public interface Keyed<K extends Key<?>, T> {
 

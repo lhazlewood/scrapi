@@ -21,6 +21,8 @@ package scrapi.util;
  */
 public class UnknownClassException extends RuntimeException {
 
+    private static final long serialVersionUID = -1508402204679389519L;
+
     /**
      * Constructs a new UnknownClassException.
      *

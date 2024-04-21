@@ -23,6 +23,8 @@ package scrapi;
  */
 public class ScrapiException extends RuntimeException {
 
+    private static final long serialVersionUID = -622057854047656904L;
+
     /**
      * Creates a new instance with the specified explanation message.
      *

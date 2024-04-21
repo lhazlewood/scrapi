@@ -22,6 +22,8 @@ import scrapi.SecurityException;
  */
 public class KeyException extends SecurityException {
 
+    private static final long serialVersionUID = 5292618870619965505L;
+
     /**
      * Creates a new instance with the specified explanation message.
      *

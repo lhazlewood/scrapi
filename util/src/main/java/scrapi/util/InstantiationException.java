@@ -20,6 +20,8 @@ package scrapi.util;
  */
 public class InstantiationException extends RuntimeException {
 
+    private static final long serialVersionUID = 8670071925164527896L;
+
     /**
      * Creates a new instance with the specified explanation message and underlying cause.
      *

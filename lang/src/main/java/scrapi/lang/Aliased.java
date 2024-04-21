@@ -13,15 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package scrapi.digest;
+package scrapi.lang;
 
-import scrapi.SecurityException;
+import java.util.Set;
 
-public class DigestException extends SecurityException {
+/**
+ * An {@link Identifiable} instance that has additional aliases in addition to its primary {@link #id() id}.
+ *
+ * @param <T> the type of id and aliases
+ * @since SCRAPI_RELEASE_VERSION
+ */
+public interface Aliased<T> extends Identifiable<T> {
 
-    private static final long serialVersionUID = 3151558165317465591L;
-
-    public DigestException(String message, Throwable t) {
-        super(message, t);
-    }
+    /**
+     * Returns the aliases that identify this instance in addition to its primary {@link #id() id}.
+     *
+     * @return the aliases that identify this instance in addition to its primary {@link #id() id}.
+     */
+    Set<T> aliases();
 }

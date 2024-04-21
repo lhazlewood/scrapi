@@ -21,6 +21,8 @@ import scrapi.util.Assert;
 import scrapi.util.Bytes;
 
 import java.security.MessageDigest;
+import java.util.Arrays;
+import java.util.Objects;
 
 final class DefaultDigest<A extends DigestAlgorithm<A>> implements Digest<A> {
 
@@ -57,5 +59,10 @@ final class DefaultDigest<A extends DigestAlgorithm<A>> implements Digest<A> {
                     MessageDigest.isEqual(this.digest, digest.get());
         }
         return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(algorithm, Arrays.hashCode(digest));
     }
 }
