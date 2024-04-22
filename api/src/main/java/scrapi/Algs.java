@@ -17,6 +17,8 @@ package scrapi;
 
 import scrapi.digest.HashAlgorithm;
 import scrapi.digest.MacAlgorithm;
+import scrapi.digest.RsaSignatureAlgorithm;
+import scrapi.digest.SignatureAlgorithm;
 import scrapi.key.OctetKey;
 import scrapi.key.PbeKey;
 import scrapi.lang.Registry;
@@ -108,21 +110,91 @@ public final class Algs {
         public static final MacAlgorithm<OctetKey, OctetKey.Builder> HS3_384 = Algs.get(get(), "HmacSHA3-384");
         public static final MacAlgorithm<OctetKey, OctetKey.Builder> HS3_512 = Algs.get(get(), "HmacSHA3-512");
 
-        private static final MacAlgorithm<PbeKey, PbeKey.Builder> PBEHS1 = Algs.get(get(), "PBEWithHmacSHA1");
-        private static final MacAlgorithm<PbeKey, PbeKey.Builder> PBEHS224 = Algs.get(get(), "PBEWithHmacSHA224");
-        private static final MacAlgorithm<PbeKey, PbeKey.Builder> PBEHS256 = Algs.get(get(), "PBEWithHmacSHA256");
-        private static final MacAlgorithm<PbeKey, PbeKey.Builder> PBEHS384 = Algs.get(get(), "PBEWithHmacSHA384");
-        private static final MacAlgorithm<PbeKey, PbeKey.Builder> PBEHS512 = Algs.get(get(), "PBEWithHmacSHA512");
-        private static final MacAlgorithm<PbeKey, PbeKey.Builder> PBEHS512_224 = Algs.get(get(), "PBEWithHmacSHA512/224");
-        private static final MacAlgorithm<PbeKey, PbeKey.Builder> PBEHS512_256 = Algs.get(get(), "PBEWithHmacSHA512/256");
+        public static final MacAlgorithm<PbeKey, PbeKey.Builder> PBEHS1 = Algs.get(get(), "PBEWithHmacSHA1");
+        public static final MacAlgorithm<PbeKey, PbeKey.Builder> PBEHS224 = Algs.get(get(), "PBEWithHmacSHA224");
+        public static final MacAlgorithm<PbeKey, PbeKey.Builder> PBEHS256 = Algs.get(get(), "PBEWithHmacSHA256");
+        public static final MacAlgorithm<PbeKey, PbeKey.Builder> PBEHS384 = Algs.get(get(), "PBEWithHmacSHA384");
+        public static final MacAlgorithm<PbeKey, PbeKey.Builder> PBEHS512 = Algs.get(get(), "PBEWithHmacSHA512");
+        public static final MacAlgorithm<PbeKey, PbeKey.Builder> PBEHS512_224 = Algs.get(get(), "PBEWithHmacSHA512/224");
+        public static final MacAlgorithm<PbeKey, PbeKey.Builder> PBEHS512_256 = Algs.get(get(), "PBEWithHmacSHA512/256");
 
-        private static final MacAlgorithm<PbeKey, PbeKey.Builder> PKCS12HS1 = Algs.get(get(), "HmacPBESHA1");
-        private static final MacAlgorithm<PbeKey, PbeKey.Builder> PKCS12HS224 = Algs.get(get(), "HmacPBESHA224");
-        private static final MacAlgorithm<PbeKey, PbeKey.Builder> PKCS12HS256 = Algs.get(get(), "HmacPBESHA256");
-        private static final MacAlgorithm<PbeKey, PbeKey.Builder> PKCS12HS384 = Algs.get(get(), "HmacPBESHA384");
-        private static final MacAlgorithm<PbeKey, PbeKey.Builder> PKCS12HS512 = Algs.get(get(), "HmacPBESHA512");
-        private static final MacAlgorithm<PbeKey, PbeKey.Builder> PKCS12HS512_224 = Algs.get(get(), "HmacPBESHA512/224");
-        private static final MacAlgorithm<PbeKey, PbeKey.Builder> PKCS12HS512_256 = Algs.get(get(), "HmacPBESHA512/256");
+        /*
+         * Per <a href="https://datatracker.ietf.org/doc/html/rfc7292#appendix-B">RFC 7292, Appendix B</a>, the
+         * following HmacPBE* algorithms are deprecated and should not be used in new code:
+         * <blockquote><pre>
+         *    Note that this method for password privacy mode is not recommended
+         *    and is deprecated for new usage.  The procedures and algorithms
+         *    defined in PKCS #5 v2.1 should be used instead.
+         *    Specifically, PBES2 should be used as encryption scheme, with PBKDF2
+         *    as the key derivation function.
+         *
+         *    The method presented here is still used to generate the key in
+         *    password integrity mode.
+         * </pre></blockquote>
+         */
+
+        @SuppressWarnings("DeprecatedIsStillUsed")
+        @Deprecated // per https://datatracker.ietf.org/doc/html/rfc7292#appendix-B
+        public static final MacAlgorithm<PbeKey, PbeKey.Builder> PKCS12HS1 = Algs.get(get(), "HmacPBESHA1");
+
+        @SuppressWarnings("DeprecatedIsStillUsed")
+        @Deprecated // per https://datatracker.ietf.org/doc/html/rfc7292#appendix-B
+        public static final MacAlgorithm<PbeKey, PbeKey.Builder> PKCS12HS224 = Algs.get(get(), "HmacPBESHA224");
+
+        @SuppressWarnings("DeprecatedIsStillUsed")
+        @Deprecated // per https://datatracker.ietf.org/doc/html/rfc7292#appendix-B
+        public static final MacAlgorithm<PbeKey, PbeKey.Builder> PKCS12HS256 = Algs.get(get(), "HmacPBESHA256");
+
+        @SuppressWarnings("DeprecatedIsStillUsed")
+        @Deprecated // per https://datatracker.ietf.org/doc/html/rfc7292#appendix-B
+        public static final MacAlgorithm<PbeKey, PbeKey.Builder> PKCS12HS384 = Algs.get(get(), "HmacPBESHA384");
+
+        @SuppressWarnings("DeprecatedIsStillUsed")
+        @Deprecated // per https://datatracker.ietf.org/doc/html/rfc7292#appendix-B
+        public static final MacAlgorithm<PbeKey, PbeKey.Builder> PKCS12HS512 = Algs.get(get(), "HmacPBESHA512");
+
+        @SuppressWarnings("DeprecatedIsStillUsed")
+        @Deprecated // per https://datatracker.ietf.org/doc/html/rfc7292#appendix-B
+        public static final MacAlgorithm<PbeKey, PbeKey.Builder> PKCS12HS512_224 = Algs.get(get(), "HmacPBESHA512/224");
+
+        @SuppressWarnings("DeprecatedIsStillUsed")
+        @Deprecated // per https://datatracker.ietf.org/doc/html/rfc7292#appendix-B
+        public static final MacAlgorithm<PbeKey, PbeKey.Builder> PKCS12HS512_256 = Algs.get(get(), "HmacPBESHA512/256");
+    }
+
+    public static final class Sig {
+
+        //prevent instantiation
+        private Sig() {
+        }
+
+        private static final String IMPL_CLASSNAME = "scrapi.impl.digest.StandardSignatureAlgorithms";
+        private static final Registry<String, SignatureAlgorithm<?, ?, ?>> REGISTRY = Classes.newInstance(IMPL_CLASSNAME);
+
+        /**
+         * Returns a registry of all
+         * <a href="https://docs.oracle.com/en/java/javase/21/docs/specs/security/standard-names.html#messagedigest-algorithms">Java
+         * Standard Hash (aka Message Digest) Algorithms</a>.
+         *
+         * @return a registry of all
+         * <a href="https://docs.oracle.com/en/java/javase/21/docs/specs/security/standard-names.html#messagedigest-algorithms">Java
+         * Standard Hash (aka Message Digest) Algorithms</a>.
+         */
+        public static Registry<String, SignatureAlgorithm<?, ?, ?>> get() {
+            return REGISTRY;
+        }
+
+        public static final RsaSignatureAlgorithm RS1 = Algs.get(get(), "SHA1withRSA");
+        public static final RsaSignatureAlgorithm RS224 = Algs.get(get(), "SHA224withRSA");
+        public static final RsaSignatureAlgorithm RS256 = Algs.get(get(), "SHA256withRSA");
+        public static final RsaSignatureAlgorithm RS384 = Algs.get(get(), "SHA384withRSA");
+        public static final RsaSignatureAlgorithm RS512 = Algs.get(get(), "SHA512withRSA");
+        public static final RsaSignatureAlgorithm RS512_224 = Algs.get(get(), "SHA512/224withRSA");
+        public static final RsaSignatureAlgorithm RS512_256 = Algs.get(get(), "SHA512/256withRSA");
+        public static final RsaSignatureAlgorithm RS3_224 = Algs.get(get(), "SHA3-224withRSA");
+        public static final RsaSignatureAlgorithm RS3_256 = Algs.get(get(), "SHA3-256withRSA");
+        public static final RsaSignatureAlgorithm RS3_384 = Algs.get(get(), "SHA3-384withRSA");
+        public static final RsaSignatureAlgorithm RS3_512 = Algs.get(get(), "SHA3-512withRSA");
 
     }
 }

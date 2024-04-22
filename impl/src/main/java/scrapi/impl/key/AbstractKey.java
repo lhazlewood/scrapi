@@ -80,7 +80,7 @@ abstract class AbstractKey<K extends java.security.Key> implements Key<K> {
                 SUNPKCS11_GENERIC_SECRET_ALGNAME.equals(key.getAlgorithm());
     }
 
-    private static Integer findBitLength(java.security.Key key) {
+    static Integer findBitLength(java.security.Key key) {
 
         Integer bitlen = null;
 

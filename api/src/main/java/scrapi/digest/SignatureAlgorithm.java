@@ -16,13 +16,16 @@
 package scrapi.digest;
 
 import scrapi.jca.Randomizable;
+import scrapi.key.KeyBuilderSupplier;
+import scrapi.key.Keyed;
 import scrapi.key.PrivateKey;
 import scrapi.key.PublicKey;
 
-public interface SignatureAlgorithm<U extends PublicKey<?>, R extends PrivateKey<?, U>>
-        extends DigestAlgorithm<SignatureAlgorithm<U, R>>, Randomizable<SignatureAlgorithm<U, R>> {
-
-    Digester<?> key(R privateKey);
+public interface SignatureAlgorithm<U extends PublicKey<?>, R extends PrivateKey<?, U>, KB extends PrivateKey.Builder<U, R, KB>>
+        extends DigestAlgorithm<SignatureAlgorithm<U, R, KB>>,
+        Keyed<R, Digester<?>>,
+        Randomizable<SignatureAlgorithm<U, R, KB>>,
+        KeyBuilderSupplier<R, KB> {
 
     Verifier<?> key(U publicKey);
 }

@@ -26,8 +26,8 @@ import scrapi.lang.Builder;
  * ensuring the resulting {@link Key}s are compatible with their associated cryptographic algorithm.</p>
  *
  * @param <K> the type of key to build
- * @param <B> the type of the builder, for subtype method chaining
+ * @param <T> the type of the builder, for subtype method chaining
  * @see KeyBuilderSupplier
  */
-public interface KeyBuilder<K extends Key<?>, B extends KeyBuilder<K, B>> extends Providable<B>, Randomizable<B>, Builder<K> {
+public interface KeyBuilder<K extends Key<?>, T extends KeyBuilder<K, T>> extends Providable<T>, Randomizable<T>, Builder<K> {
 }

@@ -19,9 +19,9 @@ import scrapi.key.PbeKey;
 
 import javax.crypto.interfaces.PBEKey;
 
-public class JcaPbeKey extends AbstractSymmetricKey<PBEKey> implements PbeKey {
+public class DefaultPbeKey extends AbstractSymmetricKey<PBEKey> implements PbeKey {
 
-    public JcaPbeKey(PBEKey key) {
+    public DefaultPbeKey(PBEKey key) {
         super(key);
     }
 

@@ -17,7 +17,15 @@ package scrapi.key;
 
 import scrapi.Destroyable;
 
-public interface PrivateKey<R extends java.security.PrivateKey, U extends PublicKey<?>> extends AsymmetricKey<R>, Destroyable {
+public interface PrivateKey<J extends java.security.PrivateKey, U extends PublicKey<?>> extends AsymmetricKey<J>, Destroyable {
 
     U publicKey();
+
+    interface Mutators<U extends PublicKey<?>, T extends Mutators<U, T>> {
+        T publicKey(U publicKey);
+    }
+
+    interface Builder<P extends PublicKey<?>, K extends PrivateKey<?, P>, T extends Builder<P, K, T>>
+            extends Mutators<P, T>, KeyBuilder<K, T> {
+    }
 }

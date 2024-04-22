@@ -15,11 +15,12 @@
  */
 package scrapi.digest;
 
+import scrapi.BitLength;
 import scrapi.key.KeyBuilder;
 import scrapi.key.KeyBuilderSupplier;
 import scrapi.key.Keyed;
 import scrapi.key.SecretKey;
 
 public interface MacAlgorithm<K extends SecretKey<?>, KB extends KeyBuilder<K, KB>>
-        extends DigestAlgorithm<MacAlgorithm<K, KB>>, Keyed<K, Hasher>, KeyBuilderSupplier<K, KB> {
+        extends DigestAlgorithm<MacAlgorithm<K, KB>>, BitLength, Keyed<K, Hasher>, KeyBuilderSupplier<K, KB> {
 }

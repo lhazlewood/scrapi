@@ -31,14 +31,13 @@ abstract class AbstractDigestAlgorithm<A extends DigestAlgorithm<A>> extends Abs
         this.BITLEN = Assert.gt(bitLength, 0, "bitLength must be positive (greater than zero).");
     }
 
-    @Override
     public int bitLength() {
         return this.BITLEN;
     }
 
     @Override
     public int hashCode() {
-        return Objects.nullSafeHashCode(this.ID, this.BITLEN);
+        return Objects.hashCode(this.BITLEN);
     }
 
     @Override
@@ -46,7 +45,7 @@ abstract class AbstractDigestAlgorithm<A extends DigestAlgorithm<A>> extends Abs
         if (obj == this) return true;
         if (obj instanceof DigestAlgorithm) {
             DigestAlgorithm<?> other = (DigestAlgorithm<?>) obj;
-            return this.BITLEN == other.bitLength() && this.ID.equals(other.id());
+            return this.ID.equals(other.id());
         }
         return false;
     }

@@ -32,7 +32,7 @@ final class DefaultDigest<A extends DigestAlgorithm<A>> implements Digest<A> {
     public DefaultDigest(A algorithm, byte[] digest) {
         this.digest = Assert.notEmpty(digest, "digest array argument cannot be null or empty.");
         this.algorithm = Assert.notNull(algorithm, "DigestAlgorithm argument cannot be null.");
-        Assert.eq((int) Bytes.bitLength(digest), algorithm.bitLength(), "Algorithm Digest length mismatch.");
+        //Assert.eq((int) Bytes.bitLength(digest), algorithm.bitLength(), "Algorithm Digest length mismatch.");
     }
 
     @Override

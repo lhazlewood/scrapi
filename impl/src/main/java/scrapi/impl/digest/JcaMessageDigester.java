@@ -52,6 +52,6 @@ class JcaMessageDigester extends AbstractDataConsumer<Hasher> implements Hasher 
 
     @Override
     public boolean test(byte[] bytes) {
-        return false;
+        return MessageDigest.isEqual(get(), bytes);
     }
 }

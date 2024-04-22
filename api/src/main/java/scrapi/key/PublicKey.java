@@ -15,5 +15,5 @@
  */
 package scrapi.key;
 
-public interface PublicKey<T extends java.security.PublicKey> extends AsymmetricKey<T> {
+public interface PublicKey<J extends java.security.PublicKey> extends AsymmetricKey<J> {
 }

@@ -600,7 +600,7 @@ public final class Objects {
      * @see Long#hashCode()
      */
     public static int hashCode(long lng) {
-        return (int) (lng ^ (lng >>> 32));
+        return Long.hashCode(lng);
     }
 
 

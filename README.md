@@ -248,3 +248,34 @@ able to access their associated public key via `privateKey.getPublicKey()`;
 The JCA `KeyFactory`, `KeyGenerator` and `KeyPairGenerator` concepts are independent and often confusing to 
 application developers when one vs the other should be used. Fluent and intuitive `Builder` concepts could likely 
 replace both concepts.
+
+### RSA Private Keys
+
+The JCA has two `RSAPrivateKey` sub-interfaces that are peers:
+* `RSAPrivateCrtKey`
+* `RSAMultPrimePrivateCrtKey`
+
+With numerous problems:
+- The two interfaces are _identical_ - with identically named methods - except for 
+one extra method in `RSAMultiPrimePrivateCrtKey`, _but they don't share a common interface_.
+- This means they're not polymorphic, and implementations cannot rely on common logic. Anything that inspects or interacts with either type must duplicate logic.
+- The naming is inconsistent; subtypes should retain parent type names and prefix additional meaning/context for obvious concept aggregation and readability.
+
+The original JDK naming/hierarchy (c|sh)ould have been:
+```
+RSAPrivateKey
+|-- CrtRSAPrivateKey
+  |-- MultiPrimeCrtRSAPrivateKey
+```
+
+but it's not, causing confusion.  Additionally, [RFC 8017, Section 3.2.2](https://datatracker.ietf.org/doc/html/rfc8017#section-3.2) is explicit that the extra 'multi primes' are purely optional, and this could have easily been modeled
+in Java as `RSAPrivateKey` with one sub-interface `MultiPrimeRSAPrivateKey` where the
+latter has an empty collection if addtional r>=3 primes are not necessary. A separate peer / non-polymorphic type is not needed at all when a simple empty collection check
+would suffice.
+
+Consequently, scrapi adopts the simpler, polymorphic, and intuitive alternative to support when RSA multi-prime private keys may be used:
+
+```
+RsaPrivateKey
+|-- MultiPrimeRsaPrivateKey
+```

@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class StandardMacAlgorithms extends IdentifiableRegistry<String, MacAlgorithm<?, ?>> {
+public final class StandardMacAlgorithms extends IdentifiableRegistry<String, MacAlgorithm<?, ?>> {
 
     private static String suffix(HashAlgorithm alg) {
         String id = alg.id();

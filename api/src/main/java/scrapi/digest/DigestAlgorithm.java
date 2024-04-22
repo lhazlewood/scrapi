@@ -16,7 +16,6 @@
 package scrapi.digest;
 
 import scrapi.Algorithm;
-import scrapi.BitLength;
 
-public interface DigestAlgorithm<A extends DigestAlgorithm<A>> extends Algorithm<A>, BitLength {
+public interface DigestAlgorithm<A extends DigestAlgorithm<A>> extends Algorithm<A> {
 }
