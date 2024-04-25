@@ -5,8 +5,8 @@ import scrapi.key.RsaKey;
 
 import java.math.BigInteger;
 
-abstract class AbstractRsaKeyBuilder<K extends RsaKey<?>, T extends KeyBuilder<K, T> & RsaKey.Mutators<T>>
-        extends AbstractKeyBuilder<K, T> implements RsaKey.Mutators<T> {
+abstract class AbstractRsaKeyBuilder<K extends RsaKey<?>, T extends KeyBuilder<K, T> & RsaKey.Mutator<T>>
+        extends AbstractKeyBuilder<K, T> implements RsaKey.Mutator<T> {
 
     protected BigInteger modulus;
     protected BigInteger publicExponent;

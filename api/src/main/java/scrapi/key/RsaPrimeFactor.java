@@ -28,7 +28,7 @@ public interface RsaPrimeFactor {
      */
     BigInteger coefficient();
 
-    interface Mutators<T extends Mutators<T>> {
+    interface Mutator<T extends Mutator<T>> {
 
         T prime(BigInteger prime);
 
@@ -37,6 +37,6 @@ public interface RsaPrimeFactor {
         T coefficient(BigInteger coefficient);
     }
 
-    interface Builder extends Mutators<Builder>, scrapi.lang.Builder<RsaPrimeFactor> {
+    interface Builder extends Mutator<Builder>, scrapi.lang.Builder<RsaPrimeFactor> {
     }
 }

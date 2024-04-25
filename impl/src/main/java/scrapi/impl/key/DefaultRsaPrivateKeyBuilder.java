@@ -6,21 +6,23 @@ import scrapi.key.RsaPublicKey;
 import scrapi.util.Assert;
 
 import java.security.KeyPair;
-import java.security.interfaces.RSAPrivateKey;
+import java.security.PrivateKey;
+import java.security.interfaces.RSAKey;
 import java.security.interfaces.RSAPublicKey;
 
+@SuppressWarnings("unused") // used reflectively by RsaPrivateKey.builder()
 public class DefaultRsaPrivateKeyBuilder
         extends AbstractRsaPrivateKeyBuilder<RsaPrivateKey, RsaPrivateKey.Builder>
         implements RsaPrivateKey.Builder {
 
+    private static final String RSA_PUB_TYPE_MSG = "RSA PublicKey must be a " + RSAKey.class.getName() + " instance.";
+
     @Override
     public RsaPrivateKey build() {
         KeyPair pair = new JcaTemplate("RSA").generateKeyPair(this.bitLength);
-        RSAPublicKey jcaPub = Assert.isInstance(RSAPublicKey.class, pair.getPublic(),
-                "RSA PublicKey must be a java.security.interfaces.RSAPublicKey instance.");
+        RSAPublicKey jcaPub = Assert.isInstance(RSAPublicKey.class, pair.getPublic(), RSA_PUB_TYPE_MSG);
         RsaPublicKey pub = new DefaultRsaPublicKey(jcaPub);
-        RSAPrivateKey jcaPriv = Assert.isInstance(RSAPrivateKey.class, pair.getPrivate(),
-                "RSA PrivateKey must be a java.security.interfaces.RSAPrivateKey instance.");
+        PrivateKey jcaPriv = Assert.notNull(pair.getPrivate(), "RSA KeyPair private key cannot be null.");
         return new DefaultRsaPrivateKey(jcaPriv, pub);
     }
 }

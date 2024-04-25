@@ -21,11 +21,11 @@ public interface PrivateKey<J extends java.security.PrivateKey, U extends Public
 
     U publicKey();
 
-    interface Mutators<U extends PublicKey<?>, T extends Mutators<U, T>> {
+    interface Mutator<U extends PublicKey<?>, T extends Mutator<U, T>> {
         T publicKey(U publicKey);
     }
 
     interface Builder<P extends PublicKey<?>, K extends PrivateKey<?, P>, T extends Builder<P, K, T>>
-            extends Mutators<P, T>, KeyBuilder<K, T> {
+            extends Mutator<P, T>, KeyBuilder<K, T> {
     }
 }

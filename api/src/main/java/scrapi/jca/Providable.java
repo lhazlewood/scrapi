@@ -31,7 +31,7 @@ public interface Providable<T> {
      * a default JCA Provider will be used when necessary.
      *
      * @param provider the JCA Security Provider instance to use if necessary.
-     * @return the associated object for method chaining.
+     * @return the associated object for method chaining.ß
      */
     T provider(Provider provider);
 }

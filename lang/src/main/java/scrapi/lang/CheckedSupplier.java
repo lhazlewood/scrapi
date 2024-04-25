@@ -26,11 +26,6 @@ public interface CheckedSupplier<T> {
 
     T get() throws Throwable;
 
-    default <V> CheckedSupplier<V> andThen(CheckedFunction<? super T, ? extends V> after) {
-        Objects.requireNonNull(after, "after is null");
-        return () -> after.apply(get());
-    }
-
     default Supplier<T> unchecked() {
         return () -> {
             try {

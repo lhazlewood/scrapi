@@ -15,6 +15,7 @@
  */
 package scrapi.lang;
 
+import java.util.Objects;
 import java.util.function.Function;
 
 /**
@@ -24,6 +25,16 @@ import java.util.function.Function;
 public interface CheckedFunction<T, R> {
 
     R apply(T t) throws Throwable;
+
+//    default <V> CheckedFunction<V, R> compose(CheckedFunction<? super V, ? extends T> before) {
+//        Objects.requireNonNull(before);
+//        return (V v) -> apply(before.apply(v));
+//    }
+//
+//    default <V> CheckedFunction<T, V> andThen(CheckedFunction<? super R, ? extends V> after) {
+//        Objects.requireNonNull(after);
+//        return (T t) -> after.apply(apply(t));
+//    }
 
     default Function<T, R> unchecked() {
         return t1 -> {

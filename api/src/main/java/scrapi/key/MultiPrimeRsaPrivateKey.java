@@ -61,7 +61,7 @@ public interface MultiPrimeRsaPrivateKey extends RsaPrivateKey {
      */
     List<RsaPrimeFactor> otherFactors();
 
-    interface Mutators<T extends Mutators<T>> extends RsaPrivateKey.Mutators<T> {
+    interface Mutator<T extends Mutator<T>> extends RsaPrivateKey.Mutator<T> {
 
         Builder prime1(BigInteger prime1);
 
@@ -75,9 +75,9 @@ public interface MultiPrimeRsaPrivateKey extends RsaPrivateKey {
 
         Builder add(RsaPrimeFactor factor);
 
-        Builder add(Consumer<RsaPrimeFactor.Mutators<?>> c);
+        Builder add(Consumer<RsaPrimeFactor.Mutator<?>> c);
     }
 
-    interface Builder extends Mutators<Builder>, PrivateKey.Builder<RsaPublicKey, MultiPrimeRsaPrivateKey, Builder> {
+    interface Builder extends Mutator<Builder>, PrivateKey.Builder<RsaPublicKey, MultiPrimeRsaPrivateKey, Builder> {
     }
 }

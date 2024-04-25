@@ -17,11 +17,11 @@ public interface RsaPrivateKey extends PrivateKey<java.security.PrivateKey, RsaP
      */
     Optional<BigInteger> privateExponent();
 
-    interface Mutators<T extends Mutators<T>> extends RsaKey.Mutators<T>, PrivateKey.Mutators<RsaPublicKey, T> {
+    interface Mutator<T extends Mutator<T>> extends RsaKey.Mutator<T>, PrivateKey.Mutator<RsaPublicKey, T> {
         T privateExponent(BigInteger privateExponent);
     }
 
-    interface Builder extends Mutators<Builder>, PrivateKey.Builder<RsaPublicKey, RsaPrivateKey, Builder> {
+    interface Builder extends Mutator<Builder>, PrivateKey.Builder<RsaPublicKey, RsaPrivateKey, Builder> {
         Builder bitLength(int bitLength);
     }
 

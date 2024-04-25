@@ -6,8 +6,8 @@ import scrapi.key.RsaPublicKey;
 
 import java.math.BigInteger;
 
-abstract class AbstractRsaPrivateKeyBuilder<K extends RsaPrivateKey, T extends KeyBuilder<K, T> & RsaPrivateKey.Mutators<T>>
-        extends AbstractRsaKeyBuilder<K, T> implements RsaPrivateKey.Mutators<T> {
+abstract class AbstractRsaPrivateKeyBuilder<K extends RsaPrivateKey, T extends KeyBuilder<K, T> & RsaPrivateKey.Mutator<T>>
+        extends AbstractRsaKeyBuilder<K, T> implements RsaPrivateKey.Mutator<T> {
 
     protected RsaPublicKey publicKey;
     protected BigInteger privateExponent;

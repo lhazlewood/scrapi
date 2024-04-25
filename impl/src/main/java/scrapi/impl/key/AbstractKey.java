@@ -90,7 +90,7 @@ abstract class AbstractKey<K extends java.security.Key> implements Key<K> {
             if ("RAW".equals(secretKey.getFormat())) {
                 byte[] encoded = findEncoded(secretKey);
                 if (!Bytes.isEmpty(encoded)) {
-                    bitlen = Integer.valueOf((int) Bytes.bitLength(encoded));
+                    bitlen = (int) Bytes.bitLength(encoded);
                     Bytes.clear(encoded);
                 }
             }
