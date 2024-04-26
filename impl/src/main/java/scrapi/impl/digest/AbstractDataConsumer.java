@@ -35,6 +35,13 @@ abstract class AbstractDataConsumer<T extends DataConsumer<T>> implements DataCo
         return self();
     }
 
+    protected abstract void doApply(byte[] input);
+
+    public final T apply(byte[] input) {
+        doApply(input);
+        return self();
+    }
+
     protected abstract void doApply(byte[] input, int offset, int len);
 
     @Override

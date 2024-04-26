@@ -26,7 +26,7 @@ import java.util.function.Consumer;
  *
  * @since SCRAPI_RELEASE_VERSION
  */
-public interface MultiPrimeRsaPrivateKey extends RsaPrivateKey {
+public interface CrtRsaPrivateKey extends RsaPrivateKey {
 
     /**
      * Returns the first factor {@code p}, a positive integer.
@@ -93,6 +93,6 @@ public interface MultiPrimeRsaPrivateKey extends RsaPrivateKey {
         Builder add(Consumer<RsaPrimeFactor.Mutator<?>> c);
     }
 
-    interface Builder extends Mutator<Builder>, PrivateKey.Builder<RsaPublicKey, MultiPrimeRsaPrivateKey, Builder> {
+    interface Builder extends Mutator<Builder>, PrivateKey.Builder<RsaPublicKey, CrtRsaPrivateKey, Builder> {
     }
 }

@@ -46,6 +46,11 @@ class JcaMacDigester extends AbstractDataConsumer<Hasher> implements Hasher {
     }
 
     @Override
+    protected void doApply(byte[] input) {
+        this.MAC.update(input);
+    }
+
+    @Override
     protected void doApply(byte[] input, int offset, int len) {
         this.MAC.update(input, offset, len);
     }

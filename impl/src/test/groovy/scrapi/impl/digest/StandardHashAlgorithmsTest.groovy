@@ -23,7 +23,8 @@ import scrapi.util.Bytes
 import java.nio.ByteBuffer
 import java.security.MessageDigest
 
-import static org.junit.jupiter.api.Assertions.*
+import static org.junit.jupiter.api.Assertions.assertEquals
+import static org.junit.jupiter.api.Assertions.assertTrue
 
 class StandardHashAlgorithmsTest {
 
@@ -72,7 +73,7 @@ class StandardHashAlgorithmsTest {
     void digestOneByte() {
         Algs.Hash.get().values().each {
             def b = Bytes.random(1)[0]
-            byte[] digest = it.get().apply(b).get()
+            byte[] digest = it.apply(b).get()
             def jca = MessageDigest.getInstance(it.id())
             jca.update(b)
             def jcaDigest = jca.digest()
@@ -85,7 +86,7 @@ class StandardHashAlgorithmsTest {
     void digestByteBuffer() {
         Algs.Hash.get().values().each {
             def buf = ByteBuffer.wrap(Bytes.random(16))
-            byte[] digest = it.get().apply(buf).get()
+            byte[] digest = it.apply(buf).get()
 
             buf.rewind() // to use in jca digest calculation:
             def jca = MessageDigest.getInstance(it.id())
@@ -102,7 +103,16 @@ class StandardHashAlgorithmsTest {
     void digestExactLengths() {
         Algs.Hash.get().values().each {
             byte[] data = Bytes.randomBits(it.bitLength())
-            byte[] digest = it.get().apply(data).get()
+            byte[] digest = it.apply(data).get()
+            assertEquals it.bitLength(), Bytes.bitLength(digest)
+        }
+    }
+
+    @Test
+    void applyArrayWithLength() {
+        Algs.Hash.get().values().each {
+            byte[] data = Bytes.randomBits(it.bitLength())
+            byte[] digest = it.apply(data, 0, data.length).get()
             assertEquals it.bitLength(), Bytes.bitLength(digest)
         }
     }
@@ -111,7 +121,7 @@ class StandardHashAlgorithmsTest {
     void digestSmallerLengths() {
         Algs.Hash.get().values().each {
             byte[] data = Bytes.randomBits(it.bitLength() - Byte.SIZE) // 1 byte less than digest length
-            byte[] digest = it.get().apply(data).get()
+            byte[] digest = it.apply(data).get()
             assertEquals it.bitLength(), Bytes.bitLength(digest) // digest is still same as alg bitlength
         }
     }
@@ -131,10 +141,10 @@ class StandardHashAlgorithmsTest {
     void verify() {
         Algs.Hash.get().values().each {
             byte[] data = Bytes.randomBits(it.bitLength())
-            byte[] digest = it.get().apply(data).get()
+            byte[] digest = it.apply(data).get()
             byte[] jcaDigest = MessageDigest.getInstance(it.id()).digest(data)
             assertTrue MessageDigest.isEqual(digest, jcaDigest)
-            assertTrue it.get().apply(data).test(digest)
+            assertTrue it.apply(data).test(digest)
         }
     }
 }

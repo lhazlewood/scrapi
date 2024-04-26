@@ -69,6 +69,11 @@ abstract class JcaSignatureSupport<T extends DataConsumer<T>, K extends Asymmetr
     }
 
     @Override
+    protected void doApply(byte[] input) {
+        apply(() -> this.SIG.update(input));
+    }
+
+    @Override
     protected void doApply(byte[] input, int offset, int len) {
         apply(() -> this.SIG.update(input, offset, len));
     }

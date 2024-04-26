@@ -36,6 +36,11 @@ class JcaMessageDigester extends AbstractDataConsumer<Hasher> implements Hasher 
     }
 
     @Override
+    protected void doApply(byte[] input) {
+        this.MD.update(input);
+    }
+
+    @Override
     protected void doApply(byte[] input, int offset, int len) {
         this.MD.update(input, offset, len);
     }

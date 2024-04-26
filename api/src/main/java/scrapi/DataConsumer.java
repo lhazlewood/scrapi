@@ -15,8 +15,6 @@
  */
 package scrapi;
 
-import scrapi.util.Bytes;
-
 import java.nio.ByteBuffer;
 import java.util.function.Function;
 
@@ -27,9 +25,7 @@ public interface DataConsumer<T extends DataConsumer<T>> extends Function<byte[]
      *
      * @param input the byte to process
      */
-    default T apply(byte input) {
-        return apply(new byte[]{input});
-    }
+    T apply(byte input);
 
     /**
      * Processes the specified array of bytes.
@@ -37,9 +33,7 @@ public interface DataConsumer<T extends DataConsumer<T>> extends Function<byte[]
      * @param input the array of bytes.
      */
     @Override
-    default T apply(byte[] input) {
-        return apply(input, 0, Bytes.length(input));
-    }
+    T apply(byte[] input);
 
     /**
      * Processes the specified array of bytes, starting at the specified offset.
@@ -48,9 +42,7 @@ public interface DataConsumer<T extends DataConsumer<T>> extends Function<byte[]
      * @param offset the offset to start from in the array of bytes.
      * @param len    the number of bytes to use, starting at {@code offset}.
      */
-    default T apply(byte[] input, int offset, int len) {
-        return apply(ByteBuffer.wrap(input, offset, len));
-    }
+    T apply(byte[] input, int offset, int len);
 
     /**
      * Processes the specified ByteBuffer using {@code input.remaining()} bytes starting at {@code input.position()}.
