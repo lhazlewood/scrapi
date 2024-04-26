@@ -90,7 +90,7 @@ public interface CrtRsaPrivateKey extends RsaPrivateKey {
 
         Builder add(RsaPrimeFactor factor);
 
-        Builder add(Consumer<RsaPrimeFactor.Mutator<?>> c);
+        Builder add(Consumer<? extends RsaPrimeFactor.Mutator<?>> c);
     }
 
     interface Builder extends Mutator<Builder>, PrivateKey.Builder<RsaPublicKey, CrtRsaPrivateKey, Builder> {
