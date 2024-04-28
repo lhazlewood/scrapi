@@ -17,24 +17,42 @@ package scrapi.impl.key;
 
 import scrapi.key.KeyBuilder;
 import scrapi.key.RsaKey;
+import scrapi.util.Assert;
 
 import java.math.BigInteger;
 
 abstract class AbstractRsaKeyBuilder<K extends RsaKey<?>, T extends KeyBuilder<K, T> & RsaKey.Mutator<T>>
         extends AbstractKeyBuilder<K, T> implements RsaKey.Mutator<T> {
 
+    static final String ALG_NAME = "RSA";
+    static final int MIN_KEY_SIZE = 1024;
+
     protected BigInteger modulus;
     protected BigInteger publicExponent;
 
+    protected AbstractRsaKeyBuilder() {
+        this(MIN_KEY_SIZE);
+    }
+
+    protected AbstractRsaKeyBuilder(int minSize) {
+        this(ALG_NAME, minSize);
+    }
+
+    protected AbstractRsaKeyBuilder(String jcaName, int minSize) {
+        super(jcaName, minSize);
+    }
+
     @Override
     public T modulus(BigInteger modulus) {
+        Assert.notNull(modulus, "RSA Key modulus cannot be null.");
+        assertSize(modulus.bitLength(), this.minSize, "RSA Key modulus size");
         this.modulus = modulus;
         return self();
     }
 
     @Override
     public T publicExponent(BigInteger publicExponent) {
-        this.publicExponent = publicExponent;
+        this.publicExponent = Assert.notNull(publicExponent, "RSA Key public exponent cannot be null.");
         return self();
     }
 }

@@ -13,17 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package scrapi.impl.digest;
+package scrapi.lang;
 
-import scrapi.digest.RsaSignatureAlgorithm;
-import scrapi.key.RsaPrivateKey;
-import scrapi.key.RsaPublicKey;
+@FunctionalInterface
+public interface Sizable<T> {
 
-public class DefaultRsaSignatureAlgorithm
-        extends DefaultSignatureAlgorithm<RsaPublicKey, RsaPrivateKey, RsaPrivateKey.Builder>
-        implements RsaSignatureAlgorithm {
+    /**
+     * Sets the size in bits (<em>not bytes</em>) of the associated instance.
+     *
+     * @param size the size in bits
+     * @return the associated object for method chaining.
+     * @throws IllegalArgumentException if the specified size is invalid or insufficient
+     */
+    T size(int size) throws IllegalArgumentException;
 
-    public DefaultRsaSignatureAlgorithm(String id, int bitLength) {
-        super(id, null, null, bitLength, () -> RsaPrivateKey.builder().size(4096));
-    }
 }

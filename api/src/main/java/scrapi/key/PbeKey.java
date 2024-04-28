@@ -25,12 +25,15 @@ public interface PbeKey extends SecretKey<PBEKey> {
 
     int iterations();
 
-    interface Builder extends KeyBuilder<PbeKey, Builder> {
+    interface Mutator<T extends Mutator<T>> {
 
-        Builder password(char[] password);
+        T password(char[] password);
 
-        Builder salt(byte[] salt);
+        T salt(byte[] salt);
 
-        Builder iterations(int iterations);
+        T iterations(int iterations);
+    }
+
+    interface Builder extends Mutator<Builder>, KeyBuilder<PbeKey, Builder> {
     }
 }

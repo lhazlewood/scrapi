@@ -19,7 +19,7 @@ import scrapi.digest.HashAlgorithm;
 import scrapi.digest.MacAlgorithm;
 import scrapi.digest.RsaSignatureAlgorithm;
 import scrapi.digest.SignatureAlgorithm;
-import scrapi.key.OctetKey;
+import scrapi.key.OctetSecretKey;
 import scrapi.key.PbeKey;
 import scrapi.lang.Registry;
 import scrapi.util.Classes;
@@ -97,18 +97,18 @@ public final class Algs {
             return REGISTRY;
         }
 
-        public static final MacAlgorithm<OctetKey, OctetKey.Builder> HMD5 = Algs.get(get(), "HmacMD5");
-        public static final MacAlgorithm<OctetKey, OctetKey.Builder> HS1 = Algs.get(get(), "HmacSHA1");
-        public static final MacAlgorithm<OctetKey, OctetKey.Builder> HS224 = Algs.get(get(), "HmacSHA224");
-        public static final MacAlgorithm<OctetKey, OctetKey.Builder> HS256 = Algs.get(get(), "HmacSHA256");
-        public static final MacAlgorithm<OctetKey, OctetKey.Builder> HS384 = Algs.get(get(), "HmacSHA384");
-        public static final MacAlgorithm<OctetKey, OctetKey.Builder> HS512 = Algs.get(get(), "HmacSHA512");
-        public static final MacAlgorithm<OctetKey, OctetKey.Builder> HS512_224 = Algs.get(get(), "HmacSHA512/224");
-        public static final MacAlgorithm<OctetKey, OctetKey.Builder> HS512_256 = Algs.get(get(), "HmacSHA512/256");
-        public static final MacAlgorithm<OctetKey, OctetKey.Builder> HS3_224 = Algs.get(get(), "HmacSHA3-224");
-        public static final MacAlgorithm<OctetKey, OctetKey.Builder> HS3_256 = Algs.get(get(), "HmacSHA3-256");
-        public static final MacAlgorithm<OctetKey, OctetKey.Builder> HS3_384 = Algs.get(get(), "HmacSHA3-384");
-        public static final MacAlgorithm<OctetKey, OctetKey.Builder> HS3_512 = Algs.get(get(), "HmacSHA3-512");
+        public static final MacAlgorithm<OctetSecretKey, OctetSecretKey.Builder> HMD5 = Algs.get(get(), "HmacMD5");
+        public static final MacAlgorithm<OctetSecretKey, OctetSecretKey.Builder> HS1 = Algs.get(get(), "HmacSHA1");
+        public static final MacAlgorithm<OctetSecretKey, OctetSecretKey.Builder> HS224 = Algs.get(get(), "HmacSHA224");
+        public static final MacAlgorithm<OctetSecretKey, OctetSecretKey.Builder> HS256 = Algs.get(get(), "HmacSHA256");
+        public static final MacAlgorithm<OctetSecretKey, OctetSecretKey.Builder> HS384 = Algs.get(get(), "HmacSHA384");
+        public static final MacAlgorithm<OctetSecretKey, OctetSecretKey.Builder> HS512 = Algs.get(get(), "HmacSHA512");
+        public static final MacAlgorithm<OctetSecretKey, OctetSecretKey.Builder> HS512_224 = Algs.get(get(), "HmacSHA512/224");
+        public static final MacAlgorithm<OctetSecretKey, OctetSecretKey.Builder> HS512_256 = Algs.get(get(), "HmacSHA512/256");
+        public static final MacAlgorithm<OctetSecretKey, OctetSecretKey.Builder> HS3_224 = Algs.get(get(), "HmacSHA3-224");
+        public static final MacAlgorithm<OctetSecretKey, OctetSecretKey.Builder> HS3_256 = Algs.get(get(), "HmacSHA3-256");
+        public static final MacAlgorithm<OctetSecretKey, OctetSecretKey.Builder> HS3_384 = Algs.get(get(), "HmacSHA3-384");
+        public static final MacAlgorithm<OctetSecretKey, OctetSecretKey.Builder> HS3_512 = Algs.get(get(), "HmacSHA3-512");
 
         public static final MacAlgorithm<PbeKey, PbeKey.Builder> PBEHS1 = Algs.get(get(), "PBEWithHmacSHA1");
         public static final MacAlgorithm<PbeKey, PbeKey.Builder> PBEHS224 = Algs.get(get(), "PBEWithHmacSHA224");

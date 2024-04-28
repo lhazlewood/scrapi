@@ -15,30 +15,32 @@
  */
 package scrapi.impl.key;
 
-import scrapi.key.RsaPublicKey;
+import scrapi.key.RsaPrimeFactor;
+import scrapi.util.Assert;
 
 import java.math.BigInteger;
-import java.security.interfaces.RSAPublicKey;
-import java.util.Optional;
+import java.security.spec.RSAOtherPrimeInfo;
 
-public class DefaultRsaPublicKey extends AbstractKey<RSAPublicKey> implements RsaPublicKey {
+public class DefaultRsaPrimeFactor implements RsaPrimeFactor {
 
-    public DefaultRsaPublicKey(RSAPublicKey key) {
-        super(key);
+    private final RSAOtherPrimeInfo info;
+
+    public DefaultRsaPrimeFactor(RSAOtherPrimeInfo info) {
+        this.info = Assert.notNull(info, "RSAOtherPrimeInfo cannot be null.");
     }
 
     @Override
-    public Optional<Integer> bitLength() {
-        return Optional.of(modulus().bitLength());
+    public BigInteger prime() {
+        return this.info.getPrime();
     }
 
     @Override
-    public BigInteger modulus() {
-        return this.key.getModulus();
+    public BigInteger exponent() {
+        return this.info.getExponent();
     }
 
     @Override
-    public BigInteger publicExponent() {
-        return this.key.getPublicExponent();
+    public BigInteger coefficient() {
+        return this.info.getCrtCoefficient();
     }
 }

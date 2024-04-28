@@ -78,19 +78,19 @@ public interface CrtRsaPrivateKey extends RsaPrivateKey {
 
     interface Mutator<T extends Mutator<T>> extends RsaPrivateKey.Mutator<T> {
 
-        Builder prime1(BigInteger prime1);
+        T prime1(BigInteger prime1);
 
-        Builder prime2(BigInteger prime2);
+        T prime2(BigInteger prime2);
 
-        Builder exponent1(BigInteger exponent1);
+        T exponent1(BigInteger exponent1);
 
-        Builder exponent2(BigInteger exponent2);
+        T exponent2(BigInteger exponent2);
 
-        Builder coefficient(BigInteger coefficient);
+        T coefficient(BigInteger coefficient);
 
-        Builder add(RsaPrimeFactor factor);
+        T add(RsaPrimeFactor factor);
 
-        Builder add(Consumer<? extends RsaPrimeFactor.Mutator<?>> c);
+        T add(Consumer<RsaPrimeFactor.Mutator<?>> c);
     }
 
     interface Builder extends Mutator<Builder>, PrivateKey.Builder<RsaPublicKey, CrtRsaPrivateKey, Builder> {

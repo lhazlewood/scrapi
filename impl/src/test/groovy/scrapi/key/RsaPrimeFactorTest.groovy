@@ -13,17 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package scrapi.impl.digest;
+package scrapi.key
 
-import scrapi.digest.RsaSignatureAlgorithm;
-import scrapi.key.RsaPrivateKey;
-import scrapi.key.RsaPublicKey;
+import org.junit.jupiter.api.Test
 
-public class DefaultRsaSignatureAlgorithm
-        extends DefaultSignatureAlgorithm<RsaPublicKey, RsaPrivateKey, RsaPrivateKey.Builder>
-        implements RsaSignatureAlgorithm {
+import static org.junit.jupiter.api.Assertions.assertEquals
 
-    public DefaultRsaSignatureAlgorithm(String id, int bitLength) {
-        super(id, null, null, bitLength, () -> RsaPrivateKey.builder().size(4096));
+class RsaPrimeFactorTest {
+
+    @Test
+    void builder() {
+        // random BigInteger values are fine for this test, we're just seeing if the values are set correctly:
+        def f = RsaPrimeFactor.builder()
+                .prime(BigInteger.ONE).exponent(BigInteger.TWO).coefficient(BigInteger.TEN)
+                .build()
+
+        assertEquals(BigInteger.ONE, f.prime())
+        assertEquals(BigInteger.TWO, f.exponent())
+        assertEquals(BigInteger.TEN, f.coefficient())
     }
 }

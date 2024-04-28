@@ -36,11 +36,10 @@ public interface RsaPrivateKey extends PrivateKey<java.security.PrivateKey, RsaP
         T privateExponent(BigInteger privateExponent);
     }
 
-    interface Builder extends Mutator<Builder>, PrivateKey.Builder<RsaPublicKey, RsaPrivateKey, Builder> {
-        Builder bitLength(int bitLength);
+    interface Builder extends PrivateKey.Builder<RsaPublicKey, RsaPrivateKey, Builder>, CrtRsaPrivateKey.Mutator<Builder> {
     }
 
-    static Builder builder() {
+    static RsaPrivateKey.Builder builder() {
         return Classes.newInstance("scrapi.impl.key.DefaultRsaPrivateKeyBuilder");
     }
 }

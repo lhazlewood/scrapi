@@ -17,38 +17,37 @@ package scrapi.impl.jca;
 
 import scrapi.jca.Providable;
 import scrapi.jca.Randomizable;
-import scrapi.lang.Builder;
 import scrapi.util.Assert;
 
 import java.security.Provider;
 import java.security.SecureRandom;
 
-public abstract class AbstractSecurityBuilder<T, B extends Providable<B> & Randomizable<B> & Builder<T>>
-        implements Providable<B>, Randomizable<B>, Builder<T> {
+public abstract class AlgorithmSupport<T extends Providable<T> & Randomizable<T>>
+        implements Providable<T>, Randomizable<T> {
 
     protected final String jcaName;
-
     protected Provider provider;
     protected SecureRandom random;
 
-    protected AbstractSecurityBuilder(String jcaName) {
+    public AlgorithmSupport(String jcaName) {
         this.jcaName = Assert.hasText(jcaName, "jcaName cannot be null or empty.");
     }
 
     @SuppressWarnings("unchecked")
-    protected final B self() {
-        return (B) this;
+    protected final T self() {
+        return (T) this;
     }
 
     @Override
-    public B provider(Provider provider) {
-        this.provider = provider; // may be null
+    public T provider(Provider provider) {
+        this.provider = provider;
         return self();
     }
 
     @Override
-    public B random(SecureRandom random) {
-        this.random = random; // may be null
+    public T random(SecureRandom random) {
+        this.random = random;
         return self();
     }
+
 }

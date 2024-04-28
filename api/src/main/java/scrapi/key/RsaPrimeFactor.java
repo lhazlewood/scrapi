@@ -15,6 +15,8 @@
  */
 package scrapi.key;
 
+import scrapi.util.Classes;
+
 import java.math.BigInteger;
 
 public interface RsaPrimeFactor {
@@ -53,5 +55,9 @@ public interface RsaPrimeFactor {
     }
 
     interface Builder extends Mutator<Builder>, scrapi.lang.Builder<RsaPrimeFactor> {
+    }
+
+    static Builder builder() {
+        return Classes.newInstance("scrapi.impl.key.DefaultRsaPrimeFactorBuilder");
     }
 }

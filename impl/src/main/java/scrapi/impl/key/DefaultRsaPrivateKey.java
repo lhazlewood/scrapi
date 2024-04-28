@@ -47,6 +47,11 @@ public class DefaultRsaPrivateKey extends AbstractPrivateKey<java.security.Priva
     }
 
     @Override
+    public Optional<Integer> bitLength() {
+        return Optional.of(modulus().bitLength());
+    }
+
+    @Override
     public BigInteger publicExponent() {
         return publicKey().publicExponent();
     }

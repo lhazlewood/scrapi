@@ -15,7 +15,6 @@
  */
 package scrapi.impl.key;
 
-import scrapi.impl.jca.AbstractSecurityBuilder;
 import scrapi.impl.jca.JcaTemplate;
 import scrapi.key.PbeKey;
 import scrapi.util.Assert;
@@ -26,7 +25,7 @@ import javax.crypto.interfaces.PBEKey;
 import javax.crypto.spec.PBEKeySpec;
 
 public class DefaultPbeKeyBuilder
-        extends AbstractSecurityBuilder<PbeKey, PbeKey.Builder>
+        extends AbstractKeyBuilder<PbeKey, PbeKey.Builder>
         implements PbeKey.Builder {
 
     private static final char[] ALPHABET =
@@ -42,11 +41,9 @@ public class DefaultPbeKeyBuilder
     private char[] password = EMPTY_CHARS;
     private byte[] salt;
     private int iterations;
-    private final int keyBitLength;
 
-    public DefaultPbeKeyBuilder(String jcaName, int keyBitLength, int defaultIterations) {
-        super(jcaName);
-        this.keyBitLength = Assert.gte(keyBitLength, 160, "keyBitLength must be >= 160");
+    public DefaultPbeKeyBuilder(String jcaName, int generatedKeySize, int defaultIterations) {
+        super(jcaName, generatedKeySize);
         this.DEFAULT_ITERATIONS = Assert.gte(defaultIterations, MIN_ITERATIONS, MIN_ITERATIONS_MSG);
     }
 
@@ -87,9 +84,10 @@ public class DefaultPbeKeyBuilder
         if (password == null || password.length == 0) {
             password = randomPassword();
         }
+        int size = Math.max(this.size /* might not have been configured, so default to min: */, this.minSize);
         byte[] salt = this.salt;
         if (Bytes.isEmpty(salt)) {
-            salt = Bytes.randomBits(this.keyBitLength);
+            salt = Bytes.randomBits(size);
         }
         int iterations = this.iterations;
         if (iterations < MIN_ITERATIONS) {
@@ -97,7 +95,7 @@ public class DefaultPbeKeyBuilder
         }
 
         JcaTemplate template = new JcaTemplate(this.jcaName, this.provider, this.random);
-        PBEKeySpec spec = new PBEKeySpec(password, salt, iterations, this.keyBitLength);
+        PBEKeySpec spec = new PBEKeySpec(password, salt, iterations, size);
         javax.crypto.SecretKey jcaKey = template.withSecretKeyFactory(factory -> factory.generateSecret(spec));
         PBEKey jcaPbeKey = Assert.isInstance(PBEKey.class, jcaKey, "JCA did not create a PBEKey instance.");
         return new DefaultPbeKey(jcaPbeKey);

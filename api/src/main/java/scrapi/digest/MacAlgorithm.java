@@ -21,6 +21,6 @@ import scrapi.key.KeyBuilderSupplier;
 import scrapi.key.Keyed;
 import scrapi.key.SecretKey;
 
-public interface MacAlgorithm<K extends SecretKey<?>, KB extends KeyBuilder<K, KB>>
-        extends DigestAlgorithm<MacAlgorithm<K, KB>>, BitLength, Keyed<K, Hasher>, KeyBuilderSupplier<K, KB> {
+public interface MacAlgorithm<K extends SecretKey<?>, B extends KeyBuilder<K, B>>
+        extends DigestAlgorithm<MacAlgorithm<K, B>>, BitLength, Keyed<K, Hasher>, KeyBuilderSupplier<K, B> {
 }

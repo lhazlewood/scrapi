@@ -16,19 +16,20 @@
 package scrapi.impl.key;
 
 import scrapi.key.KeyException;
-import scrapi.key.OctetKey;
+import scrapi.key.OctetSecretKey;
 
 import javax.security.auth.DestroyFailedException;
+import java.util.Optional;
 
-public class DefaultOctetKey extends AbstractKey<javax.crypto.SecretKey> implements OctetKey {
+public class DefaultOctetSecretKey extends AbstractKey<javax.crypto.SecretKey> implements OctetSecretKey {
 
-    public DefaultOctetKey(javax.crypto.SecretKey key) {
+    public DefaultOctetSecretKey(javax.crypto.SecretKey key) {
         super(key);
     }
 
     @Override
-    public byte[] octets() {
-        return this.key.getEncoded();
+    public Optional<byte[]> octets() {
+        return Optional.ofNullable(AbstractKey.findEncoded(this.key));
     }
 
     @Override

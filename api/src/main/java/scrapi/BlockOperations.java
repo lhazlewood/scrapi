@@ -20,8 +20,6 @@ import java.util.function.Function;
 
 public interface BlockOperations extends Function<byte[], byte[]> {
 
-    byte[] apply(byte[] input);
-
     byte[] apply(byte[] input, int inputOffset, int inputLen);
 
     int apply(byte[] input, int inputOffset, int inputLen, byte[] output);

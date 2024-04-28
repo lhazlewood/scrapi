@@ -15,31 +15,50 @@
  */
 package scrapi.impl.key;
 
+import scrapi.impl.jca.AlgorithmSupport;
 import scrapi.key.Key;
 import scrapi.key.KeyBuilder;
 
 import java.security.Provider;
-import java.security.SecureRandom;
 
-abstract class AbstractKeyBuilder<K extends Key<?>, T extends KeyBuilder<K, T>> implements KeyBuilder<K, T> {
+abstract class AbstractKeyBuilder<K extends Key<?>, T extends KeyBuilder<K, T>>
+        extends AlgorithmSupport<T>
+        implements KeyBuilder<K, T> {
 
     protected Provider provider;
-    protected SecureRandom random;
 
-    @SuppressWarnings("unchecked")
-    protected final T self() {
-        return (T) this;
+    protected final int minSize;
+    protected int size = 0; // zero means not configured
+
+    protected static int assertByteable(int size, String name) {
+        if (size <= 0) {
+            String msg = name + " must be greater than 0. Value: " + size;
+            throw new IllegalArgumentException(msg);
+        }
+        if (size % Byte.SIZE != 0) {
+            String msg = name + " must be a multiple of " + Byte.SIZE + ". Size: " + size;
+            throw new IllegalArgumentException(msg);
+        }
+        return size;
+    }
+
+    public AbstractKeyBuilder(String jcaName, int minSize) {
+        super(jcaName);
+        this.minSize = assertByteable(minSize, "minSize");
+    }
+
+    protected static int assertSize(int size, int minSize, String name) {
+        assertByteable(size, name);
+        if (size < minSize) {
+            String msg = name + " must be greater than or equal to " + minSize + ". Size: " + size;
+            throw new IllegalArgumentException(msg);
+        }
+        return size;
     }
 
     @Override
-    public T provider(Provider provider) {
-        this.provider = provider;
-        return self();
-    }
-
-    @Override
-    public T random(SecureRandom random) {
-        this.random = random;
+    public T size(int size) {
+        this.size = assertSize(size, minSize, "size");
         return self();
     }
 }

@@ -15,28 +15,24 @@
  */
 package scrapi.impl.key;
 
-import scrapi.impl.jca.AbstractSecurityBuilder;
 import scrapi.impl.jca.JcaTemplate;
-import scrapi.key.OctetKey;
+import scrapi.key.OctetSecretKey;
 import scrapi.util.Bytes;
 
 import javax.crypto.spec.SecretKeySpec;
 
 public class DefaultOctetKeyBuilder
-        extends AbstractSecurityBuilder<OctetKey, OctetKey.Builder>
-        implements OctetKey.Builder {
-
-    //protected final int BIT_LENGTH;
+        extends AbstractKeyBuilder<OctetSecretKey, OctetSecretKey.Builder>
+        implements OctetSecretKey.Builder {
 
     protected byte[] octets;
 
-    public DefaultOctetKeyBuilder(String jcaName) {
-        super(jcaName);
-        //this.BIT_LENGTH = 0;
+    public DefaultOctetKeyBuilder(String jcaName, int size) {
+        super(jcaName, size);
     }
 
     @Override
-    public OctetKey.Builder octets(byte[] octets) {
+    public OctetSecretKey.Builder octets(byte[] octets) {
         this.octets = octets;
         return this;
     }
@@ -51,10 +47,10 @@ public class DefaultOctetKeyBuilder
 //    }
 
     @Override
-    public OctetKey build() {
+    public OctetSecretKey build() {
         if (!Bytes.isEmpty(this.octets)) {
             SecretKeySpec spec = new SecretKeySpec(this.octets, this.jcaName);
-            return new DefaultOctetKey(spec);
+            return new DefaultOctetSecretKey(spec);
         }
 
         // otherwise, no octets configured, so generate a new random key:
@@ -66,6 +62,6 @@ public class DefaultOctetKeyBuilder
 //        }
 //        // else, alg name implies associated length:
         javax.crypto.SecretKey jcaKey = template.generateSecretKey();
-        return new DefaultOctetKey(jcaKey);
+        return new DefaultOctetSecretKey(jcaKey);
     }
 }
