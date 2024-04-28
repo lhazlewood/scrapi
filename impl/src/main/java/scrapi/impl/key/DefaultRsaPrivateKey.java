@@ -20,16 +20,39 @@ import scrapi.key.RsaPublicKey;
 import scrapi.util.Assert;
 
 import java.math.BigInteger;
+import java.security.KeyPair;
 import java.security.interfaces.RSAKey;
 import java.security.interfaces.RSAPrivateKey;
 import java.util.Optional;
 
-public class DefaultRsaPrivateKey extends AbstractPrivateKey<java.security.PrivateKey, RsaPublicKey>
+public class DefaultRsaPrivateKey extends AbstractRsaKey<java.security.PrivateKey>
         implements RsaPrivateKey {
 
+    private final RsaPublicKey publicKey;
+
     public DefaultRsaPrivateKey(java.security.PrivateKey key, RsaPublicKey publicKey) {
-        super(key, publicKey);
-        Assert.isInstance(RSAKey.class, key, "PrivateKey must be an instanceof java.security.interfaces.RSAKey");
+        super(key);
+        this.publicKey = Assert.notNull(publicKey, "RsaPublicKey cannot be null.");
+        if (key instanceof RSAKey) {
+            RSAKey rsaKey = (RSAKey) key;
+            Assert.eq(rsaKey.getModulus(), publicKey.modulus(), "RSA PrivateKey modulus and RsaPublicKey modulus must be equal.");
+        }
+    }
+
+    @Override
+    public RsaPublicKey publicKey() {
+        return this.publicKey;
+    }
+
+    @Override
+    public BigInteger modulus() {
+        return this.publicKey.modulus(); // guaranteed to be the same in the constructor if possible
+    }
+
+    @Override
+    public BigInteger publicExponent() {
+        // JCA RSA Private Keys don't expose this, so we delegate to the public key:
+        return publicKey.publicExponent();
     }
 
     @Override
@@ -42,17 +65,7 @@ public class DefaultRsaPrivateKey extends AbstractPrivateKey<java.security.Priva
     }
 
     @Override
-    public BigInteger modulus() {
-        return Assert.isInstance(RSAKey.class, this.key, "RSAKey type required.").getModulus();
-    }
-
-    @Override
-    public Optional<Integer> bitLength() {
-        return Optional.of(modulus().bitLength());
-    }
-
-    @Override
-    public BigInteger publicExponent() {
-        return publicKey().publicExponent();
+    public KeyPair toJcaKeyPair() {
+        return new KeyPair(this.publicKey.toJcaKey(), toJcaKey());
     }
 }

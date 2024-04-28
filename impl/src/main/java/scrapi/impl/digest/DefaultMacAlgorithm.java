@@ -16,7 +16,7 @@
 package scrapi.impl.digest;
 
 import scrapi.digest.MacAlgorithm;
-import scrapi.impl.key.DefaultOctetKeyBuilder;
+import scrapi.impl.key.DefaultOctetSecretKeyBuilder;
 import scrapi.key.OctetSecretKey;
 
 import java.security.Provider;
@@ -36,6 +36,6 @@ public class DefaultMacAlgorithm
 
     @Override
     public OctetSecretKey.Builder key() {
-        return new DefaultOctetKeyBuilder(this.KEYGEN_ALG_NAME, this.BITLEN);
+        return new DefaultOctetSecretKeyBuilder(this.KEYGEN_ALG_NAME, this.BITLEN);
     }
 }

@@ -19,17 +19,11 @@ import scrapi.key.RsaPublicKey;
 
 import java.math.BigInteger;
 import java.security.interfaces.RSAPublicKey;
-import java.util.Optional;
 
-public class DefaultRsaPublicKey extends AbstractKey<RSAPublicKey> implements RsaPublicKey {
+public class DefaultRsaPublicKey extends AbstractRsaKey<RSAPublicKey> implements RsaPublicKey {
 
     public DefaultRsaPublicKey(RSAPublicKey key) {
         super(key);
-    }
-
-    @Override
-    public Optional<Integer> bitLength() {
-        return Optional.of(modulus().bitLength());
     }
 
     @Override

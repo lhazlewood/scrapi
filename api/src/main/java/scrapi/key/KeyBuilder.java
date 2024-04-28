@@ -18,7 +18,6 @@ package scrapi.key;
 import scrapi.jca.Providable;
 import scrapi.jca.Randomizable;
 import scrapi.lang.Builder;
-import scrapi.lang.Sizable;
 
 /**
  * A {@code KeyBuilder} produces {@link Key}s suitable for use with an associated cryptographic algorithm.
@@ -31,5 +30,5 @@ import scrapi.lang.Sizable;
  * @see KeyBuilderSupplier
  */
 public interface KeyBuilder<K extends Key<?>, T extends KeyBuilder<K, T>>
-        extends Providable<T>, Randomizable<T>, Sizable<T>, Builder<K> {
+        extends Providable<T>, Randomizable<T>, Builder<K> {
 }

@@ -16,13 +16,23 @@
 package scrapi.impl.key;
 
 import scrapi.key.PbeKey;
+import scrapi.util.Assert;
 
 import javax.crypto.interfaces.PBEKey;
+import java.util.Optional;
 
-public class DefaultPbeKey extends AbstractSymmetricKey<PBEKey> implements PbeKey {
+public class DefaultPbeKey extends AbstractKey<PBEKey> implements PbeKey {
 
-    public DefaultPbeKey(PBEKey key) {
+    private final int generatedKeySize;
+
+    public DefaultPbeKey(PBEKey key, int generatedKeySize) {
         super(key);
+        this.generatedKeySize = Assert.gt(generatedKeySize, 0, "generatedKeySize must be >= 0");
+    }
+
+    @Override
+    public Optional<Integer> bitLength() {
+        return Optional.of(generatedKeySize);
     }
 
     @Override

@@ -24,18 +24,15 @@ import java.math.BigInteger;
 abstract class AbstractRsaKeyBuilder<K extends RsaKey<?>, T extends KeyBuilder<K, T> & RsaKey.Mutator<T>>
         extends AbstractKeyBuilder<K, T> implements RsaKey.Mutator<T> {
 
-    static final String ALG_NAME = "RSA";
-    static final int MIN_KEY_SIZE = 1024;
-
     protected BigInteger modulus;
     protected BigInteger publicExponent;
 
     protected AbstractRsaKeyBuilder() {
-        this(MIN_KEY_SIZE);
+        this(AbstractRsaKey.MIN_SIZE);
     }
 
     protected AbstractRsaKeyBuilder(int minSize) {
-        this(ALG_NAME, minSize);
+        this(AbstractRsaKey.JCA_ALG_NAME, minSize);
     }
 
     protected AbstractRsaKeyBuilder(String jcaName, int minSize) {

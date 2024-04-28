@@ -16,38 +16,28 @@
 package scrapi.impl.key;
 
 import scrapi.key.Key;
+import scrapi.key.KeyException;
 import scrapi.util.Assert;
 import scrapi.util.Bytes;
 import scrapi.util.Strings;
 
-import java.util.Optional;
+import javax.security.auth.DestroyFailedException;
+import javax.security.auth.Destroyable;
 
-abstract class AbstractKey<K extends java.security.Key> implements Key<K> {
+abstract class AbstractKey<K extends java.security.Key> implements Key<K>, scrapi.Destroyable {
 
     private static final String SUNPKCS11_GENERIC_SECRET_CLASSNAME = "sun.security.pkcs11.P11Key$P11SecretKey";
     private static final String SUNPKCS11_GENERIC_SECRET_ALGNAME = "Generic Secret"; // https://github.com/openjdk/jdk/blob/4f90abaf17716493bad740dcef76d49f16d69379/src/jdk.crypto.cryptoki/share/classes/sun/security/pkcs11/P11KeyStore.java#L1292
 
     protected final K key;
-    private final Integer bitLength;
 
     protected AbstractKey(K key) {
         this.key = Assert.notNull(key, "Key cannot be null.");
-        this.bitLength = findBitLength(key);
-    }
-
-    protected AbstractKey(K key, int bitLength) {
-        this.key = Assert.notNull(key, "Key cannot be null.");
-        this.bitLength = bitLength;
     }
 
     @Override
     public K toJcaKey() {
         return this.key;
-    }
-
-    @Override
-    public Optional<Integer> bitLength() {
-        return Optional.ofNullable(bitLength);
     }
 
     static String findAlgorithm(java.security.Key key) {
@@ -111,5 +101,21 @@ abstract class AbstractKey<K extends java.security.Key> implements Key<K> {
         return bitlen;
     }
 
+    @Override
+    public void destroy() {
+        if (!(this.key instanceof Destroyable)) return;
+        Destroyable destroyable = (Destroyable) this.key;
+        try {
+            destroyable.destroy();
+        } catch (DestroyFailedException e) {
+            String msg = "Unable to destroy internal JCA key of type " + this.key.getClass().getName() + ": " +
+                    e.getMessage();
+            throw new KeyException(msg, e);
+        }
+    }
 
+    @Override
+    public boolean isDestroyed() {
+        return this.key instanceof Destroyable && ((Destroyable) this.key).isDestroyed();
+    }
 }

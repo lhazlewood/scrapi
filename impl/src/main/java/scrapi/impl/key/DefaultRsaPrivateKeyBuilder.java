@@ -143,17 +143,26 @@ public class DefaultRsaPrivateKeyBuilder
     }
 
     private RsaPrivateKey generate() {
-        KeyPair pair = new JcaTemplate("RSA").generateKeyPair(this.size);
+        KeyPair pair = jca().generateKeyPair(this.size);
         RSAPublicKey jcaPub = Assert.isInstance(RSAPublicKey.class, pair.getPublic(), RSA_PUB_TYPE_MSG);
         RsaPublicKey pub = new DefaultRsaPublicKey(jcaPub);
         PrivateKey jcaPriv = Assert.notNull(pair.getPrivate(), "RSA KeyPair private key cannot be null.");
         return new DefaultRsaPrivateKey(jcaPriv, pub);
     }
 
+    private boolean hasFieldState() {
+        return this.modulus != null || this.publicExponent != null || this.publicKey != null ||
+                this.privateExponent != null || !this.crtFieldsChanged.isEmpty() || !factors.isEmpty();
+    }
+
     @Override
     public RsaPrivateKey build() {
 
         if (this.size > 0) { // generation requested:
+            if (hasFieldState()) {
+                String msg = "foo";
+                throw new IllegalStateException(msg);
+            }
             return generate();
         }
 
@@ -193,7 +202,7 @@ public class DefaultRsaPrivateKeyBuilder
             }
         }
 
-        return new JcaTemplate("RSA", this.provider).withKeyFactory(f -> {
+        return new JcaTemplate(this.jcaName, this.provider).withKeyFactory(f -> {
 
             RSAPublicKeySpec pubSpec;
 

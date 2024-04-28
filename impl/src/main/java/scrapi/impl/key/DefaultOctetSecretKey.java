@@ -15,10 +15,9 @@
  */
 package scrapi.impl.key;
 
-import scrapi.key.KeyException;
 import scrapi.key.OctetSecretKey;
+import scrapi.util.Bytes;
 
-import javax.security.auth.DestroyFailedException;
 import java.util.Optional;
 
 public class DefaultOctetSecretKey extends AbstractKey<javax.crypto.SecretKey> implements OctetSecretKey {
@@ -33,17 +32,7 @@ public class DefaultOctetSecretKey extends AbstractKey<javax.crypto.SecretKey> i
     }
 
     @Override
-    public void destroy() {
-        try {
-            this.key.destroy();
-        } catch (DestroyFailedException e) {
-            String msg = javax.crypto.SecretKey.class.getName() + " destroy() failed: " + e.getMessage();
-            throw new KeyException(msg, e);
-        }
-    }
-
-    @Override
-    public boolean isDestroyed() {
-        return this.key.isDestroyed();
+    public Optional<Integer> bitLength() {
+        return octets().map(b -> (int) Bytes.bitLength(b));
     }
 }

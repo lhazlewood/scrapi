@@ -15,8 +15,6 @@
  */
 package scrapi.impl.key;
 
-import scrapi.Destroyable;
-import scrapi.impl.jca.JcaTemplate;
 import scrapi.key.OctetSecretKey;
 import scrapi.util.Assert;
 import scrapi.util.Bytes;
@@ -25,9 +23,9 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
 public class DefaultOctetSecretKeyBuilder extends AbstractKeyBuilder<OctetSecretKey, OctetSecretKey.Builder>
-        implements OctetSecretKey.Builder, Destroyable {
+        implements OctetSecretKey.Builder {
 
-    private byte[] octets;
+    private transient byte[] octets;
 
     public DefaultOctetSecretKeyBuilder(String jcaName, int minSize) {
         super(jcaName, minSize);
@@ -42,30 +40,18 @@ public class DefaultOctetSecretKeyBuilder extends AbstractKeyBuilder<OctetSecret
     @Override
     public OctetSecretKey build() {
 
+        SecretKey jcaKey;
+
         if (!Bytes.isEmpty(this.octets)) {
             if (this.size != 0) {
                 throw new IllegalStateException("Both size and octets cannot be specified.");
             }
-            return new DefaultOctetSecretKey(new SecretKeySpec(this.octets, this.jcaName));
+            jcaKey = new SecretKeySpec(this.octets, this.jcaName);
+        } else {
+            // otherwise need to generate:
+            jcaKey = this.size > 0 ? jca().generateSecretKey(this.size) : jca().generateSecretKey();
         }
 
-        // otherwise need to generate:
-        JcaTemplate template = new JcaTemplate(this.jcaName, this.provider, this.random);
-
-        SecretKey jcaKey = this.size > 0 ?
-                template.generateSecretKey(this.size) :
-                template.generateSecretKey();
-
         return new DefaultOctetSecretKey(jcaKey);
-    }
-
-    @Override
-    public void destroy() {
-        Bytes.clear(this.octets);
-    }
-
-    @Override
-    public boolean isDestroyed() {
-        return false;
     }
 }

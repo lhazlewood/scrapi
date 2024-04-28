@@ -1,5 +1,5 @@
 /*
- * Copyright © 2023 Les Hazlewood
+ * Copyright © 2024 Les Hazlewood
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,18 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package scrapi.lang
+package scrapi.key;
 
-import org.junit.jupiter.api.Test
+@FunctionalInterface
+public interface Sizable<T> {
 
-import static org.junit.jupiter.api.Assertions.assertEquals
+    /**
+     * Sets the size in bits (<em>not bytes</em>) of the associated instance.
+     *
+     * @param sizeInBits the size in bits
+     * @return the associated object for method chaining.
+     * @throws IllegalArgumentException if the specified size is invalid or insufficient
+     */
+    T size(int sizeInBits) throws IllegalArgumentException;
 
-class PairTest {
-
-    @Test
-    void testOf() {
-        def pair = Pair.of('a', 'b')
-        def expected = new DefaultPair('a', 'b')
-        assertEquals expected, pair
-    }
 }

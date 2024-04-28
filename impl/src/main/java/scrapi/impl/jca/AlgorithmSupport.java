@@ -50,4 +50,7 @@ public abstract class AlgorithmSupport<T extends Providable<T> & Randomizable<T>
         return self();
     }
 
+    protected JcaTemplate jca() {
+        return new JcaTemplate(this.jcaName, this.provider, this.random);
+    }
 }

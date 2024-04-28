@@ -98,6 +98,6 @@ public class DefaultPbeKeyBuilder
         PBEKeySpec spec = new PBEKeySpec(password, salt, iterations, size);
         javax.crypto.SecretKey jcaKey = template.withSecretKeyFactory(factory -> factory.generateSecret(spec));
         PBEKey jcaPbeKey = Assert.isInstance(PBEKey.class, jcaKey, "JCA did not create a PBEKey instance.");
-        return new DefaultPbeKey(jcaPbeKey);
+        return new DefaultPbeKey(jcaPbeKey, size);
     }
 }

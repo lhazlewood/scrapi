@@ -36,7 +36,7 @@ abstract class AbstractKeyBuilder<K extends Key<?>, T extends KeyBuilder<K, T>>
             throw new IllegalArgumentException(msg);
         }
         if (size % Byte.SIZE != 0) {
-            String msg = name + " must be a multiple of " + Byte.SIZE + ". Size: " + size;
+            String msg = name + " must be a multiple of " + Byte.SIZE + ". Value: " + size;
             throw new IllegalArgumentException(msg);
         }
         return size;
@@ -56,9 +56,8 @@ abstract class AbstractKeyBuilder<K extends Key<?>, T extends KeyBuilder<K, T>>
         return size;
     }
 
-    @Override
-    public T size(int size) {
-        this.size = assertSize(size, minSize, "size");
+    public T size(int sizeInBits) {
+        this.size = assertSize(sizeInBits, minSize, "size");
         return self();
     }
 }

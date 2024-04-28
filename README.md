@@ -121,6 +121,29 @@ other forms of API usage assertions (e.g. throwing an exception if an API is use
 security while having a cleaner, easier to maintain and understand API that is more readable and usable for 
 developers of all experience levels.
 
+### Abandoning JavaBeans Naming Conventions
+
+In October of 1996, the [JavaBeans Specification, section 8.3](https://download.oracle.com/otndocs/jcp/7224-javabeans-1.01-fr-spec-oth-JSpec/) created getter and setter naming conventions (e.g. `getSomething()`, `setSomething(String something)`) to help dynamically determine which properties of an object were readable and writable/mutable at runtime, mostly to facilitate AWT/Swing user-interface and tool development. Many projects, API specifications and open-source libraries realized this was valuable for non-UI code as well, and proliferated that convention for the same benefits.
+
+However, since the advent of annotations introduced in Java 1.5 in [late 2004](https://en.wikipedia.org/wiki/Java_version_history#Java_5), this convention hasn't been necessary. This is because Java annotations can be used with far more power and introspected at compile time (instead of runtime method name inspection), to indicate which properties support reading and writing, as well as any other number of behaviors or metadata that could be useful (e.g. [JPA annotations](https://javadoc.io/static/javax.persistence/javax.persistence-api/2.2/javax/persistence/package-summary.html) are one such example).
+
+Consequently, scrapi avoids the use of `get` and `set` prefixes, relying on the inherent Java language model that already indicates readability and writability by the nature of a `public` method having arguments or not.  For example:
+
+```java
+public interface Example {
+    
+    String id(); // public without arguments, so it's readable
+
+    void id(String id); // public with arguments, so it's writable 
+}
+```
+
+This decision was made for a few reasons:
+
+1. Code is more readable and less verbose, especially when method chaining
+2. scrapi is primarily designed for application developers authoring code manually, not for user interfaces or external tool automation.
+3. If any such metadata is required beyond the intrinsic Java language model features for public readability and writability or tool automation, we'll use annotations as necessary for better compile-time and runtime capabilities.
+
 ### Lifecycle API Separation
 
 In many JCA APIs, object instances have lifecycle management methods combined with usage methods.  Calling them out of
@@ -225,7 +248,7 @@ size can be represented if possible, even if they key material may not be presen
 ability is inherent and implicit in all private key concepts, and should be supported as such.  For example:
 
 ```java
-aPrivateKey.getPublicKey();
+aPrivateKey.publicKey();
 ```
 
 Even if a private key's material is not available (e.g. it resides externally from the JVM in an HSM), its associated 
@@ -236,12 +259,17 @@ Having this capability may even make the concept of a key `Pair` extraneous and 
 
 ### Key Pairs
 
-`java.security.KeyPair` is a concrete class and not generics-capable.  `scrapi.lang.Pair` is a generics-capable
-interface and new instances can easily be created via `Pair.of(a, b)`.  This ensures public/private key subtypes
-are not lost when paired together.
+`java.security.KeyPair` is a non-generic concrete class, so you never know what type of keys it contains, which is always frustrating when you need to cast its contained keys to the types you need (and hope that they really are those types, or perform a bunch of type and/or algorithm name checking to see if they are).
 
-Even so, the concept of a scrapi `Key` pair may not be necessary at all given that all scrapi private keys will be
-able to access their associated public key via `privateKey.getPublicKey()`;
+Scrapi in contrast does not have a `KeyPair` concept because all scrapi private keys are able to access their associated public key via `privateKey.publicKey()`. And because all Scrapi keys use generics, `publicKey()` will always return the specific subtype associated with the scrapi 
+private key's subtype.
+
+In a sense then, scrapi `PrivateKey` instances can be thought of as 'key pairs' from a JCA perspective. Even so,
+if you still need to use the legacy JCA `KeyPair` API, you can obtain one from the scrapi `PrivateKey`, e.g.
+
+```java
+java.security.KeyPair pair = scrapiPrivateKey.toJcaKeyPair();
+```
 
 ### Builders
 
@@ -269,13 +297,13 @@ RSAPrivateKey
 ```
 
 but it's not, causing confusion.  Additionally, [RFC 8017, Section 3.2.2](https://datatracker.ietf.org/doc/html/rfc8017#section-3.2) is explicit that the extra 'multi primes' are purely optional, and this could have easily been modeled
-in Java as `RSAPrivateKey` with one sub-interface `MultiPrimeRSAPrivateKey` where the
-latter has an empty collection if addtional r>=3 primes are not necessary. A separate peer / non-polymorphic type is not needed at all when a simple empty collection check
+in Java as `RSAPrivateKey` with one sub-interface `CrtRSAPrivateKey` where the
+latter has an empty collection if addtional r >= 3 primes are not necessary. A separate peer / non-polymorphic type is not needed at all when a simple empty collection check
 would suffice.
 
 Consequently, scrapi adopts the simpler, polymorphic, and intuitive alternative to support when RSA multi-prime private keys may be used:
 
 ```
 RsaPrivateKey
-|-- MultiPrimeRsaPrivateKey
+|-- CrtRsaPrivateKey
 ```
