@@ -47,16 +47,15 @@ public final class StandardMacAlgorithms extends IdentifiableRegistry<String, Ma
             if (Algs.Hash.MD2.equals(hashAlg)) continue; // no JCA standard hmac alg for this one
 
             String suffix = suffix(hashAlg);
-            String keyAlgName = "Hmac" + suffix;
+            String id = "Hmac" + suffix;
             int bitLength = hashAlg.bitLength();
-            macs.add(new DefaultMacAlgorithm(keyAlgName, null, bitLength, keyAlgName));
+            macs.add(new DefaultMacAlgorithm(id, null, bitLength));
 
             // Standard PBEWith* and HmacPBE* algs only support SHA1 and SHA2 family algorithms, so if we've
             // encountered anything other than those families, skip:
             if (!hashAlg.id().startsWith("SHA-")) continue;
-            keyAlgName = "PBKDF2WithHmac" + suffix;
 
-            int defaultIterations;
+            int defaultIterations; // https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html
             if (bitLength >= 512) {
                 defaultIterations = 210_000;
             } else if (bitLength >= 384) {
@@ -69,8 +68,8 @@ public final class StandardMacAlgorithms extends IdentifiableRegistry<String, Ma
                 defaultIterations = 1_300_000;
             }
 
-            macs.add(new DefaultPbeMacAlgorithm("PBEWithHmac" + suffix, null, bitLength, keyAlgName, defaultIterations));
-            macs.add(new DefaultPbeMacAlgorithm("HmacPBE" + suffix, null, bitLength, keyAlgName, defaultIterations));
+            macs.add(new DefaultPbeMacAlgorithm("PBEWithHmac" + suffix, null, bitLength, defaultIterations));
+            macs.add(new DefaultPbeMacAlgorithm("HmacPBE" + suffix, null, bitLength, defaultIterations));
         }
         return Collections.immutable(macs);
     }

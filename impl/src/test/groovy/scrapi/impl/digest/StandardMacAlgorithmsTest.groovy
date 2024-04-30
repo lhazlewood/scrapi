@@ -18,7 +18,7 @@ package scrapi.impl.digest
 import org.junit.jupiter.api.Test
 import scrapi.Algs
 import scrapi.digest.MacAlgorithm
-import scrapi.impl.key.DefaultPbeKeyBuilder
+import scrapi.impl.key.DefaultPbeKey
 import scrapi.key.PbeKey
 import scrapi.key.SecretKey
 import scrapi.util.Bytes
@@ -38,10 +38,7 @@ class StandardMacAlgorithmsTest {
 
     static SecretKey<? extends javax.crypto.SecretKey> newKey(MacAlgorithm alg) {
         def b = alg.key()
-        if (b instanceof PbeKey.Builder) {
-            return b.iterations(DefaultPbeKeyBuilder.MIN_ITERATIONS) // keep tests fast
-                    .build()
-        }
+        if (b instanceof PbeKey.Builder) b.iterations(DefaultPbeKey.MIN_ITERATIONS) // keep tests fast
         return b.build() as SecretKey
     }
 
@@ -92,6 +89,7 @@ class StandardMacAlgorithmsTest {
             def key = newKey(alg)
             byte[] digest = alg.key(key).get() // no 'apply' methods called, no data processed
             def jca = Mac.getInstance(alg.id() as String)
+            jca.getMacLength()
             jca.init(key.toJcaKey())
             byte[] jcaDigest = jca.doFinal()
             assertTrue MessageDigest.isEqual(jcaDigest, digest)

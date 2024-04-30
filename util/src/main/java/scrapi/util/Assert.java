@@ -120,6 +120,13 @@ public final class Assert {
         return array;
     }
 
+    public static char[] notEmpty(char[] array, String msg) {
+        hasText(msg, "Exception message cannot be null or empty.");
+        notNull(array, msg);
+        if (array.length == 0) throw new IllegalArgumentException(msg);
+        return array;
+    }
+
     /**
      * Assert that a collection has elements; that is, it must not be
      * <code>null</code> and must have at least one element.

@@ -19,34 +19,84 @@ import scrapi.key.PbeKey;
 import scrapi.util.Assert;
 
 import javax.crypto.interfaces.PBEKey;
+import javax.crypto.spec.PBEKeySpec;
 import java.util.Optional;
 
-public class DefaultPbeKey extends AbstractKey<PBEKey> implements PbeKey {
+@SuppressWarnings("serial")
+public class DefaultPbeKey extends PBEKeySpec implements PbeKey, PBEKey {
 
-    private final int generatedKeySize;
+    private static final String RAW_ALGORITHM_NAME = "RAW";
+    public static final int MIN_SIZE = 64;
+    public static final String MIN_SIZE_MSG = "size must be >= " + MIN_SIZE;
+    public static final int MIN_ITERATIONS = 1024;
+    public static final String MIN_ITERATIONS_MSG = "iterations must be >= " + MIN_ITERATIONS;
 
-    public DefaultPbeKey(PBEKey key, int generatedKeySize) {
-        super(key);
-        this.generatedKeySize = Assert.gt(generatedKeySize, 0, "generatedKeySize must be >= 0");
+    private final String jcaAlg;
+    private volatile boolean destroyed;
+
+    public DefaultPbeKey(String jcaAlg, char[] password, byte[] salt, int iterations, int derivedKeySize) {
+        super(Assert.notEmpty(password, "password cannot be null or empty."),
+                Assert.notEmpty(salt, "salt cannot be null or empty."),
+                Assert.gte(iterations, MIN_ITERATIONS, MIN_ITERATIONS_MSG),
+                Assert.gt(derivedKeySize, MIN_SIZE, MIN_SIZE_MSG));
+        this.jcaAlg = Assert.hasText(jcaAlg, "jcaAlg cannot be null or empty.");
     }
 
     @Override
     public Optional<Integer> bitLength() {
-        return Optional.of(generatedKeySize);
+        return Optional.of(getKeyLength());
     }
 
     @Override
     public char[] password() {
-        return this.key.getPassword();
+        return super.getPassword();
     }
 
     @Override
     public byte[] salt() {
-        return this.key.getSalt();
+        return super.getSalt();
     }
 
     @Override
     public int iterations() {
-        return this.key.getIterationCount();
+        return super.getIterationCount();
+    }
+
+    @Override
+    public String getAlgorithm() {
+        return this.jcaAlg;
+    }
+
+    @Override
+    public String getFormat() {
+        return RAW_ALGORITHM_NAME;
+    }
+
+    @Override
+    public byte[] getEncoded() {
+        // 'Real' PBE keys are derived using a cryptographic algorithm, and this class implementation does not
+        // represent a real derived key - only the values needed to derive one.  As such, we don't return an encoded
+        // byte array here to avoid the ambiguity and confusion that could result if the caller might expect
+        // the (non-derived) password bytes and not the 'real' derived bytes (or vice versa).
+        //
+        // (that is, this implementation is only used with derivation algorithms, and does not represent an
+        //  already-derived key).
+        return null;
+    }
+
+    @Override
+    public void destroy() {
+        destroyed = true;
+        clearPassword();
+    }
+
+    @Override
+    public boolean isDestroyed() {
+        return this.destroyed;
+    }
+
+    @Override
+    public PBEKey toJcaKey() {
+        return this;
     }
 }

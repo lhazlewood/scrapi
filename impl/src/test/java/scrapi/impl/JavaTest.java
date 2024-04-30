@@ -19,6 +19,23 @@ package scrapi.impl;
 public class JavaTest {
 
 //    @Test
+//    void testing() throws Exception {
+//        byte[] salt = Bytes.randomBits(64);
+//        char[] password = "correct horse battery staple".toCharArray();
+//        PBEParameterSpec paramSpec = new PBEParameterSpec(salt, 20);
+//        PBEKeySpec keySpec = new PBEKeySpec(password, salt, 20, 256);
+//        SecretKeyFactory f = SecretKeyFactory.getInstance("PBEWithHmacSHA256AndAES_128");
+//        SecretKey key = f.generateSecret(keySpec);
+//        Mac mac = Mac.getInstance("HmacPBESHA256");
+//        mac.getMacLength(); // force SPI lookup
+//        mac.init(key);
+//        mac.update(salt);
+//        byte[] digest = mac.doFinal();
+//        System.out.println(key);
+//        System.out.println("Digest: " + Strings.toHex(digest));
+//    }
+
+//    @Test
 //    void sigNoData() throws Exception {
 //        Algs.Sig.get().values().stream().filter(s -> s instanceof RsaSignatureAlgorithm).map(s -> (RsaSignatureAlgorithm) s).forEach(rsa -> {
 //            RsaPrivateKey priv = rsa.key().size(1024).build(); // keep build times short

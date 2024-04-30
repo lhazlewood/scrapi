@@ -15,14 +15,10 @@
  */
 package scrapi.impl.key;
 
-import scrapi.impl.jca.JcaTemplate;
 import scrapi.key.PbeKey;
 import scrapi.util.Assert;
 import scrapi.util.Bytes;
 import scrapi.util.Randoms;
-
-import javax.crypto.interfaces.PBEKey;
-import javax.crypto.spec.PBEKeySpec;
 
 public class DefaultPbeKeyBuilder
         extends AbstractKeyBuilder<PbeKey, PbeKey.Builder>
@@ -32,8 +28,6 @@ public class DefaultPbeKeyBuilder
             "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789~`!@#$%^&*()-_+={}[]|\\;:\"<>,./?"
                     .toCharArray();
 
-    public static final int MIN_ITERATIONS = 1024;
-    public static final String MIN_ITERATIONS_MSG = "iterations must be >= " + MIN_ITERATIONS;
     private static final char[] EMPTY_CHARS = new char[0];
 
     private final int DEFAULT_ITERATIONS;
@@ -44,7 +38,7 @@ public class DefaultPbeKeyBuilder
 
     public DefaultPbeKeyBuilder(String jcaName, int generatedKeySize, int defaultIterations) {
         super(jcaName, generatedKeySize);
-        this.DEFAULT_ITERATIONS = Assert.gte(defaultIterations, MIN_ITERATIONS, MIN_ITERATIONS_MSG);
+        this.DEFAULT_ITERATIONS = Assert.gte(defaultIterations, DefaultPbeKey.MIN_ITERATIONS, DefaultPbeKey.MIN_ITERATIONS_MSG);
     }
 
     @Override
@@ -59,13 +53,13 @@ public class DefaultPbeKeyBuilder
 
     @Override
     public PbeKey.Builder salt(byte[] salt) {
-        this.salt = salt;
+        this.salt = Assert.notEmpty(salt, "salt cannot be null or empty.").clone();
         return self();
     }
 
     @Override
     public PbeKey.Builder iterations(int iterations) {
-        this.iterations = Assert.gte(iterations, MIN_ITERATIONS, MIN_ITERATIONS_MSG);
+        this.iterations = Assert.gte(iterations, DefaultPbeKey.MIN_ITERATIONS, DefaultPbeKey.MIN_ITERATIONS_MSG);
         return self();
     }
 
@@ -90,14 +84,10 @@ public class DefaultPbeKeyBuilder
             salt = Bytes.randomBits(size);
         }
         int iterations = this.iterations;
-        if (iterations < MIN_ITERATIONS) {
+        if (iterations < DefaultPbeKey.MIN_ITERATIONS) {
             iterations = DEFAULT_ITERATIONS;
         }
 
-        JcaTemplate template = new JcaTemplate(this.jcaName, this.provider, this.random);
-        PBEKeySpec spec = new PBEKeySpec(password, salt, iterations, size);
-        javax.crypto.SecretKey jcaKey = template.withSecretKeyFactory(factory -> factory.generateSecret(spec));
-        PBEKey jcaPbeKey = Assert.isInstance(PBEKey.class, jcaKey, "JCA did not create a PBEKey instance.");
-        return new DefaultPbeKey(jcaPbeKey, size);
+        return new DefaultPbeKey(this.jcaName, password, salt, iterations, size);
     }
 }

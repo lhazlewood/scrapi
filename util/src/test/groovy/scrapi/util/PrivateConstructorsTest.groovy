@@ -13,24 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package scrapi.impl.digest;
+package scrapi.util
 
-import scrapi.digest.Hasher;
-import scrapi.digest.MacAlgorithm;
-import scrapi.key.KeyBuilder;
-import scrapi.key.SecretKey;
+import org.junit.jupiter.api.Test
 
-import java.security.Provider;
+class PrivateConstructorsTest {
 
-abstract class AbstractMacAlgorithm<K extends SecretKey<?>, B extends KeyBuilder<K, B>>
-        extends AbstractDigestAlgorithm<MacAlgorithm<K, B>> implements MacAlgorithm<K, B> {
-
-    protected AbstractMacAlgorithm(String id, Provider provider, int bitLength) {
-        super(id, provider, bitLength);
-    }
-
-    @Override
-    public Hasher key(K key) {
-        return new JcaMacDigester(this.ID, this.PROVIDER, key);
+    /**
+     * For code coverage assertions only.
+     */
+    @SuppressWarnings(['GroovyAccessibility', 'GroovyResultOfObjectAllocationIgnored'])
+    @Test
+    void privateConstructors() {
+        new Arrays()
+        new Assert()
+        new Bytes()
+        new Classes()
+        new Collections()
+        new Maps()
+        new Objects()
+        new Randoms()
+        new Strings()
     }
 }

@@ -25,17 +25,17 @@ public class DefaultMacAlgorithm
         extends AbstractMacAlgorithm<OctetSecretKey, OctetSecretKey.Builder>
         implements MacAlgorithm<OctetSecretKey, OctetSecretKey.Builder> {
 
-    public DefaultMacAlgorithm(String id, Provider provider, int bitLength, String keygenAlgName) {
-        super(id, provider, bitLength, keygenAlgName);
+    public DefaultMacAlgorithm(String id, Provider provider, int bitLength) {
+        super(id, provider, bitLength);
     }
 
     @Override
     public DefaultMacAlgorithm provider(Provider provider) {
-        return new DefaultMacAlgorithm(this.ID, this.PROVIDER, this.BITLEN, this.KEYGEN_ALG_NAME);
+        return new DefaultMacAlgorithm(this.ID, this.PROVIDER, this.BITLEN);
     }
 
     @Override
     public OctetSecretKey.Builder key() {
-        return new DefaultOctetSecretKeyBuilder(this.KEYGEN_ALG_NAME, this.BITLEN);
+        return new DefaultOctetSecretKeyBuilder(id(), this.BITLEN);
     }
 }
