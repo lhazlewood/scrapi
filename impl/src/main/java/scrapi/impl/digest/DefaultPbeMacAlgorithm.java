@@ -19,7 +19,6 @@ import scrapi.digest.MacAlgorithm;
 import scrapi.impl.key.DefaultPbeKey;
 import scrapi.impl.key.DefaultPbeKeyBuilder;
 import scrapi.key.PbeKey;
-import scrapi.util.Assert;
 
 import java.security.Provider;
 
@@ -31,8 +30,7 @@ public class DefaultPbeMacAlgorithm
 
     protected DefaultPbeMacAlgorithm(String id, Provider provider, int bitLength, int defaultIterations) {
         super(id, provider, bitLength);
-        this.DEFAULT_ITERATIONS = Assert.gte(defaultIterations, DefaultPbeKey.MIN_ITERATIONS,
-                DefaultPbeKey.MIN_ITERATIONS_MSG);
+        this.DEFAULT_ITERATIONS = DefaultPbeKey.assertMinIterations(defaultIterations);
     }
 
     @Override

@@ -37,9 +37,13 @@ public class DefaultPbeKey extends PBEKeySpec implements PbeKey, PBEKey {
     public DefaultPbeKey(String jcaAlg, char[] password, byte[] salt, int iterations, int derivedKeySize) {
         super(Assert.notEmpty(password, "password cannot be null or empty."),
                 Assert.notEmpty(salt, "salt cannot be null or empty."),
-                Assert.gte(iterations, MIN_ITERATIONS, MIN_ITERATIONS_MSG),
+                assertMinIterations(iterations),
                 Assert.gt(derivedKeySize, MIN_SIZE, MIN_SIZE_MSG));
         this.jcaAlg = Assert.hasText(jcaAlg, "jcaAlg cannot be null or empty.");
+    }
+
+    public static int assertMinIterations(int minIterations) {
+        return Assert.gte(minIterations, MIN_ITERATIONS, MIN_ITERATIONS_MSG);
     }
 
     @Override

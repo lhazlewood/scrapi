@@ -38,7 +38,7 @@ public class DefaultPbeKeyBuilder
 
     public DefaultPbeKeyBuilder(String jcaName, int generatedKeySize, int defaultIterations) {
         super(jcaName, generatedKeySize);
-        this.DEFAULT_ITERATIONS = Assert.gte(defaultIterations, DefaultPbeKey.MIN_ITERATIONS, DefaultPbeKey.MIN_ITERATIONS_MSG);
+        this.DEFAULT_ITERATIONS = DefaultPbeKey.assertMinIterations(defaultIterations);
     }
 
     @Override
@@ -59,7 +59,7 @@ public class DefaultPbeKeyBuilder
 
     @Override
     public PbeKey.Builder iterations(int iterations) {
-        this.iterations = Assert.gte(iterations, DefaultPbeKey.MIN_ITERATIONS, DefaultPbeKey.MIN_ITERATIONS_MSG);
+        this.iterations = DefaultPbeKey.assertMinIterations(iterations);
         return self();
     }
 
