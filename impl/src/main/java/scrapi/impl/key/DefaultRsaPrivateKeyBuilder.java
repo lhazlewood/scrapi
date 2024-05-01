@@ -209,7 +209,7 @@ public class DefaultRsaPrivateKeyBuilder
             RSAPrivateKey priv = Assert.isInstance(RSAPrivateKey.class, f.generatePrivate(privSpec),
                     "RSA KeyFactory Provider must return an instance of RSAPrivateKey.");
 
-            if (priv instanceof RSAPrivateCrtKey || priv instanceof RSAMultiPrimePrivateCrtKey) {
+            if (isCrt(priv)) {
                 // public exponent already available from the private key, use it directly:
                 BigInteger pubExp = priv instanceof RSAPrivateCrtKey ?
                         ((RSAPrivateCrtKey) priv).getPublicExponent() :

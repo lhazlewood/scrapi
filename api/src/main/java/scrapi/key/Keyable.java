@@ -16,21 +16,23 @@
 package scrapi.key;
 
 /**
- * Represents a {@link Key} supplier. There is no requirement that a new or distinct key is returned each time the
- * {@link #key()} method is invoked.
+ * Represents the ability to accept a {@link Key} for use in cryptographic algorithms.
  *
- * <p>This is a {@link FunctionalInterface functional interface} whose functional method is {@link #key()}.</p>
+ * <p>This is a {@link FunctionalInterface functionl interface} whose functional method is {@link #key(Key)}.</p>
  *
- * @param <K> the type of Key.
+ * @param <K> the type of key accepted.
+ * @param <T> the type of object returned after accepting the key, often useful for method chaining.
  * @since SCRAPI_RELEASE_VERSION
  */
 @FunctionalInterface
-public interface Keyed<K extends Key<?>> {
+public interface Keyable<K extends Key<?>, T> {
 
     /**
-     * Returns a key.
+     * Accepts the specified key.
      *
-     * @return a key.
+     * @param key the key to accept.
+     * @return the key to accept.
      */
-    K key();
+    T key(K key);
+
 }

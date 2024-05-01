@@ -15,7 +15,11 @@
  */
 package scrapi
 
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
+
+import java.security.Provider
+import java.security.Security
 
 class AlgsTest {
 
@@ -26,5 +30,18 @@ class AlgsTest {
         new Algs.Hash()
         new Algs.Mac()
         new Algs.Sig()
+    }
+
+    @Test()
+    @Disabled
+    // not needed during build, only for manual or IDE convenience
+    void listServices() {
+        //Security.addProvider(new BouncyCastleProvider())
+        def providers = Security.getProviders()
+        def services = providers.collectMany { it.getServices() }
+        def macServices = services.findAll { s -> s.type.contains('Mac') && !s.algorithm.startsWith('Ssl') }
+        macServices.eachWithIndex { Provider.Service service, int i ->
+            println "${i + 1}: $service"
+        }
     }
 }

@@ -394,12 +394,12 @@ public class JcaTemplate {
         protected Exception wrap(Exception e, String jcaName, Provider specifiedProvider, Provider fallbackProvider) {
             String msg = "Unable to obtain '" + jcaName + "' " + id() + " instance from ";
             if (specifiedProvider != null) {
-                msg += "specified '" + specifiedProvider + "' Provider";
+                msg += "specified Provider '" + specifiedProvider + "'";
             } else {
                 msg += "default JCA Provider";
             }
             if (fallbackProvider != null) {
-                msg += " or fallback '" + fallbackProvider + "' Provider";
+                msg += " or fallback Provider '" + fallbackProvider + "'";
             }
             msg += ": " + e.getMessage();
             return wrap(msg, e);
