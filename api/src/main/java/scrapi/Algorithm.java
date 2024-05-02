@@ -16,7 +16,7 @@
 package scrapi;
 
 import scrapi.jca.Providable;
-import scrapi.lang.Identifiable;
+import scrapi.lang.Identified;
 
-public interface Algorithm<A extends Algorithm<A>> extends Identifiable<String>, Providable<A> {
+public interface Algorithm<A extends Algorithm<A>> extends Identified<String>, Providable<A> {
 }

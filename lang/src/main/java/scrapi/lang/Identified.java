@@ -21,7 +21,7 @@ package scrapi.lang;
  * @since SCRAPI_RELEASE_VERSION
  */
 @FunctionalInterface
-public interface Identifiable<T> {
+public interface Identified<T> {
 
     /**
      * Returns the unique identifier of the associated object.

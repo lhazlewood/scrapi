@@ -18,12 +18,12 @@ package scrapi.lang;
 import java.util.Set;
 
 /**
- * An {@link Identifiable} instance that has additional aliases in addition to its primary {@link #id() id}.
+ * An {@link Identified} instance that has additional aliases in addition to its primary {@link #id() id}.
  *
  * @param <T> the type of id and aliases
  * @since SCRAPI_RELEASE_VERSION
  */
-public interface Aliased<T> extends Identifiable<T> {
+public interface Aliased<T> extends Identified<T> {
 
     /**
      * Returns the aliases that identify this instance in addition to its primary {@link #id() id}.

@@ -19,7 +19,7 @@ import scrapi.SecurityException;
 import scrapi.digest.DigestException;
 import scrapi.lang.CheckedFunction;
 import scrapi.lang.CheckedSupplier;
-import scrapi.lang.Identifiable;
+import scrapi.lang.Identified;
 import scrapi.util.Assert;
 import scrapi.util.Collections;
 import scrapi.util.Objects;
@@ -316,7 +316,7 @@ public class JcaTemplate {
 //        });
 //    }
 
-    private interface InstanceFactory<T> extends Identifiable<String> {
+    private interface InstanceFactory<T> extends Identified<String> {
 
         Class<T> getInstanceClass();
 

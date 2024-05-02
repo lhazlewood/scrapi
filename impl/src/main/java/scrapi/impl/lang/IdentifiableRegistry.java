@@ -15,13 +15,13 @@
  */
 package scrapi.impl.lang;
 
-import scrapi.lang.Identifiable;
+import scrapi.lang.Identified;
 
 import java.util.Collection;
 
-public class IdentifiableRegistry<K, V extends Identifiable<K>> extends DefaultRegistry<K, V> {
+public class IdentifiableRegistry<K, V extends Identified<K>> extends DefaultRegistry<K, V> {
 
     public IdentifiableRegistry(String name, Collection<? extends V> values) {
-        super(name, "id", values, Identifiable::id);
+        super(name, "id", values, Identified::id);
     }
 }
