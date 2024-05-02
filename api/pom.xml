@@ -45,36 +45,37 @@
     </dependencies>
 
 <!--    <build>-->
-    <!--        <plugins>-->
-    <!--            <plugin>-->
-    <!--                <groupId>org.apache.maven.plugins</groupId>-->
-    <!--                <artifactId>maven-checkstyle-plugin</artifactId>-->
-    <!--                <version>3.3.1</version>-->
-    <!--                <executions>-->
-    <!--                    <execution>-->
-    <!--                        <id>verify-style</id>-->
-    <!--                        <phase>process-classes</phase>-->
-    <!--                        <goals>-->
-    <!--                            <goal>check</goal>-->
-    <!--                        </goals>-->
-    <!--                    </execution>-->
-    <!--                </executions>-->
-    <!--                <configuration>-->
-    <!--                    <consoleOutput>true</consoleOutput>-->
-    <!--                    <logViolationsToConsole>true</logViolationsToConsole>-->
-    <!--                    <includeTestResources>false</includeTestResources>-->
-    <!--                    <checkstyleRules>-->
-    <!--                        <module name="Checker">-->
-    <!--                            <module name="TreeWalker">-->
-    <!--                                <module name="NonEmptyAtclauseDescription"/>-->
-    <!--&lt;!&ndash;                                    <property name="javadocTokens" value="SINCE_LITERAL"/>&ndash;&gt;-->
-    <!--&lt;!&ndash;                                </module>&ndash;&gt;-->
-    <!--                            </module>-->
-    <!--                        </module>-->
-    <!--                    </checkstyleRules>-->
-    <!--                </configuration>-->
-    <!--            </plugin>-->
-    <!--        </plugins>-->
-    <!--    </build>-->
+<!--        <plugins>-->
+<!--            <plugin>-->
+<!--                <groupId>org.apache.maven.plugins</groupId>-->
+<!--                <artifactId>maven-checkstyle-plugin</artifactId>-->
+<!--                <version>3.3.1</version>-->
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <id>verify-style</id>-->
+<!--                        <phase>process-classes</phase>-->
+<!--                        <goals>-->
+<!--                            <goal>check</goal>-->
+<!--                        </goals>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--                <configuration>-->
+<!--                    <consoleOutput>true</consoleOutput>-->
+<!--                    <logViolationsToConsole>true</logViolationsToConsole>-->
+<!--                    <includeTestResources>false</includeTestResources>-->
+<!--                    <checkstyleRules>-->
+<!--                        <module name="Checker">-->
+<!--                            <module name="TreeWalker">-->
+<!--                                &lt;!&ndash; https://github.com/checkstyle/checkstyle/discussions/14848#discussioncomment-9290358: &ndash;&gt;-->
+<!--                                <module name="WriteTag">-->
+<!--                                    <property name="tag" value="@since"/>-->
+<!--                                </module>-->
+<!--                            </module>-->
+<!--                        </module>-->
+<!--                    </checkstyleRules>-->
+<!--                </configuration>-->
+<!--            </plugin>-->
+<!--        </plugins>-->
+<!--    </build>-->
 
 </project>
