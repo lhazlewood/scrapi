@@ -20,7 +20,7 @@ import java.util.Optional;
 /**
  * An {@code OctetSecretKey} is a {@code SecretKey} where the key material is a single byte array value.
  *
- * @since 0.1
+ * @since SCRAPI_RELEASE_VERSION
  */
 public interface OctetSecretKey extends SecretKey<javax.crypto.SecretKey> {
 

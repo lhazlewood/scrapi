@@ -28,6 +28,7 @@ import scrapi.lang.Builder;
  * @param <K> the type of key to build
  * @param <T> the type of the builder, for subtype method chaining
  * @see KeyBuilderSupplier
+ * @since SCRAPI_RELEASE_VERSION
  */
 public interface KeyBuilder<K extends Key<?>, T extends KeyBuilder<K, T>>
         extends Providable<T>, Randomizable<T>, Builder<K> {

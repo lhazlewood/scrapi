@@ -22,6 +22,7 @@ import java.security.Provider;
  *
  * @param <T> the type of {@code Object} returned after setting the {@code Provider}, usually for method chaining.
  * @see #provider(Provider)
+ * @since SCRAPI_RELEASE_VERSION
  */
 @FunctionalInterface
 public interface Providable<T> {

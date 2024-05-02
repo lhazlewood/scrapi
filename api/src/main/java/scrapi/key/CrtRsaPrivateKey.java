@@ -32,7 +32,7 @@ public interface CrtRsaPrivateKey extends RsaPrivateKey {
      * Returns the first factor {@code p}, a positive integer.
      *
      * @return the first factor {@code p}, a positive integer.
-     * @see <a href="https://datatracker.ietf.org/doc/html/rfc8017#section-3.2">RFC 8017, Section 3.2</a>, second representation.
+     * @see <a href="https://datatracker.ietf.org/doc/html/rfc8017#section-3.2">RFC 8017, Section 3.2 (second representation)</a>
      */
     BigInteger prime1();
 
@@ -40,7 +40,7 @@ public interface CrtRsaPrivateKey extends RsaPrivateKey {
      * Returns the second factor {@code q}, a positive integer.
      *
      * @return the second factor {@code q}, a positive integer.
-     * @see <a href="https://datatracker.ietf.org/doc/html/rfc8017#section-3.2">RFC 8017, Section 3.2</a>, second representation.
+     * @see <a href="https://datatracker.ietf.org/doc/html/rfc8017#section-3.2">RFC 8017, Section 3.2 (second representation)</a>
      */
     BigInteger prime2();
 
@@ -48,7 +48,7 @@ public interface CrtRsaPrivateKey extends RsaPrivateKey {
      * Returns the first factor's CRT exponent, a positive integer.
      *
      * @return the first factor's CRT exponent, a positive integer.
-     * @see <a href="https://datatracker.ietf.org/doc/html/rfc8017#section-3.2">RFC 8017, Section 3.2</a>, second representation.
+     * @see <a href="https://datatracker.ietf.org/doc/html/rfc8017#section-3.2">RFC 8017, Section 3.2 (second representation)</a>
      */
     BigInteger exponent1();
 
@@ -56,7 +56,7 @@ public interface CrtRsaPrivateKey extends RsaPrivateKey {
      * Returns the second factor's CRT exponent, a positive integer.
      *
      * @return the second factor's CRT exponent, a positive integer.
-     * @see <a href="https://datatracker.ietf.org/doc/html/rfc8017#section-3.2">RFC 8017, Section 3.2</a>, second representation.
+     * @see <a href="https://datatracker.ietf.org/doc/html/rfc8017#section-3.2">RFC 8017, Section 3.2 (second representation)</a>
      */
     BigInteger exponent2();
 
@@ -64,7 +64,7 @@ public interface CrtRsaPrivateKey extends RsaPrivateKey {
      * Returns the (first) CRT coefficient, a positive integer.
      *
      * @return the (first) CRT coefficient, a positive integer.
-     * @see <a href="https://datatracker.ietf.org/doc/html/rfc8017#section-3.2">RFC 8017, Section 3.2</a>, second representation.
+     * @see <a href="https://datatracker.ietf.org/doc/html/rfc8017#section-3.2">RFC 8017, Section 3.2 (second representation)</a>
      */
     BigInteger coefficient();
 
@@ -72,7 +72,7 @@ public interface CrtRsaPrivateKey extends RsaPrivateKey {
      * Returns any additional (possibly empty) prime factors of the {@link #modulus() modulus} {@code n}.
      *
      * @return any additional (possibly empty) prime factors of the {@link #modulus() modulus} {@code n}.
-     * @see <a href="https://datatracker.ietf.org/doc/html/rfc8017#section-3.2">RFC 8017, Section 3.2</a>, second representation.
+     * @see <a href="https://datatracker.ietf.org/doc/html/rfc8017#section-3.2">RFC 8017, Section 3.2 (second representation)</a>
      */
     List<RsaPrimeFactor> otherFactors();
 

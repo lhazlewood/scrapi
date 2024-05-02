@@ -25,7 +25,7 @@ public interface RsaPrimeFactor {
      * Returns the factor's prime, a positive integer.
      *
      * @return the factor's prime, a positive integer.
-     * @see <a href="https://datatracker.ietf.org/doc/html/rfc8017#section-3.2">RFC 8017, Section 3.2</a>, second representation.
+     * @see <a href="https://datatracker.ietf.org/doc/html/rfc8017#section-3.2">RFC 8017, Section 3.2 (second representation)</a>
      */
     BigInteger prime();
 
@@ -33,7 +33,7 @@ public interface RsaPrimeFactor {
      * Returns the factor's CRT exponent, a positive integer.
      *
      * @return the factor's CRT exponent, a positive integer.
-     * @see <a href="https://datatracker.ietf.org/doc/html/rfc8017#section-3.2">RFC 8017, Section 3.2</a>, second representation.
+     * @see <a href="https://datatracker.ietf.org/doc/html/rfc8017#section-3.2">RFC 8017, Section 3.2 (second representation)</a>
      */
     BigInteger exponent();
 
@@ -41,7 +41,7 @@ public interface RsaPrimeFactor {
      * Returns the factor's CRT coefficient, a positive integer.
      *
      * @return the factor's CRT coefficient, a positive integer.
-     * @see <a href="https://datatracker.ietf.org/doc/html/rfc8017#section-3.2">RFC 8017, Section 3.2</a>, second representation.
+     * @see <a href="https://datatracker.ietf.org/doc/html/rfc8017#section-3.2">RFC 8017, Section 3.2 (second representation)</a>
      */
     BigInteger coefficient();
 

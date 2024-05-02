@@ -23,6 +23,7 @@ package scrapi.key;
  * @param <B> type of builder to create each time {@link #key()} is called.
  * @see #key()
  * @see KeyBuilder
+ * @since SCRAPI_RELEASE_VERSION
  */
 @FunctionalInterface
 public interface KeyBuilderSupplier<K extends Key<?>, B extends KeyBuilder<K, B>> {

@@ -28,7 +28,7 @@ public interface RsaPrivateKey extends PrivateKey<java.security.PrivateKey, RsaP
      * with some JCA {@link java.security.Provider Provider}s and/or Hardware Security Modules.
      *
      * @return the private exponent {@code d}, a positive integer, if it is available.
-     * @see <a href="https://datatracker.ietf.org/doc/html/rfc8017#section-3.2">RFC 8017, Section 3.2</a>.
+     * @see <a href="https://datatracker.ietf.org/doc/html/rfc8017#section-3.2">RFC 8017, Section 3.2</a>
      */
     Optional<BigInteger> privateExponent();
 

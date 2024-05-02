@@ -22,6 +22,7 @@ import java.security.SecureRandom;
  *
  * @param <T> the type of {@code Object} returned after setting the {@code SecureRandom}, usually for method chaining.
  * @see #random(SecureRandom)
+ * @since SCRAPI_RELEASE_VERSION
  */
 @FunctionalInterface
 public interface Randomizable<T> {

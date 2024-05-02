@@ -19,6 +19,8 @@ import scrapi.SecurityException;
 
 /**
  * General-purpose exception when encountering a problem with a cryptographic {@link Key}.
+ *
+ * @since SCRAPI_RELEASE_VERSION
  */
 public class KeyException extends SecurityException {
 
