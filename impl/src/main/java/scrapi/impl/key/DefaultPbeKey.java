@@ -26,7 +26,7 @@ import java.util.Optional;
 public class DefaultPbeKey extends PBEKeySpec implements PbeKey, PBEKey {
 
     private static final String RAW_ALGORITHM_NAME = "RAW";
-    public static final int MIN_SIZE = 64;
+    public static final int MIN_SIZE = 128;
     public static final String MIN_SIZE_MSG = "size must be >= " + MIN_SIZE;
     public static final int MIN_ITERATIONS = 1024;
     public static final String MIN_ITERATIONS_MSG = "iterations must be >= " + MIN_ITERATIONS;
@@ -37,13 +37,17 @@ public class DefaultPbeKey extends PBEKeySpec implements PbeKey, PBEKey {
     public DefaultPbeKey(String jcaAlg, char[] password, byte[] salt, int iterations, int derivedKeySize) {
         super(Assert.notEmpty(password, "password cannot be null or empty."),
                 Assert.notEmpty(salt, "salt cannot be null or empty."),
-                assertMinIterations(iterations),
+                assertIterationsGte(iterations, MIN_ITERATIONS),
                 Assert.gt(derivedKeySize, MIN_SIZE, MIN_SIZE_MSG));
         this.jcaAlg = Assert.hasText(jcaAlg, "jcaAlg cannot be null or empty.");
     }
 
-    public static int assertMinIterations(int minIterations) {
-        return Assert.gte(minIterations, MIN_ITERATIONS, MIN_ITERATIONS_MSG);
+    public static int assertIterationsGte(int iterations, int requirement) {
+        if (iterations < requirement) {
+            String msg = "iterations must be >= " + requirement;
+            throw new IllegalArgumentException(msg);
+        }
+        return iterations;
     }
 
     @Override

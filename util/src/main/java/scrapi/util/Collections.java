@@ -575,4 +575,52 @@ public final class Collections {
             throw new UnsupportedOperationException("Not supported");
         }
     }
+
+    /**
+     * Convenience method to return a Collection as a CSV String.
+     * E.g. useful for <code>toString()</code> implementations.
+     *
+     * @param coll the Collection to display
+     * @return the delimited String
+     */
+    public static String toCommaDelimitedString(Collection<?> coll) {
+        return toDelimitedString(coll, ",");
+    }
+
+    /**
+     * Convenience method to return a Collection as a delimited (e.g. CSV)
+     * String. E.g. useful for <code>toString()</code> implementations.
+     *
+     * @param coll  the Collection to display
+     * @param delim the delimiter to use (probably a ",")
+     * @return the delimited String
+     */
+    public static String toDelimitedString(Collection<?> coll, String delim) {
+        return toDelimitedString(coll, delim, "", "");
+    }
+
+    /**
+     * Convenience method to return a Collection as a delimited (e.g. CSV)
+     * String. E.g. useful for <code>toString()</code> implementations.
+     *
+     * @param coll   the Collection to display
+     * @param delim  the delimiter to use (probably a ",")
+     * @param prefix the String to start each element with
+     * @param suffix the String to end each element with
+     * @return the delimited String
+     */
+    public static String toDelimitedString(Collection<?> coll, String delim, String prefix, String suffix) {
+        if (Collections.isEmpty(coll)) {
+            return "";
+        }
+        StringBuilder sb = new StringBuilder();
+        Iterator<?> it = coll.iterator();
+        while (it.hasNext()) {
+            sb.append(prefix).append(it.next()).append(suffix);
+            if (it.hasNext()) {
+                sb.append(delim);
+            }
+        }
+        return sb.toString();
+    }
 }

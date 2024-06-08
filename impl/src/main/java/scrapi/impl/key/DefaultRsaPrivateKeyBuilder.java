@@ -74,50 +74,50 @@ public class DefaultRsaPrivateKeyBuilder
     @Override
     public RsaPrivateKey.Builder publicKey(RsaPublicKey publicKey) {
         Assert.notNull(publicKey, "publicKey cannot be null");
-        BigInteger pubExp = Assert.notNull(publicKey.publicExponent(), "RsaPublicKey publicExponent cannot be null");
-        modulus(publicKey.modulus());
-        publicExponent(pubExp);
+        BigInteger pubExp = Assert.notNull(publicKey.e(), "RsaPublicKey public exponent 'e' cannot be null");
+        n(publicKey.n());
+        e(pubExp);
         this.publicKey = publicKey;
         return self();
     }
 
     @Override
-    public RsaPrivateKey.Builder privateExponent(BigInteger privateExponent) {
+    public RsaPrivateKey.Builder d(BigInteger privateExponent) {
         this.privateExponent = Assert.notNull(privateExponent, "Private exponent cannot be null.");
         return self();
     }
 
     @Override
-    public RsaPrivateKey.Builder prime1(BigInteger prime1) {
-        this.prime1 = Assert.notNull(prime1, "prime1 cannot be null.");
+    public RsaPrivateKey.Builder p(BigInteger firstFactor) {
+        this.prime1 = Assert.notNull(firstFactor, "prime1 cannot be null.");
         this.crtFieldsChanged.add(pName);
         return self();
     }
 
     @Override
-    public RsaPrivateKey.Builder prime2(BigInteger prime2) {
-        this.prime2 = Assert.notNull(prime2, "prime2 cannot be null.");
+    public RsaPrivateKey.Builder q(BigInteger secondFactor) {
+        this.prime2 = Assert.notNull(secondFactor, "prime2 cannot be null.");
         this.crtFieldsChanged.add(qName);
         return self();
     }
 
     @Override
-    public RsaPrivateKey.Builder exponent1(BigInteger exponent1) {
-        this.exponent1 = Assert.notNull(exponent1, "exponent1 cannot be null.");
+    public RsaPrivateKey.Builder dP(BigInteger firstFactorCrtExponent) {
+        this.exponent1 = Assert.notNull(firstFactorCrtExponent, "exponent1 cannot be null.");
         this.crtFieldsChanged.add(dPName);
         return self();
     }
 
     @Override
-    public RsaPrivateKey.Builder exponent2(BigInteger exponent2) {
-        this.exponent2 = Assert.notNull(exponent2, "exponent2 cannot be null.");
+    public RsaPrivateKey.Builder dQ(BigInteger secondFactorCrtExponent) {
+        this.exponent2 = Assert.notNull(secondFactorCrtExponent, "exponent2 cannot be null.");
         this.crtFieldsChanged.add(dQName);
         return self();
     }
 
     @Override
-    public RsaPrivateKey.Builder coefficient(BigInteger coefficient) {
-        this.coefficient = Assert.notNull(coefficient, "coefficient cannot be null.");
+    public RsaPrivateKey.Builder qInv(BigInteger firstCrtExponent) {
+        this.coefficient = Assert.notNull(firstCrtExponent, "coefficient cannot be null.");
         this.crtFieldsChanged.add(qInvName);
         return self();
     }
@@ -142,31 +142,15 @@ public class DefaultRsaPrivateKeyBuilder
         return key instanceof RSAPrivateCrtKey || key instanceof RSAMultiPrimePrivateCrtKey;
     }
 
-    private RsaPrivateKey generate() {
-        KeyPair pair = jca().generateKeyPair(this.size);
-        RSAPublicKey jcaPub = Assert.isInstance(RSAPublicKey.class, pair.getPublic(), RSA_PUB_TYPE_MSG);
-        RsaPublicKey pub = new DefaultRsaPublicKey(jcaPub);
-        PrivateKey jcaPriv = Assert.notNull(pair.getPrivate(), "RSA KeyPair private key cannot be null.");
-        return new DefaultRsaPrivateKey(jcaPriv, pub);
-    }
-
     private boolean hasFieldState() {
         return this.modulus != null || this.publicExponent != null || this.publicKey != null ||
                 this.privateExponent != null || !this.crtFieldsChanged.isEmpty() || !factors.isEmpty();
     }
 
     @Override
-    public RsaPrivateKey build() {
+    public RsaPrivateKey get() {
 
-        if (this.size > 0) { // generation requested:
-            if (hasFieldState()) {
-                String msg = "foo";
-                throw new IllegalStateException(msg);
-            }
-            return generate();
-        }
-
-        //TODO: if publicKey is set, it should be retained below instead of using KeyFactory:
+        //TODO: if publicKey is set, it should be retained below instead of using KeyBuilder:
 
         RSAPrivateKeySpec privSpec;
 
@@ -207,7 +191,7 @@ public class DefaultRsaPrivateKeyBuilder
             RSAPublicKeySpec pubSpec;
 
             RSAPrivateKey priv = Assert.isInstance(RSAPrivateKey.class, f.generatePrivate(privSpec),
-                    "RSA KeyFactory Provider must return an instance of RSAPrivateKey.");
+                    "RSA KeyBuilder Provider must return an instance of RSAPrivateKey.");
 
             if (isCrt(priv)) {
                 // public exponent already available from the private key, use it directly:
@@ -221,7 +205,7 @@ public class DefaultRsaPrivateKeyBuilder
             }
 
             RSAPublicKey jcaPub = Assert.isInstance(RSAPublicKey.class, f.generatePublic(pubSpec),
-                    "RSA KeyFactory Provider must return an instance of RSAPublicKey.");
+                    "RSA KeyBuilder Provider must return an instance of RSAPublicKey.");
             RsaPublicKey pub = new DefaultRsaPublicKey(jcaPub);
 
             return isCrt(priv) ? new DefaultCrtRsaPrivateKey(priv, pub) : new DefaultRsaPrivateKey(priv, pub);

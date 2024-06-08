@@ -15,10 +15,14 @@
  */
 package scrapi.impl.key;
 
+import scrapi.impl.util.Parameter;
+import scrapi.impl.util.Parameters;
 import scrapi.key.AsymmetricKey;
 import scrapi.key.RsaKey;
+import scrapi.util.Assert;
 import scrapi.util.Collections;
 
+import java.math.BigInteger;
 import java.security.Key;
 import java.security.interfaces.RSAKey;
 import java.util.Optional;
@@ -28,6 +32,9 @@ abstract class AbstractRsaKey<K extends java.security.Key> extends AbstractKey<K
 
     static final String JCA_ALG_NAME = "RSA";
     static final int MIN_SIZE = 1024;
+
+    static final Parameter<BigInteger> N = Parameters.positiveBigInt("n", "RSA modulus", false);
+    static final Parameter<BigInteger> E = Parameters.positiveBigInt("e", "RSA public exponent", false);
 
     // Defined in https://www.rfc-editor.org/rfc/rfc8017#appendix-A.1:
     private static final String RSA_ENC_OID = "1.2.840.113549.1.1.1"; // RFC 8017's "rsaEncryption"
@@ -46,11 +53,21 @@ abstract class AbstractRsaKey<K extends java.security.Key> extends AbstractKey<K
     private static final Set<String> JCA_ALG_NAMES =
             Collections.setOf("RSA", PSS_JCA_ALG_NAME, PSS_OID, RS256_OID, RS384_OID, RS512_OID, RSA_ENC_OID);
 
-    private static final String RSA_KEY_TYPE_MSG = "Key must be an instance of " + RSAKey.class.getName();
+    protected static final String RSA_KEY_TYPE_MSG = "JDK Key must be an instance of " + RSAKey.class.getName();
 
     protected static boolean isRsaAlgName(java.security.Key key) {
         String alg = findAlgorithm(key);
         return alg != null && JCA_ALG_NAMES.contains(alg);
+    }
+
+    static BigInteger assertModulus(BigInteger n) {
+        Assert.notNull(n, "RSA key modulus 'n' must not be null.");
+        return Assert.gt(n, BigInteger.ZERO, "RSA key modulus 'n' must be greater than zero.");
+    }
+
+    static BigInteger assertExponent(BigInteger e) {
+        Assert.notNull(e, "RSA key public exponent 'e' must not be null.");
+        return Assert.gt(e, BigInteger.ZERO, "RSA key public exponent 'e' must be greater than zero.");
     }
 
     protected static <T extends java.security.Key> T assertRsaAlgName(T key) {
@@ -72,6 +89,6 @@ abstract class AbstractRsaKey<K extends java.security.Key> extends AbstractKey<K
 
     @Override
     public Optional<Integer> bitLength() {
-        return Optional.of(modulus().bitLength());
+        return Optional.of(n().bitLength());
     }
 }

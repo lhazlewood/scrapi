@@ -22,6 +22,8 @@ import scrapi.util.Assert;
 import java.math.BigInteger;
 import java.security.KeyPair;
 import java.security.interfaces.RSAKey;
+import java.security.interfaces.RSAMultiPrimePrivateCrtKey;
+import java.security.interfaces.RSAPrivateCrtKey;
 import java.security.interfaces.RSAPrivateKey;
 import java.util.Optional;
 
@@ -33,10 +35,8 @@ public class DefaultRsaPrivateKey extends AbstractRsaKey<java.security.PrivateKe
     public DefaultRsaPrivateKey(java.security.PrivateKey key, RsaPublicKey publicKey) {
         super(key);
         this.publicKey = Assert.notNull(publicKey, "RsaPublicKey cannot be null.");
-        if (key instanceof RSAKey) {
-            RSAKey rsaKey = (RSAKey) key;
-            Assert.eq(rsaKey.getModulus(), publicKey.modulus(), "RSA PrivateKey modulus and RsaPublicKey modulus must be equal.");
-        }
+        RSAKey priv = Assert.isInstance(RSAKey.class, key, RSA_KEY_TYPE_MSG);
+        Assert.eq(priv.getModulus(), publicKey.n(), "RSA PrivateKey n and RsaPublicKey n must be equal.");
     }
 
     @Override
@@ -45,27 +45,35 @@ public class DefaultRsaPrivateKey extends AbstractRsaKey<java.security.PrivateKe
     }
 
     @Override
-    public BigInteger modulus() {
-        return this.publicKey.modulus(); // guaranteed to be the same in the constructor if possible
+    public BigInteger n() {
+        return this.publicKey.n(); // guaranteed to be the same in the constructor if possible
     }
 
     @Override
-    public BigInteger publicExponent() {
+    public BigInteger e() {
         // JCA RSA Private Keys don't expose this, so we delegate to the public key:
-        return publicKey.publicExponent();
+        return publicKey.e();
     }
 
     @Override
-    public Optional<BigInteger> privateExponent() {
-        BigInteger privExp = null;
+    public Optional<BigInteger> d() {
+        BigInteger d = null;
         if (this.key instanceof RSAPrivateKey) {
-            privExp = ((RSAPrivateKey) this.key).getPrivateExponent();
+            d = ((RSAPrivateKey) this.key).getPrivateExponent();
         }
-        return Optional.ofNullable(privExp);
+        return Optional.ofNullable(d);
     }
 
     @Override
     public KeyPair toJcaKeyPair() {
         return new KeyPair(this.publicKey.toJcaKey(), toJcaKey());
     }
+
+    static RsaPrivateKey of(java.security.PrivateKey jcaPriv, RsaPublicKey pub) {
+        if (jcaPriv instanceof RSAPrivateCrtKey || jcaPriv instanceof RSAMultiPrimePrivateCrtKey) {
+            return new DefaultCrtRsaPrivateKey(jcaPriv, pub);
+        }
+        return new DefaultRsaPrivateKey(jcaPriv, pub);
+    }
+
 }

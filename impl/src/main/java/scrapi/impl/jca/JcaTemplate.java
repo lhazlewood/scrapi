@@ -290,9 +290,9 @@ public class JcaTemplate {
     }
 
 //    public PrivateKey generatePrivate(final KeySpec spec) {
-//        return fallback(KeyFactory.class, new CheckedFunction<KeyFactory, PrivateKey>() {
+//        return fallback(KeyBuilder.class, new CheckedFunction<KeyBuilder, PrivateKey>() {
 //            @Override
-//            public PrivateKey apply(KeyFactory keyFactory) throws Exception {
+//            public PrivateKey apply(KeyBuilder keyFactory) throws Exception {
 //                try {
 //                    return generatePrivate(keyFactory, spec);
 //                } catch (InvalidKeySpecException e) {

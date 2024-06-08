@@ -17,13 +17,13 @@ package scrapi.impl.digest;
 
 import scrapi.digest.Hasher;
 import scrapi.digest.MacAlgorithm;
-import scrapi.key.KeyBuilder;
+import scrapi.key.KeyGenerator;
 import scrapi.key.SecretKey;
 
 import java.security.Provider;
 
-abstract class AbstractMacAlgorithm<K extends SecretKey<?>, B extends KeyBuilder<K, B>>
-        extends AbstractDigestAlgorithm<MacAlgorithm<K, B>> implements MacAlgorithm<K, B> {
+abstract class AbstractMacAlgorithm<K extends SecretKey<?>, G extends KeyGenerator<K, G>>
+        extends AbstractDigestAlgorithm<MacAlgorithm<K, G>> implements MacAlgorithm<K, G> {
 
     protected AbstractMacAlgorithm(String id, Provider provider, int bitLength) {
         super(id, provider, bitLength);

@@ -18,7 +18,7 @@ package scrapi.impl.digest;
 import scrapi.digest.Digester;
 import scrapi.digest.SignatureAlgorithm;
 import scrapi.digest.Verifier;
-import scrapi.key.KeyBuilder;
+import scrapi.key.KeyGenerator;
 import scrapi.key.PrivateKey;
 import scrapi.key.PublicKey;
 import scrapi.util.Assert;
@@ -27,18 +27,18 @@ import java.security.Provider;
 import java.security.SecureRandom;
 import java.util.function.Supplier;
 
-public class DefaultSignatureAlgorithm<U extends PublicKey<?>, R extends PrivateKey<?, U>, B extends KeyBuilder<R, B>>
-        extends AbstractDigestAlgorithm<SignatureAlgorithm<U, R, B>>
-        implements SignatureAlgorithm<U, R, B> {
+public class DefaultSignatureAlgorithm<U extends PublicKey<?>, R extends PrivateKey<?, U>, G extends KeyGenerator<R, G>>
+        extends AbstractDigestAlgorithm<SignatureAlgorithm<U, R, G>>
+        implements SignatureAlgorithm<U, R, G> {
 
     protected final SecureRandom RANDOM;
 
-    private final Supplier<B> SUPPLIER;
+    private final Supplier<G> SUPPLIER;
 
-    DefaultSignatureAlgorithm(String id, Provider provider, SecureRandom random, int bitLength, Supplier<B> genSupplier) {
+    DefaultSignatureAlgorithm(String id, Provider provider, SecureRandom random, int bitLength, Supplier<G> genSupplier) {
         super(id, provider, bitLength);
         this.RANDOM = random;
-        this.SUPPLIER = Assert.notNull(genSupplier, "KeyBuilderSupplier supplier cannot be null.");
+        this.SUPPLIER = Assert.notNull(genSupplier, "KeyGenerator supplier cannot be null.");
     }
 
     @Override
@@ -52,17 +52,17 @@ public class DefaultSignatureAlgorithm<U extends PublicKey<?>, R extends Private
     }
 
     @Override
-    public SignatureAlgorithm<U, R, B> provider(Provider provider) {
+    public SignatureAlgorithm<U, R, G> provider(Provider provider) {
         return new DefaultSignatureAlgorithm<>(this.ID, provider, this.RANDOM, this.BITLEN, this.SUPPLIER);
     }
 
     @Override
-    public SignatureAlgorithm<U, R, B> random(SecureRandom random) {
+    public SignatureAlgorithm<U, R, G> random(SecureRandom random) {
         return new DefaultSignatureAlgorithm<>(this.ID, this.PROVIDER, random, this.BITLEN, this.SUPPLIER);
     }
 
     @Override
-    public B key() {
-        return Assert.notNull(this.SUPPLIER.get(), "Builder suppler cannot produce null builders.");
+    public G keygen() {
+        return Assert.notNull(this.SUPPLIER.get(), "KeyGenerator suppler cannot produce null generators.");
     }
 }

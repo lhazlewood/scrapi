@@ -16,14 +16,15 @@
 package scrapi.impl.digest;
 
 import scrapi.digest.RsaSignatureAlgorithm;
+import scrapi.impl.key.DefaultRsaPrivateKeyGenerator;
 import scrapi.key.RsaPrivateKey;
 import scrapi.key.RsaPublicKey;
 
 public class DefaultRsaSignatureAlgorithm
-        extends DefaultSignatureAlgorithm<RsaPublicKey, RsaPrivateKey, RsaPrivateKey.Builder>
+        extends DefaultSignatureAlgorithm<RsaPublicKey, RsaPrivateKey, RsaPrivateKey.Generator>
         implements RsaSignatureAlgorithm {
 
     public DefaultRsaSignatureAlgorithm(String id, int bitLength) {
-        super(id, null, null, bitLength, () -> RsaPrivateKey.builder().size(4096));
+        super(id, null, null, bitLength, DefaultRsaPrivateKeyGenerator::new);
     }
 }

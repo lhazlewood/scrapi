@@ -19,7 +19,7 @@ package scrapi.key;
 public interface Sizable<T> {
 
     /**
-     * Sets the size in bits (<em>not bytes</em>) of the associated instance.
+     * Sets the size in bits (<em>not bytes</em>).
      *
      * @param sizeInBits the size in bits
      * @return the associated object for method chaining.

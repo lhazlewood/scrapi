@@ -33,6 +33,10 @@ public final class Strings {
      */
     public static final String EMPTY = "";
 
+    public static final String COMMA = ",";
+
+    public static final char[] EMPTY_CHARS = EMPTY.toCharArray();
+
     private static final CharBuffer EMPTY_BUF = CharBuffer.wrap(EMPTY);
 
     /**

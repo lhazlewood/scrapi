@@ -34,6 +34,13 @@ public interface PbeKey extends SecretKey<PBEKey> {
         T iterations(int iterations);
     }
 
+    interface Generator extends Mutator<Generator>, KeyGenerator<PbeKey, Generator> {
+
+        Generator alphabet(char[] alphabet);
+
+        Generator passwordLength(int numCharacters);
+    }
+
     interface Builder extends Mutator<Builder>, KeyBuilder<PbeKey, Builder> {
     }
 }

@@ -22,7 +22,7 @@ import scrapi.util.Bytes;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
-public class DefaultOctetSecretKeyBuilder extends AbstractKeyBuilder<OctetSecretKey, OctetSecretKey.Builder>
+public class DefaultOctetSecretKeyBuilder extends AbstractKeyFactory<OctetSecretKey, OctetSecretKey.Builder>
         implements OctetSecretKey.Builder {
 
     private transient byte[] octets;
@@ -38,20 +38,13 @@ public class DefaultOctetSecretKeyBuilder extends AbstractKeyBuilder<OctetSecret
     }
 
     @Override
-    public OctetSecretKey build() {
-
-        SecretKey jcaKey;
-
-        if (!Bytes.isEmpty(this.octets)) {
-            if (this.size != 0) {
-                throw new IllegalStateException("Both size and octets cannot be specified.");
-            }
-            jcaKey = new SecretKeySpec(this.octets, this.jcaName);
-        } else {
-            // otherwise need to generate:
-            jcaKey = this.size > 0 ? jca().generateSecretKey(this.size) : jca().generateSecretKey();
+    public OctetSecretKey get() {
+        byte[] octets = this.octets;
+        if (Bytes.length(octets) == 0) {
+            String msg = "Octets cannot be null or empty.";
+            throw new IllegalStateException(msg);
         }
-
+        SecretKey jcaKey = new SecretKeySpec(octets, this.jcaName);
         return new DefaultOctetSecretKey(jcaKey);
     }
 }

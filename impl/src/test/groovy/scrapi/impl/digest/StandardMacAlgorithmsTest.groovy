@@ -37,9 +37,9 @@ class StandardMacAlgorithmsTest {
     }
 
     static SecretKey<? extends javax.crypto.SecretKey> newKey(MacAlgorithm alg) {
-        def b = alg.key()
+        def b = alg.keygen()
         if (b instanceof PbeKey.Builder) b.iterations(DefaultPbeKey.MIN_ITERATIONS) // keep tests fast
-        return b.build() as SecretKey
+        return b.get() as SecretKey
     }
 
     @Test

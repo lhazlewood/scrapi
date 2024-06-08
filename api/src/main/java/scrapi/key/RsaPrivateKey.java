@@ -15,8 +15,6 @@
  */
 package scrapi.key;
 
-import scrapi.util.Classes;
-
 import java.math.BigInteger;
 import java.util.Optional;
 
@@ -30,16 +28,15 @@ public interface RsaPrivateKey extends PrivateKey<java.security.PrivateKey, RsaP
      * @return the private exponent {@code d}, a positive integer, if it is available.
      * @see <a href="https://datatracker.ietf.org/doc/html/rfc8017#section-3.2">RFC 8017, Section 3.2</a>
      */
-    Optional<BigInteger> privateExponent();
+    Optional<BigInteger> d();
 
     interface Mutator<T extends Mutator<T>> extends RsaKey.Mutator<T>, PrivateKey.Mutator<RsaPublicKey, T> {
-        T privateExponent(BigInteger privateExponent);
+        T d(BigInteger privateExponent);
     }
 
     interface Builder extends PrivateKey.Builder<RsaPublicKey, RsaPrivateKey, Builder>, CrtRsaPrivateKey.Mutator<Builder> {
     }
 
-    static RsaPrivateKey.Builder builder() {
-        return Classes.newInstance("scrapi.impl.key.DefaultRsaPrivateKeyBuilder");
+    interface Generator extends PrivateKey.Generator<RsaPrivateKey, Generator> {
     }
 }

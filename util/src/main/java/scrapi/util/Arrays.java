@@ -46,6 +46,14 @@ public final class Arrays {
         return length(array) == 0;
     }
 
+    public static int length(char[] a) {
+        return a == null ? 0 : a.length;
+    }
+
+    public static boolean isEmpty(char[] array) {
+        return length(array) == 0;
+    }
+
 //    /**
 //     * Converts the specified array to a {@link List}. If the array is empty, an empty list will be returned.
 //     *

@@ -170,7 +170,7 @@ public final class Classes {
      */
     @SuppressWarnings("unchecked")
     public static <T> T newInstance(String fqcn) {
-        return (T) newInstance(forName(fqcn));
+        return newInstance(forName(fqcn));
     }
 
     /**
@@ -200,7 +200,7 @@ public final class Classes {
      */
     @SuppressWarnings("unchecked")
     public static <T> T newInstance(String fqcn, Object... args) {
-        return (T) newInstance(forName(fqcn), args);
+        return newInstance(forName(fqcn), args);
     }
 
     /**

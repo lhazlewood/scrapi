@@ -17,7 +17,7 @@ package scrapi.key;
 
 import java.math.BigInteger;
 
-public interface RsaKey<J extends java.security.Key> extends AsymmetricKey<J> {
+public interface RsaKey<K extends java.security.Key> extends AsymmetricKey<K> {
 
     /**
      * Returns the modulus {@code n}, a positive integer.
@@ -25,7 +25,7 @@ public interface RsaKey<J extends java.security.Key> extends AsymmetricKey<J> {
      * @return the modulus {@code n}, a positive integer.
      * @see <a href="https://datatracker.ietf.org/doc/html/rfc8017#section-3.1">RFC 8017, Section 3.1</a>
      */
-    BigInteger modulus();
+    BigInteger n();
 
     /**
      * Returns the public exponent {@code e}, a positive integer.
@@ -33,12 +33,12 @@ public interface RsaKey<J extends java.security.Key> extends AsymmetricKey<J> {
      * @return the public exponent {@code e}, a positive integer.
      * @see <a href="https://datatracker.ietf.org/doc/html/rfc8017#section-3.1">RFC 8017, Section 3.1</a>
      */
-    BigInteger publicExponent();
+    BigInteger e();
 
     interface Mutator<T extends Mutator<T>> {
 
-        T modulus(BigInteger modulus);
+        T n(BigInteger modulus);
 
-        T publicExponent(BigInteger publicExponent);
+        T e(BigInteger publicExponent);
     }
 }

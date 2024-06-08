@@ -22,7 +22,7 @@ import scrapi.util.Assert;
 import java.math.BigInteger;
 
 abstract class AbstractRsaKeyBuilder<K extends RsaKey<?>, T extends KeyBuilder<K, T> & RsaKey.Mutator<T>>
-        extends AbstractKeyBuilder<K, T> implements RsaKey.Mutator<T> {
+        extends AbstractKeyFactory<K, T> implements RsaKey.Mutator<T> {
 
     protected BigInteger modulus;
     protected BigInteger publicExponent;
@@ -36,20 +36,20 @@ abstract class AbstractRsaKeyBuilder<K extends RsaKey<?>, T extends KeyBuilder<K
     }
 
     protected AbstractRsaKeyBuilder(String jcaName, int minSize) {
-        super(jcaName, minSize);
+        super(jcaName, "RSA Key modulus size", minSize);
     }
 
     @Override
-    public T modulus(BigInteger modulus) {
+    public T n(BigInteger modulus) {
         Assert.notNull(modulus, "RSA Key modulus cannot be null.");
-        assertSize(modulus.bitLength(), this.minSize, "RSA Key modulus size");
-        this.modulus = modulus;
+        this.SIZE_VALIDATOR.apply(modulus.bitLength());
+        this.modulus = AbstractRsaKey.N.validate(modulus);
         return self();
     }
 
     @Override
-    public T publicExponent(BigInteger publicExponent) {
-        this.publicExponent = Assert.notNull(publicExponent, "RSA Key public exponent cannot be null.");
+    public T e(BigInteger publicExponent) {
+        this.publicExponent = AbstractRsaKey.E.validate(publicExponent);
         return self();
     }
 }

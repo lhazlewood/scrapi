@@ -15,21 +15,23 @@
  */
 package scrapi.key;
 
-import scrapi.Destroyable;
-
 import java.security.KeyPair;
 
-public interface PrivateKey<J extends java.security.PrivateKey, U extends PublicKey<?>> extends AsymmetricKey<J>, Destroyable {
+public interface PrivateKey<K extends java.security.PrivateKey, P extends PublicKey<?>> extends AsymmetricKey<K>, ConfidentialKey<K> {
 
-    U publicKey();
+    P publicKey();
 
     KeyPair toJcaKeyPair();
+
+    interface Generator<K extends PrivateKey<?, ?>, T extends Generator<K, T>>
+            extends KeyGenerator<K, T> {
+    }
 
     interface Mutator<U extends PublicKey<?>, T extends Mutator<U, T>> {
         T publicKey(U publicKey);
     }
 
     interface Builder<P extends PublicKey<?>, K extends PrivateKey<?, P>, T extends Builder<P, K, T>>
-            extends Mutator<P, T>, Sizable<T>, KeyBuilder<K, T> {
+            extends Mutator<P, T>, KeyBuilder<K, T> {
     }
 }

@@ -34,7 +34,7 @@ public interface CrtRsaPrivateKey extends RsaPrivateKey {
      * @return the first factor {@code p}, a positive integer.
      * @see <a href="https://datatracker.ietf.org/doc/html/rfc8017#section-3.2">RFC 8017, Section 3.2 (second representation)</a>
      */
-    BigInteger prime1();
+    BigInteger p();
 
     /**
      * Returns the second factor {@code q}, a positive integer.
@@ -42,7 +42,7 @@ public interface CrtRsaPrivateKey extends RsaPrivateKey {
      * @return the second factor {@code q}, a positive integer.
      * @see <a href="https://datatracker.ietf.org/doc/html/rfc8017#section-3.2">RFC 8017, Section 3.2 (second representation)</a>
      */
-    BigInteger prime2();
+    BigInteger q();
 
     /**
      * Returns the first factor's CRT exponent, a positive integer.
@@ -50,7 +50,7 @@ public interface CrtRsaPrivateKey extends RsaPrivateKey {
      * @return the first factor's CRT exponent, a positive integer.
      * @see <a href="https://datatracker.ietf.org/doc/html/rfc8017#section-3.2">RFC 8017, Section 3.2 (second representation)</a>
      */
-    BigInteger exponent1();
+    BigInteger dP();
 
     /**
      * Returns the second factor's CRT exponent, a positive integer.
@@ -58,7 +58,7 @@ public interface CrtRsaPrivateKey extends RsaPrivateKey {
      * @return the second factor's CRT exponent, a positive integer.
      * @see <a href="https://datatracker.ietf.org/doc/html/rfc8017#section-3.2">RFC 8017, Section 3.2 (second representation)</a>
      */
-    BigInteger exponent2();
+    BigInteger dQ();
 
     /**
      * Returns the (first) CRT coefficient, a positive integer.
@@ -66,27 +66,27 @@ public interface CrtRsaPrivateKey extends RsaPrivateKey {
      * @return the (first) CRT coefficient, a positive integer.
      * @see <a href="https://datatracker.ietf.org/doc/html/rfc8017#section-3.2">RFC 8017, Section 3.2 (second representation)</a>
      */
-    BigInteger coefficient();
+    BigInteger qInv();
 
     /**
-     * Returns any additional (possibly empty) prime factors of the {@link #modulus() modulus} {@code n}.
+     * Returns any additional (possibly empty) prime factors of the {@link #n() n} {@code n}.
      *
-     * @return any additional (possibly empty) prime factors of the {@link #modulus() modulus} {@code n}.
+     * @return any additional (possibly empty) prime factors of the {@link #n() n} {@code n}.
      * @see <a href="https://datatracker.ietf.org/doc/html/rfc8017#section-3.2">RFC 8017, Section 3.2 (second representation)</a>
      */
     List<RsaPrimeFactor> otherFactors();
 
     interface Mutator<T extends Mutator<T>> extends RsaPrivateKey.Mutator<T> {
 
-        T prime1(BigInteger prime1);
+        T p(BigInteger firstFactor);
 
-        T prime2(BigInteger prime2);
+        T q(BigInteger secondFactor);
 
-        T exponent1(BigInteger exponent1);
+        T dP(BigInteger firstFactorCrtExponent);
 
-        T exponent2(BigInteger exponent2);
+        T dQ(BigInteger secondFactorCrtExponent);
 
-        T coefficient(BigInteger coefficient);
+        T qInv(BigInteger firstCrtExponent);
 
         T add(RsaPrimeFactor factor);
 

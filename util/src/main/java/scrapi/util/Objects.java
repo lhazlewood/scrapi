@@ -730,7 +730,7 @@ public final class Objects {
             } else {
                 sb.append(ARRAY_ELEMENT_SEPARATOR);
             }
-            sb.append(String.valueOf(array[i]));
+            sb.append(array[i]);
         }
         sb.append(ARRAY_END);
         return sb.toString();

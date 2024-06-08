@@ -16,38 +16,28 @@
 package scrapi.impl.key;
 
 import scrapi.key.PbeKey;
+import scrapi.util.Arrays;
 import scrapi.util.Assert;
 import scrapi.util.Bytes;
-import scrapi.util.Randoms;
 
 public class DefaultPbeKeyBuilder
-        extends AbstractKeyBuilder<PbeKey, PbeKey.Builder>
+        extends AbstractKeyFactory<PbeKey, PbeKey.Builder>
         implements PbeKey.Builder {
 
-    private static final char[] ALPHABET =
-            "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789~`!@#$%^&*()-_+={}[]|\\;:\"<>,./?"
-                    .toCharArray();
+    private final int MIN_ITERATIONS;
 
-    private static final char[] EMPTY_CHARS = new char[0];
-
-    private final int DEFAULT_ITERATIONS;
-
-    private char[] password = EMPTY_CHARS;
+    private char[] password;
     private byte[] salt;
     private int iterations;
 
-    public DefaultPbeKeyBuilder(String jcaName, int generatedKeySize, int defaultIterations) {
-        super(jcaName, generatedKeySize);
-        this.DEFAULT_ITERATIONS = DefaultPbeKey.assertMinIterations(defaultIterations);
+    public DefaultPbeKeyBuilder(String jcaName, int derivedKeySize, int minIterations) {
+        super(jcaName, derivedKeySize);
+        this.MIN_ITERATIONS = DefaultPbeKey.assertIterationsGte(minIterations, DefaultPbeKey.MIN_ITERATIONS);
     }
 
     @Override
     public PbeKey.Builder password(char[] password) {
-        if (password == null || password.length == 0) {
-            this.password = EMPTY_CHARS;
-        } else {
-            this.password = password.clone();
-        }
+        this.password = Assert.notEmpty(password, "password cannot be null or empty.").clone();
         return self();
     }
 
@@ -59,35 +49,21 @@ public class DefaultPbeKeyBuilder
 
     @Override
     public PbeKey.Builder iterations(int iterations) {
-        this.iterations = DefaultPbeKey.assertMinIterations(iterations);
+        this.iterations = DefaultPbeKey.assertIterationsGte(iterations, this.MIN_ITERATIONS);
         return self();
     }
 
-    private static char[] randomPassword() {
-        final char[] password = new char[16];
-        for (int i = 0; i < password.length; i++) {
-            int index = Randoms.secureRandom().nextInt(ALPHABET.length);
-            password[i] = ALPHABET[index];
-        }
-        return password;
-    }
-
     @Override
-    public PbeKey build() {
-        char[] password = this.password;
-        if (password == null || password.length == 0) {
-            password = randomPassword();
+    public PbeKey get() {
+        if (Arrays.isEmpty(this.password)) {
+            throw new IllegalStateException("password cannot be null or empty.");
         }
-        int size = Math.max(this.size /* might not have been configured, so default to min: */, this.minSize);
-        byte[] salt = this.salt;
-        if (Bytes.isEmpty(salt)) {
-            salt = Bytes.randomBits(size);
+        if (Bytes.isEmpty(this.salt)) {
+            throw new IllegalStateException("salt cannot be null or empty.");
         }
-        int iterations = this.iterations;
-        if (iterations < DefaultPbeKey.MIN_ITERATIONS) {
-            iterations = DEFAULT_ITERATIONS;
+        if (this.iterations < this.MIN_ITERATIONS) {
+            throw new IllegalStateException("iterations must be >= " + this.MIN_ITERATIONS);
         }
-
-        return new DefaultPbeKey(this.jcaName, password, salt, iterations, size);
+        return new DefaultPbeKey(this.jcaName, password, salt, iterations, this.MIN_SIZE);
     }
 }

@@ -15,15 +15,12 @@
  */
 package scrapi.impl.digest;
 
-import scrapi.digest.MacAlgorithm;
-import scrapi.impl.key.DefaultOctetSecretKeyBuilder;
+import scrapi.impl.key.DefaultOctetSecretKeyGenerator;
 import scrapi.key.OctetSecretKey;
 
 import java.security.Provider;
 
-public class DefaultMacAlgorithm
-        extends AbstractMacAlgorithm<OctetSecretKey, OctetSecretKey.Builder>
-        implements MacAlgorithm<OctetSecretKey, OctetSecretKey.Builder> {
+public class DefaultMacAlgorithm extends AbstractMacAlgorithm<OctetSecretKey, OctetSecretKey.Generator> {
 
     public DefaultMacAlgorithm(String id, Provider provider, int bitLength) {
         super(id, provider, bitLength);
@@ -31,11 +28,11 @@ public class DefaultMacAlgorithm
 
     @Override
     public DefaultMacAlgorithm provider(Provider provider) {
-        return new DefaultMacAlgorithm(this.ID, this.PROVIDER, this.BITLEN);
+        return new DefaultMacAlgorithm(this.ID, provider, this.BITLEN);
     }
 
     @Override
-    public OctetSecretKey.Builder key() {
-        return new DefaultOctetSecretKeyBuilder(id(), this.BITLEN);
+    public OctetSecretKey.Generator keygen() {
+        return new DefaultOctetSecretKeyGenerator(this.ID, this.BITLEN);
     }
 }

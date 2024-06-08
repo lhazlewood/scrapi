@@ -36,6 +36,9 @@ public interface OctetSecretKey extends SecretKey<javax.crypto.SecretKey> {
         T octets(byte[] octets);
     }
 
-    interface Builder extends Mutator<Builder>, Sizable<Builder>, KeyBuilder<OctetSecretKey, Builder> {
+    interface Builder extends Mutator<Builder>, KeyBuilder<OctetSecretKey, Builder> {
+    }
+
+    interface Generator extends KeyGenerator<OctetSecretKey, Generator> {
     }
 }

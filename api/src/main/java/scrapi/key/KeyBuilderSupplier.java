@@ -16,11 +16,11 @@
 package scrapi.key;
 
 /**
- * Interface implemented by components that support building/creating {@link Key}s suitable for use with
- * their associated cryptographic algorithm implementation.
+ * A {@code KeyBuilderSupplier} produces {@link KeyBuilder}s that may be used to create
+ * {@link Key}s suitable for use with an associated cryptographic algorithm.
  *
- * @param <K> type of {@link Key} produced by the builder
- * @param <B> type of builder to create each time {@link #key()} is called.
+ * @param <K> type of {@link Key} produced by the {@link KeyBuilder}
+ * @param <B> type of {@link KeyBuilder} produced each time the {@link #key()} method is invoked.
  * @see #key()
  * @see KeyBuilder
  * @since SCRAPI_RELEASE_VERSION

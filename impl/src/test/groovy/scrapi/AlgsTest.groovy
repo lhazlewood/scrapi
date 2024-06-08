@@ -15,6 +15,7 @@
  */
 package scrapi
 
+import org.bouncycastle.jce.provider.BouncyCastleProvider
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 
@@ -36,10 +37,10 @@ class AlgsTest {
     @Disabled
     // not needed during build, only for manual or IDE convenience
     void listServices() {
-        //Security.addProvider(new BouncyCastleProvider())
+        Security.addProvider(new BouncyCastleProvider())
         def providers = Security.getProviders()
         def services = providers.collectMany { it.getServices() }
-        def macServices = services.findAll { s -> s.type.contains('Mac') && !s.algorithm.startsWith('Ssl') }
+        def macServices = services.findAll { s -> s.type.equals('Mac') /*&& !s.algorithm.startsWith('Ssl')*/ }
         macServices.eachWithIndex { Provider.Service service, int i ->
             println "${i + 1}: $service"
         }

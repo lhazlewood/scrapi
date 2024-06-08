@@ -22,8 +22,7 @@ import scrapi.util.Assert;
 import java.security.Provider;
 import java.security.SecureRandom;
 
-public abstract class AlgorithmSupport<T extends Providable<T> & Randomizable<T>>
-        implements Providable<T>, Randomizable<T> {
+public abstract class AlgorithmSupport<T extends Providable<T>> implements Providable<T>, Randomizable<T> {
 
     protected final String jcaName;
     protected Provider provider;
