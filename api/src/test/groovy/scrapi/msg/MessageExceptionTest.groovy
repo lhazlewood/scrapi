@@ -13,18 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package scrapi.key;
+package scrapi.msg
 
-@FunctionalInterface
-public interface Sizable<T> {
+import org.junit.jupiter.api.Test
 
-    /**
-     * Sets the size in <b>bits</b> (<em>not bytes</em>).
-     *
-     * @param sizeInBits the size in bits
-     * @return the associated object for method chaining.
-     * @throws IllegalArgumentException if the specified size is invalid or insufficient
-     */
-    T size(int sizeInBits) throws IllegalArgumentException;
+import static org.junit.jupiter.api.Assertions.assertEquals
+import static org.junit.jupiter.api.Assertions.assertSame
+
+class MessageExceptionTest {
+
+    @Test
+    void messageCause() {
+        String msg = 'foo'
+        def cause = new RuntimeException()
+        def ex = new MessageException(msg, cause)
+        assertEquals msg, ex.message
+        assertSame cause, ex.cause
+    }
 
 }

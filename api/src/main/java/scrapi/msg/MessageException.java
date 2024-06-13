@@ -13,18 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package scrapi.key;
+package scrapi.msg;
 
-@FunctionalInterface
-public interface Sizable<T> {
+import scrapi.SecurityException;
 
-    /**
-     * Sets the size in <b>bits</b> (<em>not bytes</em>).
-     *
-     * @param sizeInBits the size in bits
-     * @return the associated object for method chaining.
-     * @throws IllegalArgumentException if the specified size is invalid or insufficient
-     */
-    T size(int sizeInBits) throws IllegalArgumentException;
+public class MessageException extends SecurityException {
 
+    private static final long serialVersionUID = 3151558165317465591L;
+
+    public MessageException(String message, Throwable t) {
+        super(message, t);
+    }
 }

@@ -13,18 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package scrapi.key;
+package scrapi.msg;
 
-@FunctionalInterface
-public interface Sizable<T> {
+import scrapi.DataConsumer;
 
-    /**
-     * Sets the size in <b>bits</b> (<em>not bytes</em>).
-     *
-     * @param sizeInBits the size in bits
-     * @return the associated object for method chaining.
-     * @throws IllegalArgumentException if the specified size is invalid or insufficient
-     */
-    T size(int sizeInBits) throws IllegalArgumentException;
+import java.util.function.Predicate;
+
+public interface Verifier<T extends Verifier<T>> extends DataConsumer<T>, Predicate<byte[]> {
 
 }

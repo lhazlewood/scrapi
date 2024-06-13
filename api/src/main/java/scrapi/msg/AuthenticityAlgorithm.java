@@ -13,18 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package scrapi.key;
+package scrapi.msg;
 
-@FunctionalInterface
-public interface Sizable<T> {
+import scrapi.key.Key;
+import scrapi.key.KeyGenerator;
+import scrapi.key.KeyGeneratorSupplier;
+import scrapi.key.Keyable;
 
-    /**
-     * Sets the size in <b>bits</b> (<em>not bytes</em>).
-     *
-     * @param sizeInBits the size in bits
-     * @return the associated object for method chaining.
-     * @throws IllegalArgumentException if the specified size is invalid or insufficient
-     */
-    T size(int sizeInBits) throws IllegalArgumentException;
-
+public interface AuthenticityAlgorithm<K extends Key<?>, T extends Transformer<T>, G extends KeyGenerator<K, G>, A extends AuthenticityAlgorithm<K, T, G, A>>
+        extends IntegrityAlgorithm<A>, Keyable<K, T>, KeyGeneratorSupplier<K, G> {
 }

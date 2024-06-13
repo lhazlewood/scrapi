@@ -13,18 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package scrapi.key;
+package scrapi.msg;
 
-@FunctionalInterface
-public interface Sizable<T> {
-
-    /**
-     * Sets the size in <b>bits</b> (<em>not bytes</em>).
-     *
-     * @param sizeInBits the size in bits
-     * @return the associated object for method chaining.
-     * @throws IllegalArgumentException if the specified size is invalid or insufficient
-     */
-    T size(int sizeInBits) throws IllegalArgumentException;
-
+public interface Signer extends Transformer<Signer> {
 }

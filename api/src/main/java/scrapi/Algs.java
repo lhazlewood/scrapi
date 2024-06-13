@@ -15,13 +15,13 @@
  */
 package scrapi;
 
-import scrapi.digest.HashAlgorithm;
-import scrapi.digest.MacAlgorithm;
-import scrapi.digest.RsaSignatureAlgorithm;
-import scrapi.digest.SignatureAlgorithm;
 import scrapi.key.OctetSecretKey;
 import scrapi.key.PbeKey;
 import scrapi.lang.Registry;
+import scrapi.msg.HashAlgorithm;
+import scrapi.msg.MacAlgorithm;
+import scrapi.msg.RsaSignatureAlgorithm;
+import scrapi.msg.SignatureAlgorithm;
 import scrapi.util.Classes;
 
 public final class Algs {
@@ -44,7 +44,7 @@ public final class Algs {
         private Hash() {
         }
 
-        private static final String IMPL_CLASSNAME = "scrapi.impl.digest.StandardHashAlgorithms";
+        private static final String IMPL_CLASSNAME = "scrapi.impl.msg.StandardHashAlgorithms";
         private static final Registry<String, HashAlgorithm> REGISTRY = Classes.newInstance(IMPL_CLASSNAME);
 
         /**
@@ -81,7 +81,7 @@ public final class Algs {
         private Mac() {
         }
 
-        private static final String IMPL_CLASSNAME = "scrapi.impl.digest.StandardMacAlgorithms";
+        private static final String IMPL_CLASSNAME = "scrapi.impl.msg.StandardMacAlgorithms";
         private static final Registry<String, MacAlgorithm<?, ?>> REGISTRY = Classes.newInstance(IMPL_CLASSNAME);
 
         /**
@@ -168,7 +168,7 @@ public final class Algs {
         private Sig() {
         }
 
-        private static final String IMPL_CLASSNAME = "scrapi.impl.digest.StandardSignatureAlgorithms";
+        private static final String IMPL_CLASSNAME = "scrapi.impl.msg.StandardSignatureAlgorithms";
         private static final Registry<String, SignatureAlgorithm<?, ?, ?>> REGISTRY = Classes.newInstance(IMPL_CLASSNAME);
 
         /**

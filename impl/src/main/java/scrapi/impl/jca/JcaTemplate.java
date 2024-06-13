@@ -16,7 +16,7 @@
 package scrapi.impl.jca;
 
 import scrapi.SecurityException;
-import scrapi.digest.DigestException;
+import scrapi.msg.MessageException;
 import scrapi.lang.CheckedFunction;
 import scrapi.lang.CheckedSupplier;
 import scrapi.lang.Identified;
@@ -409,7 +409,7 @@ public class JcaTemplate {
             if (MessageDigest.class.isAssignableFrom(clazz) ||
                     Signature.class.isAssignableFrom(clazz) ||
                     Mac.class.isAssignableFrom(clazz)) {
-                return new DigestException(msg, cause);
+                return new MessageException(msg, cause);
             }
             return new SecurityException(msg, cause);
         }

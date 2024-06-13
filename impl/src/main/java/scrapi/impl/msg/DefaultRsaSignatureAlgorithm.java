@@ -13,18 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package scrapi.key;
+package scrapi.impl.msg;
 
-@FunctionalInterface
-public interface Sizable<T> {
+import scrapi.msg.RsaSignatureAlgorithm;
+import scrapi.impl.key.DefaultRsaPrivateKeyGenerator;
+import scrapi.key.RsaPrivateKey;
+import scrapi.key.RsaPublicKey;
 
-    /**
-     * Sets the size in <b>bits</b> (<em>not bytes</em>).
-     *
-     * @param sizeInBits the size in bits
-     * @return the associated object for method chaining.
-     * @throws IllegalArgumentException if the specified size is invalid or insufficient
-     */
-    T size(int sizeInBits) throws IllegalArgumentException;
+public class DefaultRsaSignatureAlgorithm
+        extends DefaultSignatureAlgorithm<RsaPublicKey, RsaPrivateKey, RsaPrivateKey.Generator>
+        implements RsaSignatureAlgorithm {
 
+    public DefaultRsaSignatureAlgorithm(String id, int bitLength) {
+        super(id, null, null, bitLength, DefaultRsaPrivateKeyGenerator::new);
+    }
 }
