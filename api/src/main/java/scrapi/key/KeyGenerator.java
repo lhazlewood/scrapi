@@ -28,5 +28,6 @@ import java.util.function.Supplier;
  * @param <T> the generator subtype for method chaining
  * @since SCRAPI_RELEASE_VERSION
  */
-public interface KeyGenerator<K extends Key<?>, T extends KeyGenerator<K, T>> extends Providable<T>, Randomizable<T>, Sizable<T>, Supplier<K> {
+public interface KeyGenerator<K extends ConfidentialKey<?>, T extends KeyGenerator<K, T>>
+        extends Providable<T>, Randomizable<T>, Sizable<T>, Supplier<K> {
 }
