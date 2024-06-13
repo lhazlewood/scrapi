@@ -22,8 +22,7 @@ import java.util.function.Supplier;
 
 /**
  * A {@code KeyGenerator} creates new secure-random {@link Key}s suitable for use with an associated cryptographic
- * algorithm each time its {@link #get()} method is invoked (unlike the parent {@link KeyBuilder} interface which
- * makes no such guarantee).
+ * algorithm each time its {@link #get()} method is invoked.
  *
  * @param <K> the type of key to generate
  * @param <T> the generator subtype for method chaining

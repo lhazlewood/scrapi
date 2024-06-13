@@ -31,10 +31,18 @@ import java.util.Set;
 abstract class AbstractRsaKey<K extends java.security.Key> extends AbstractKey<K> implements AsymmetricKey<K>, RsaKey<K> {
 
     static final String JCA_ALG_NAME = "RSA";
-    static final int MIN_SIZE = 1024;
 
-    static final Parameter<BigInteger> N = Parameters.positiveBigInt("n", "RSA modulus", false);
-    static final Parameter<BigInteger> E = Parameters.positiveBigInt("e", "RSA public exponent", false);
+    /**
+     * RSA 2048-bit keys only have 112 bits of security strength per
+     * <a href="https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-57pt1r5.pdf">
+     * https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-57pt1r5.pdf</a>, Table 2 (page 54), and
+     * NIST/FIPS will not allow smaller lengths, so we won't either for safety.  Applications that require smaller
+     * lengths will need to use the JCA APIs directly.
+     */
+    static final int MIN_SIZE = 2048;
+
+    static final Parameter<BigInteger> N = Parameters.positiveBigInt("n", "RSA key modulus", false);
+    static final Parameter<BigInteger> E = Parameters.positiveBigInt("e", "RSA key public exponent", false);
 
     // Defined in https://www.rfc-editor.org/rfc/rfc8017#appendix-A.1:
     private static final String RSA_ENC_OID = "1.2.840.113549.1.1.1"; // RFC 8017's "rsaEncryption"

@@ -1,3 +1,18 @@
+/*
+ * Copyright © 2024 Les Hazlewood
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package scrapi.impl.key;
 
 import scrapi.key.RsaPrivateKey;
@@ -13,21 +28,14 @@ public class DefaultRsaPrivateKeyGenerator extends
         implements RsaPrivateKey.Generator {
 
     /**
-     * RSA 2048-bit keys only have 112 bits of security strength per
-     * <a href="https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-57pt1r5.pdf">
-     * https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-57pt1r5.pdf</a>, Table 2 (page 54), and
-     * NIST/FIPS will not allow smaller lengths, so we won't either for safety.  Applications that require smaller
-     * lengths will need to use the JCA APIs directly.
+     * Per NIST doc <a href="https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-57pt1r5.pdf">
+     * https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-57pt1r5.pdf</a>, Table 2 (page 54),
+     * RSA 3072-bit keys have 128 bits of security strength, so that's our default.
      */
-    private static final int MIN_KEY_SIZE = 2048;
-
-    /**
-     * Per NIST doc above, RSA 3072-bit keys have 128 bits of security strength, so that's our default.
-     */
-    private static final int DEFAULT_KEY_SIZE = 3072;
+    private static final int DEFAULT_KEY_SIZE = AbstractRsaKey.MIN_SIZE + 1024;
 
     public DefaultRsaPrivateKeyGenerator() {
-        super(AbstractRsaKey.JCA_ALG_NAME, "RSA modulus size", MIN_KEY_SIZE, DEFAULT_KEY_SIZE);
+        super(AbstractRsaKey.JCA_ALG_NAME, "RSA modulus size", AbstractRsaKey.MIN_SIZE, DEFAULT_KEY_SIZE);
     }
 
     @Override

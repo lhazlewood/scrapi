@@ -225,6 +225,7 @@
                     <artifactId>license-maven-plugin</artifactId>
                     <version>${maven.license.version}</version>
                     <configuration>
+                        <strictCheck>true</strictCheck>
                         <skipExistingHeaders>${maven.license.skipExistingHeaders}</skipExistingHeaders>
                         <mapping>
                             <toml>SCRIPT_STYLE</toml> <!-- yaml -->

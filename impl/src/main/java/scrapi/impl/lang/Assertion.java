@@ -15,25 +15,31 @@
  */
 package scrapi.impl.lang;
 
-import java.util.Collection;
+import scrapi.util.Assert;
+
+import java.util.Objects;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 
-public interface Interval<C extends Comparable<C>> extends Predicate<C> {
+@FunctionalInterface
+public interface Assertion<T> {
 
-    static <C extends Comparable<C>> Interval<C> of(C value) {
-        return new EndpointInterval<>(value);
+    T check(T value);
+
+    static <T> Assertion<T> of(Predicate<T> req, Supplier<String> msg) {
+        return new DefaultAssertion<>(req, msg);
     }
 
-    static <C extends Comparable<C>> Interval<C> of(C min, C max) {
-        return new ClosedInterval<>(min, max);
+    static <T> Assertion<T> of(Predicate<T> req, String msg) {
+        return new DefaultAssertion<>(req, msg);
     }
 
-    static <C extends Comparable<C>> Interval<C> of(Collection<C> values) {
-        return new CollectionInterval<>(values);
+    static <T> Assertion<T> notNull(final String msg) {
+        return of(Objects::nonNull, msg);
     }
 
-    static <C extends Comparable<C>> Interval<C> gte(C min) {
-        return new LeftClosedInterval<>(min);
+    default Assertion<T> and(Assertion<T> other) {
+        Assert.notNull(other, "other assertion cannot be null.");
+        return t -> other.check(check(t));
     }
-
 }
