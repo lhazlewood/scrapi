@@ -22,7 +22,7 @@ import java.nio.ByteBuffer;
 import java.security.MessageDigest;
 import java.security.Provider;
 
-class JcaMessageDigester extends AbstractDataConsumer<Hasher> implements Hasher {
+class JcaMessageDigester extends AbstractMessageConsumer<Hasher> implements Hasher {
 
     private final MessageDigest MD;
 

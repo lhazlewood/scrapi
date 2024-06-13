@@ -16,12 +16,11 @@
 package scrapi.msg;
 
 import scrapi.BitLength;
-import scrapi.DataConsumer;
 
 import java.nio.ByteBuffer;
 import java.util.function.Supplier;
 
-public interface HashAlgorithm extends IntegrityAlgorithm<HashAlgorithm>, BitLength, Supplier<Hasher>, DataConsumer<Hasher> {
+public interface HashAlgorithm extends IntegrityAlgorithm<HashAlgorithm>, BitLength, Supplier<Hasher>, MessageConsumer<Hasher> {
 
     @Override
     default Hasher apply(byte input) {

@@ -15,7 +15,7 @@
  */
 package scrapi.impl.msg;
 
-import scrapi.DataConsumer;
+import scrapi.msg.MessageConsumer;
 import scrapi.impl.jca.JcaTemplate;
 import scrapi.key.AsymmetricKey;
 import scrapi.key.PrivateKey;
@@ -32,7 +32,7 @@ import java.security.SecureRandom;
 import java.security.Signature;
 import java.security.SignatureException;
 
-abstract class JcaSignatureSupport<T extends DataConsumer<T>, K extends AsymmetricKey<?>> extends AbstractDataConsumer<T> {
+abstract class JcaSignatureSupport<T extends MessageConsumer<T>, K extends AsymmetricKey<?>> extends AbstractMessageConsumer<T> {
 
     private static final String JCA_KEY_TYPE_MSG = "AsymmetricKey must be an instance of either " +
             PublicKey.class.getName() + " or " + PrivateKey.class.getName();

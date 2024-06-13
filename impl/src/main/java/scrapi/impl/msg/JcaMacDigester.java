@@ -25,7 +25,7 @@ import java.nio.ByteBuffer;
 import java.security.MessageDigest;
 import java.security.Provider;
 
-class JcaMacDigester extends AbstractDataConsumer<Hasher> implements Hasher {
+class JcaMacDigester extends AbstractMessageConsumer<Hasher> implements Hasher {
 
     public static final String JCA_KEY_NOT_NULL = SecretKey.class.getName() + " toJcaKey() value cannot be null.";
 

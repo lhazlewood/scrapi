@@ -15,10 +15,8 @@
  */
 package scrapi.msg;
 
-import scrapi.DataConsumer;
-
 import java.util.function.Supplier;
 
-public interface Transformer<T extends Transformer<T>> extends DataConsumer<T>, Supplier<byte[]> {
+public interface Transformer<T extends Transformer<T>> extends MessageConsumer<T>, Supplier<byte[]> {
 
 }

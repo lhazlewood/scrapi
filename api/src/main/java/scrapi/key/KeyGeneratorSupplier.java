@@ -26,7 +26,7 @@ package scrapi.key;
  * @since SCRAPI_RELEASE_VERSION
  */
 @FunctionalInterface
-public interface KeyGeneratorSupplier<K extends Key<?>, G extends KeyGenerator<K, G>> {
+public interface KeyGeneratorSupplier<K extends ConfidentialKey<?>, G extends KeyGenerator<K, G>> {
 
     /**
      * Returns a new {@link KeyGenerator} instance that will generate new keys with a length sufficient

@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package scrapi;
+package scrapi.msg;
 
 import java.nio.ByteBuffer;
 import java.util.function.Function;
 
-public interface DataConsumer<T extends DataConsumer<T>> extends Function<byte[], T> {
+public interface MessageConsumer<T extends MessageConsumer<T>> extends Function<byte[], T> {
 
     /**
      * Processes the specified byte.

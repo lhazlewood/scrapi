@@ -15,12 +15,12 @@
  */
 package scrapi.impl.msg;
 
-import scrapi.DataConsumer;
+import scrapi.msg.MessageConsumer;
 import scrapi.util.Assert;
 
 import java.nio.ByteBuffer;
 
-abstract class AbstractDataConsumer<T extends DataConsumer<T>> implements DataConsumer<T> {
+abstract class AbstractMessageConsumer<T extends MessageConsumer<T>> implements MessageConsumer<T> {
 
     @SuppressWarnings("unchecked")
     protected final T self() {
