@@ -15,11 +15,11 @@
  */
 package scrapi.msg;
 
-import scrapi.key.Key;
+import scrapi.key.ConfidentialKey;
 import scrapi.key.KeyGenerator;
 import scrapi.key.KeyGeneratorSupplier;
 import scrapi.key.Keyable;
 
-public interface AuthenticityAlgorithm<K extends Key<?>, T extends Transformer<T>, G extends KeyGenerator<K, G>, A extends AuthenticityAlgorithm<K, T, G, A>>
+public interface AuthenticityAlgorithm<K extends ConfidentialKey<?>, T extends Transformer<T>, G extends KeyGenerator<K, G>, A extends AuthenticityAlgorithm<K, T, G, A>>
         extends IntegrityAlgorithm<A>, Keyable<K, T>, KeyGeneratorSupplier<K, G> {
 }
