@@ -57,7 +57,7 @@ nuanced understanding of cryptographic algorithms to be able to use them safely.
   and factory design patterns to eliminate tight coupling to implemenations.
 
 
-* Generic: leverage JDK 7+ generics where feasible.
+* Generic: leverage JDK 5+ generics where feasible.
 
 
 * Functional: leverage JDK 8+ functional paradigms where appropriate.
