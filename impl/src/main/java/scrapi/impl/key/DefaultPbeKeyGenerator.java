@@ -95,7 +95,7 @@ public class DefaultPbeKeyGenerator extends AbstractKeyGenerator<PbeKey, PbeKey.
     @Override
     public PbeKey get() {
         char[] password = this.password;
-        if (Arrays.length(password) == 0) {
+        if (Arrays.isEmpty(password)) {
             password = randomPassword();
         }
         int size = resolveSize();

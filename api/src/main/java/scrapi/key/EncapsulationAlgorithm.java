@@ -15,19 +15,11 @@
  */
 package scrapi.key;
 
-import scrapi.jca.Providable;
-import scrapi.jca.Randomizable;
+public interface EncapsulationAlgorithm<E extends Key<?>, D extends ConfidentialKey<?>, G extends KeyGenerator<D, G>>
+        extends KeyGeneratorSupplier<D, G> {
 
-import java.util.function.Supplier;
+    Encapsulator encapsulator(E key);
 
-/**
- * A {@code KeyGenerator} creates new secure-random {@link Key}s suitable for use with an associated cryptographic
- * algorithm each time its {@link #get()} method is invoked.
- *
- * @param <K> the type of key to generate
- * @param <T> the generator subtype for method chaining
- * @since SCRAPI_RELEASE_VERSION
- */
-public interface KeyGenerator<K extends ConfidentialKey<?>, T extends KeyGenerator<K, T>>
-        extends Providable<T>, Randomizable<T>, Supplier<K> {
+    Decapsulator decapsulator(D key);
+
 }

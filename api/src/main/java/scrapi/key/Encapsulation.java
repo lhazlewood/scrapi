@@ -15,19 +15,7 @@
  */
 package scrapi.key;
 
-import scrapi.jca.Providable;
-import scrapi.jca.Randomizable;
+public interface Encapsulation extends Keyed<SecretKey<?>> {
 
-import java.util.function.Supplier;
-
-/**
- * A {@code KeyGenerator} creates new secure-random {@link Key}s suitable for use with an associated cryptographic
- * algorithm each time its {@link #get()} method is invoked.
- *
- * @param <K> the type of key to generate
- * @param <T> the generator subtype for method chaining
- * @since SCRAPI_RELEASE_VERSION
- */
-public interface KeyGenerator<K extends ConfidentialKey<?>, T extends KeyGenerator<K, T>>
-        extends Providable<T>, Randomizable<T>, Supplier<K> {
+    byte[] ciphertext();
 }
