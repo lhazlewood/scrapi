@@ -16,9 +16,9 @@
 package scrapi.impl.key;
 
 import scrapi.alg.Size;
+import scrapi.impl.alg.SizeValidator;
 import scrapi.impl.jca.AlgorithmSupport;
 import scrapi.impl.lang.Interval;
-import scrapi.impl.alg.SizeValidator;
 import scrapi.jca.Providable;
 import scrapi.key.Key;
 import scrapi.util.Assert;

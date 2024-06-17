@@ -15,7 +15,7 @@
  */
 package scrapi.impl.alg;
 
-import scrapi.Algorithm;
+import scrapi.alg.Algorithm;
 import scrapi.util.Assert;
 
 import java.security.Provider;

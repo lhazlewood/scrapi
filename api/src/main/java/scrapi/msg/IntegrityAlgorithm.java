@@ -15,7 +15,7 @@
  */
 package scrapi.msg;
 
-import scrapi.Algorithm;
+import scrapi.alg.Algorithm;
 
 public interface IntegrityAlgorithm<A extends IntegrityAlgorithm<A>> extends Algorithm<A> {
 }

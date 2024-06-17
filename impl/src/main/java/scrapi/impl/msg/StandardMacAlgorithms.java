@@ -15,7 +15,7 @@
  */
 package scrapi.impl.msg;
 
-import scrapi.Algs;
+import scrapi.alg.Algs;
 import scrapi.alg.Size;
 import scrapi.impl.lang.IdentifiableRegistry;
 import scrapi.msg.HashAlgorithm;

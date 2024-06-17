@@ -16,7 +16,7 @@
 package scrapi.impl.msg
 
 import org.junit.jupiter.api.Test
-import scrapi.Algs
+import scrapi.alg.Algs
 import scrapi.impl.key.DefaultPbeKey
 import scrapi.key.PbeKey
 import scrapi.key.SecretKey

@@ -16,10 +16,10 @@
 package scrapi.impl.jca;
 
 import scrapi.SecurityException;
-import scrapi.msg.MessageException;
 import scrapi.lang.CheckedFunction;
 import scrapi.lang.CheckedSupplier;
 import scrapi.lang.Identified;
+import scrapi.msg.MessageException;
 import scrapi.util.Assert;
 import scrapi.util.Collections;
 import scrapi.util.Objects;

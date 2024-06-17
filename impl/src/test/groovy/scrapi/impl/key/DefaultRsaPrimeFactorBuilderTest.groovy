@@ -13,18 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package scrapi.key
+package scrapi.impl.key
 
 import org.junit.jupiter.api.Test
+import scrapi.key.RsaPrimeFactor
 
 import static org.junit.jupiter.api.Assertions.assertEquals
 
-class RsaPrimeFactorTest {
+class DefaultRsaPrimeFactorBuilderTest {
+
+    static DefaultRsaPrimeFactorBuilder builder() {
+        return RsaPrimeFactor.builder() as DefaultRsaPrimeFactorBuilder
+    }
 
     @Test
-    void builder() {
+    void testBuilder() {
         // random BigInteger values are fine for this test, we're just seeing if the values are set correctly:
-        def f = RsaPrimeFactor.builder()
+        def f = builder()
                 .prime(BigInteger.ONE).exponent(BigInteger.TWO).coefficient(BigInteger.TEN)
                 .build()
 

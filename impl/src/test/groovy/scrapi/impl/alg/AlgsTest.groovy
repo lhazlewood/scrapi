@@ -13,11 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package scrapi
+package scrapi.impl.alg
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
+import scrapi.alg.Algs
 
 import java.security.Provider
 import java.security.Security

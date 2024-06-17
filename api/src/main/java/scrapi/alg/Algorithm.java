@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package scrapi;
+package scrapi.alg;
 
 import scrapi.jca.Providable;
 import scrapi.lang.Identified;

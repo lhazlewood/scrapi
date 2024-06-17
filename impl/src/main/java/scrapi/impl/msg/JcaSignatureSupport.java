@@ -15,12 +15,12 @@
  */
 package scrapi.impl.msg;
 
-import scrapi.msg.MessageConsumer;
 import scrapi.impl.jca.JcaTemplate;
 import scrapi.key.AsymmetricKey;
 import scrapi.key.PrivateKey;
 import scrapi.key.PublicKey;
 import scrapi.lang.CheckedRunnable;
+import scrapi.msg.MessageConsumer;
 import scrapi.msg.MessageException;
 import scrapi.msg.Signer;
 import scrapi.msg.Verifier;

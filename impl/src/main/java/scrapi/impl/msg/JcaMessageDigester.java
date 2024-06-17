@@ -15,8 +15,8 @@
  */
 package scrapi.impl.msg;
 
-import scrapi.msg.Hasher;
 import scrapi.impl.jca.JcaTemplate;
+import scrapi.msg.Hasher;
 
 import java.nio.ByteBuffer;
 import java.security.MessageDigest;

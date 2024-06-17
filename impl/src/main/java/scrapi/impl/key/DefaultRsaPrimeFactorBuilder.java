@@ -21,7 +21,6 @@ import scrapi.util.Assert;
 import java.math.BigInteger;
 import java.security.spec.RSAOtherPrimeInfo;
 
-@SuppressWarnings("unused") // used via reflection in RsaPrimeFactor#builder() method implementation
 public class DefaultRsaPrimeFactorBuilder implements RsaPrimeFactor.Builder {
 
     private BigInteger prime;
