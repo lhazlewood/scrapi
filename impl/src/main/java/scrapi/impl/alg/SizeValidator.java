@@ -13,30 +13,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package scrapi.impl.util;
+package scrapi.impl.alg;
 
+import scrapi.alg.Size;
 import scrapi.util.Assert;
 
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 
-public class BitLengthValidator implements UnaryOperator<Integer> {
+public class SizeValidator implements UnaryOperator<Size> {
 
     private final String name;
-    private final Predicate<Integer> valid;
+    private final Predicate<Size> valid;
 
-    public BitLengthValidator(String name, Predicate<Integer> i) {
+    public SizeValidator(String name, Predicate<Size> i) {
         this.name = Assert.hasText(name, "name must not be null or empty.");
         this.valid = Assert.notNull(i, "interval must not be null.");
     }
 
     @Override
-    public Integer apply(Integer size) throws IllegalArgumentException {
+    public Size apply(Size size) throws IllegalArgumentException {
         if (size == null) {
             String msg = name + " must not be null.";
             throw new IllegalArgumentException(msg);
         }
-        if (size % Byte.SIZE != 0) {
+        if (size.bits() % Byte.SIZE != 0) {
             String msg = name + " value '" + size + "' must be a multiple of " + Byte.SIZE + ".";
             throw new IllegalArgumentException(msg);
         }

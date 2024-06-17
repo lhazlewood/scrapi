@@ -16,9 +16,10 @@
 package scrapi.impl.msg;
 
 import scrapi.Algs;
+import scrapi.alg.Size;
+import scrapi.impl.lang.IdentifiableRegistry;
 import scrapi.msg.HashAlgorithm;
 import scrapi.msg.MacAlgorithm;
-import scrapi.impl.lang.IdentifiableRegistry;
 import scrapi.util.Collections;
 import scrapi.util.Strings;
 
@@ -48,28 +49,29 @@ public final class StandardMacAlgorithms extends IdentifiableRegistry<String, Ma
 
             String suffix = suffix(hashAlg);
             String id = "Hmac" + suffix;
-            int bitLength = hashAlg.bitLength();
-            macs.add(new DefaultMacAlgorithm(id, null, bitLength));
+            Size digestSize = hashAlg.digestSize();
+            macs.add(new DefaultMacAlgorithm(id, null, digestSize));
 
             // Standard PBEWith* and HmacPBE* algs only support SHA1 and SHA2 family algorithms, so if we've
             // encountered anything other than those families, skip:
             if (!hashAlg.id().startsWith("SHA-")) continue;
 
             int defaultIterations; // https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html
-            if (bitLength >= 512) {
+            int bits = digestSize.bits();
+            if (bits >= 512) {
                 defaultIterations = 210_000;
-            } else if (bitLength >= 384) {
+            } else if (bits >= 384) {
                 defaultIterations = 415_000;
-            } else if (bitLength >= 256) {
+            } else if (bits >= 256) {
                 defaultIterations = 600_000;
-            } else if (bitLength >= 224) {
+            } else if (bits >= 224) {
                 defaultIterations = 900_000;
             } else {
                 defaultIterations = 1_300_000;
             }
 
-            macs.add(new DefaultPbeMacAlgorithm("PBEWithHmac" + suffix, null, bitLength, defaultIterations));
-            macs.add(new DefaultPbeMacAlgorithm("HmacPBE" + suffix, null, bitLength, defaultIterations));
+            macs.add(new DefaultPbeMacAlgorithm("PBEWithHmac" + suffix, null, digestSize, defaultIterations));
+            macs.add(new DefaultPbeMacAlgorithm("HmacPBE" + suffix, null, digestSize, defaultIterations));
         }
         return Collections.immutable(macs);
     }

@@ -15,6 +15,7 @@
  */
 package scrapi.impl.key;
 
+import scrapi.alg.Size;
 import scrapi.key.ConfidentialKey;
 import scrapi.key.KeyGenerator;
 import scrapi.util.Assert;
@@ -22,24 +23,24 @@ import scrapi.util.Assert;
 abstract class AbstractKeyGenerator<K extends ConfidentialKey<?>, T extends KeyGenerator<K, T>> extends AbstractKeyFactory<K, T>
         implements KeyGenerator<K, T> {
 
-    protected final int DEFAULT_SIZE;
-    protected int size = 0; // zero means not configured
+    protected final Size DEFAULT_SIZE;
+    protected Size size;
 
-    AbstractKeyGenerator(String jcaName, int minSize, int defaultSize) {
+    AbstractKeyGenerator(String jcaName, Size minSize, Size defaultSize) {
         this(jcaName, "size", minSize, defaultSize);
     }
 
-    AbstractKeyGenerator(String jcaName, String sizeName, int minSize, int defaultSize) {
+    AbstractKeyGenerator(String jcaName, String sizeName, Size minSize, Size defaultSize) {
         super(jcaName, sizeName, minSize);
         this.DEFAULT_SIZE = Assert.gte(defaultSize, this.MIN_SIZE, "defaultSize must be >= minSize");
     }
 
-    public final T size(int sizeInBits) {
-        this.size = this.SIZE_VALIDATOR.apply(sizeInBits);
+    public final T size(Size size) {
+        this.size = this.SIZE_VALIDATOR.apply(size);
         return self();
     }
 
-    protected int resolveSize() {
-        return this.size < MIN_SIZE ? DEFAULT_SIZE : this.size;
+    protected Size resolveSize() {
+        return this.size == null ? this.DEFAULT_SIZE : this.size;
     }
 }

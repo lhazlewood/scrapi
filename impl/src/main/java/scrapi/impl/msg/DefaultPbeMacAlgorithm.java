@@ -15,10 +15,11 @@
  */
 package scrapi.impl.msg;
 
-import scrapi.msg.MacAlgorithm;
+import scrapi.alg.Size;
 import scrapi.impl.key.DefaultPbeKey;
 import scrapi.impl.key.DefaultPbeKeyGenerator;
 import scrapi.key.PbeKey;
+import scrapi.msg.MacAlgorithm;
 import scrapi.util.Assert;
 
 import java.security.Provider;
@@ -28,20 +29,20 @@ public class DefaultPbeMacAlgorithm
 
     protected final int DEFAULT_ITERATIONS;
 
-    protected DefaultPbeMacAlgorithm(String id, Provider provider, int bitLength, int defaultIterations) {
-        super(id, provider, bitLength);
+    protected DefaultPbeMacAlgorithm(String id, Provider provider, Size digestSize, int defaultIterations) {
+        super(id, provider, digestSize);
         this.DEFAULT_ITERATIONS = DefaultPbeKey.assertIterationsGte(defaultIterations, DefaultPbeKey.MIN_ITERATIONS);
     }
 
     @Override
     public MacAlgorithm<PbeKey, PbeKey.Generator> provider(Provider provider) {
         Assert.notNull(provider, "Provider cannot not be null");
-        return new DefaultPbeMacAlgorithm(this.ID, provider, this.BITLEN, this.DEFAULT_ITERATIONS);
+        return new DefaultPbeMacAlgorithm(this.ID, provider, digestSize(), this.DEFAULT_ITERATIONS);
     }
 
 
     @Override
     public PbeKey.Generator keygen() {
-        return new DefaultPbeKeyGenerator(id(), bitLength(), this.DEFAULT_ITERATIONS);
+        return new DefaultPbeKeyGenerator(id(), digestSize(), this.DEFAULT_ITERATIONS);
     }
 }

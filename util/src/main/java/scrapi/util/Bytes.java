@@ -215,7 +215,7 @@ public final class Bytes {
      * @throws IllegalArgumentException if {@code bitLength} is less than zero.
      */
     public static int length(int bitLength) {
-        Assert.gt(bitLength, -1, "bitLength must be non-negative (zero or greater).");
+        Assert.gte(bitLength, 0, "bitLength must be >= 0.");
         return (bitLength + 7) / Byte.SIZE;
     }
 

@@ -15,6 +15,7 @@
  */
 package scrapi.impl.key;
 
+import scrapi.alg.Size;
 import scrapi.key.OctetSecretKey;
 import scrapi.util.Assert;
 import scrapi.util.Bytes;
@@ -27,7 +28,7 @@ public class DefaultOctetSecretKeyBuilder extends AbstractKeyFactory<OctetSecret
 
     private transient byte[] octets;
 
-    public DefaultOctetSecretKeyBuilder(String jcaName, int minSize) {
+    public DefaultOctetSecretKeyBuilder(String jcaName, Size minSize) {
         super(jcaName, minSize);
     }
 
@@ -40,7 +41,7 @@ public class DefaultOctetSecretKeyBuilder extends AbstractKeyFactory<OctetSecret
     @Override
     public OctetSecretKey get() {
         byte[] octets = this.octets;
-        if (Bytes.length(octets) == 0) {
+        if (Bytes.isEmpty(octets)) {
             String msg = "Octets cannot be null or empty.";
             throw new IllegalStateException(msg);
         }

@@ -15,6 +15,7 @@
  */
 package scrapi.impl.key;
 
+import scrapi.alg.Size;
 import scrapi.key.OctetSecretKey;
 import scrapi.util.Bytes;
 
@@ -32,7 +33,7 @@ public class DefaultOctetSecretKey extends AbstractKey<javax.crypto.SecretKey> i
     }
 
     @Override
-    public Optional<Integer> bitLength() {
-        return octets().map(b -> (int) Bytes.bitLength(b));
+    public Optional<Size> size() {
+        return octets().map(b -> Size.bytes(Bytes.length(b)));
     }
 }

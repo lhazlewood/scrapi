@@ -17,10 +17,10 @@ package scrapi.impl.msg
 
 import org.junit.jupiter.api.Test
 import scrapi.Algs
-import scrapi.msg.MacAlgorithm
 import scrapi.impl.key.DefaultPbeKey
 import scrapi.key.PbeKey
 import scrapi.key.SecretKey
+import scrapi.msg.MacAlgorithm
 import scrapi.util.Bytes
 
 import javax.crypto.Mac
@@ -93,7 +93,7 @@ class StandardMacAlgorithmsTest {
             jca.init(key.toJcaKey())
             byte[] jcaDigest = jca.doFinal()
             assertTrue MessageDigest.isEqual(jcaDigest, digest)
-            assertEquals alg.bitLength(), Bytes.bitLength(digest)
+            assertEquals alg.digestSize().bits(), Bytes.bitLength(digest)
             assertTrue alg.key(key).test(digest)
         }
     }
@@ -109,7 +109,7 @@ class StandardMacAlgorithmsTest {
             jca.update(b)
             def jcaDigest = jca.doFinal()
             assertTrue MessageDigest.isEqual(jcaDigest, digest) // assert same result as JCA
-            assertEquals it.bitLength(), Bytes.bitLength(digest)
+            assertEquals it.digestSize().bits(), Bytes.bitLength(digest)
             assertTrue it.key(key).apply(b).test(digest)
         }
     }
@@ -129,19 +129,18 @@ class StandardMacAlgorithmsTest {
             buf.rewind()
 
             assertTrue MessageDigest.isEqual(jcaDigest, digest) // assert same result as JCA
-            assertEquals it.bitLength(), Bytes.bitLength(digest)
+            assertEquals it.digestSize().bits(), Bytes.bitLength(digest)
             assertTrue it.key(key).apply(buf).test(digest)
         }
     }
-
 
     @Test
     void digestExactLengths() {
         for (MacAlgorithm alg : Algs.Mac.get().values()) {
             def key = newKey(alg)
-            byte[] data = Bytes.randomBits(alg.bitLength())
+            byte[] data = Bytes.randomBits(alg.digestSize().bits())
             byte[] digest = alg.key(key).apply(data).get()
-            assertEquals alg.bitLength(), Bytes.bitLength(digest)
+            assertEquals alg.digestSize().bits(), Bytes.bitLength(digest)
             assertTrue alg.key(key).apply(data).test(digest)
         }
     }
@@ -150,9 +149,9 @@ class StandardMacAlgorithmsTest {
     void digestSmallerLengths() {
         for (MacAlgorithm alg : Algs.Mac.get().values()) {
             def key = newKey(alg)
-            byte[] data = Bytes.randomBits(alg.bitLength() - Byte.SIZE) // 1 byte less than digest length
+            byte[] data = Bytes.randomBits(alg.digestSize().bits() - Byte.SIZE) // 1 byte less than digest length
             byte[] digest = alg.key(key).apply(data).get()
-            assertEquals alg.bitLength(), Bytes.bitLength(digest) // digest is still same as alg bitLength
+            assertEquals alg.digestSize().bits(), Bytes.bitLength(digest) // digest is still same as alg bitLength
             assertTrue alg.key(key).apply(data).test(digest)
         }
     }
@@ -162,12 +161,13 @@ class StandardMacAlgorithmsTest {
         for (MacAlgorithm alg : Algs.Mac.get().values()) {
             def key = newKey(alg)
             def hasher = alg.key(key)
-            def a = Bytes.randomBits(alg.bitLength())
-            def b = Bytes.randomBits(alg.bitLength())
-            def c = Bytes.randomBits(alg.bitLength())
+            def bits = alg.digestSize().bits()
+            def a = Bytes.randomBits(bits)
+            def b = Bytes.randomBits(bits)
+            def c = Bytes.randomBits(bits)
             // multiple .apply calls, total bytes applied are larger than bitLength:
             byte[] digest = hasher.apply(a).apply(b).apply(c).get()
-            assertEquals alg.bitLength(), Bytes.bitLength(digest) // digest is still same as alg bitLength
+            assertEquals alg.digestSize().bits(), Bytes.bitLength(digest) // digest is still same as alg bitLength
             assertTrue alg.key(key).apply(a).apply(b).apply(c).test(digest)
         }
     }

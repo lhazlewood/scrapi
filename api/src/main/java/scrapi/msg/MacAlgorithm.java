@@ -15,10 +15,9 @@
  */
 package scrapi.msg;
 
-import scrapi.BitLength;
 import scrapi.key.KeyGenerator;
 import scrapi.key.SecretKey;
 
 public interface MacAlgorithm<K extends SecretKey<?>, G extends KeyGenerator<K, G>>
-        extends AuthenticityAlgorithm<K, Hasher, G, MacAlgorithm<K, G>>, BitLength {
+        extends AuthenticityAlgorithm<K, Hasher, G, MacAlgorithm<K, G>>, DigestSized {
 }

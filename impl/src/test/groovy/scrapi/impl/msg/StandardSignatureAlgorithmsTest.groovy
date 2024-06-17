@@ -17,8 +17,9 @@ package scrapi.impl.msg
 
 import org.junit.jupiter.api.Test
 import scrapi.Algs
-import scrapi.msg.SignatureAlgorithm
+import scrapi.alg.Size
 import scrapi.key.RsaPrivateKey
+import scrapi.msg.SignatureAlgorithm
 import scrapi.util.Bytes
 
 import java.security.MessageDigest
@@ -62,14 +63,14 @@ class StandardSignatureAlgorithmsTest {
     @Test
     void digestNoData() {
         Algs.Sig.get().values().each { SignatureAlgorithm alg ->
-            int size = 2048 // keep build times short
+            def size = Size.bits(2048) // keep build times short
             def priv = alg.keygen().size(size).get() as RsaPrivateKey
             byte[] sig = alg.key(priv).get()
             def jca = Signature.getInstance(alg.id() as String)
             jca.initSign(priv.toJcaKey())
             byte[] jcaSig = jca.sign()
             assertTrue MessageDigest.isEqual(jcaSig, sig)
-            assertEquals Bytes.bitLength(sig), priv.bitLength().get() // RSA signature length is equal to the modulus length
+            assertEquals Bytes.bitLength(sig), priv.size().get().bits() // RSA signature length is equal to the modulus length
             jca = Signature.getInstance(alg.id() as String)
             jca.initVerify(priv.publicKey().toJcaKey())
             assertTrue jca.verify(jcaSig)
@@ -80,7 +81,7 @@ class StandardSignatureAlgorithmsTest {
     @Test
     void digestOneByte() {
         Algs.Sig.get().values().each { SignatureAlgorithm alg ->
-            int size = 2048 // keep build times short
+            def size = Size.bits(2048) // keep build times short
             def priv = alg.keygen().size(size).get() as RsaPrivateKey
 
             byte b = Bytes.random(1)[0]
@@ -92,7 +93,7 @@ class StandardSignatureAlgorithmsTest {
             byte[] jcaSig = jca.sign()
             assertTrue MessageDigest.isEqual(jcaSig, sig)
 
-            assertEquals Bytes.bitLength(sig), priv.bitLength().get() // RSA signature length is equal to the modulus length
+            assertEquals Bytes.bitLength(sig), priv.size().get().bits() // RSA signature length is equal to the modulus length
 
             jca = Signature.getInstance(alg.id() as String)
             jca.initVerify(priv.publicKey().toJcaKey())

@@ -21,8 +21,7 @@ import scrapi.key.PrivateKey;
 import scrapi.key.PublicKey;
 
 public interface SignatureAlgorithm<U extends PublicKey<?>, R extends PrivateKey<?, U>, G extends KeyGenerator<R, G>>
-        extends AuthenticityAlgorithm<R, Signer, G, SignatureAlgorithm<U, R, G>>,
-        Randomizable<SignatureAlgorithm<U, R, G>> {
+        extends AuthenticityAlgorithm<R, Signer, G, SignatureAlgorithm<U, R, G>>, Randomizable<SignatureAlgorithm<U, R, G>> {
 
     Verifier<?> key(U publicKey);
 }

@@ -15,6 +15,7 @@
  */
 package scrapi.impl.key;
 
+import scrapi.alg.Size;
 import scrapi.key.OctetSecretKey;
 
 import javax.crypto.SecretKey;
@@ -22,14 +23,14 @@ import javax.crypto.SecretKey;
 public class DefaultOctetSecretKeyGenerator extends AbstractKeyGenerator<OctetSecretKey, OctetSecretKey.Generator>
         implements OctetSecretKey.Generator {
 
-    public DefaultOctetSecretKeyGenerator(String jcaName, int minSize) {
+    public DefaultOctetSecretKeyGenerator(String jcaName, Size minSize) {
         super(jcaName, minSize, minSize);
     }
 
     @Override
     public OctetSecretKey get() {
-        int size = resolveSize();
-        SecretKey jcaKey = jca().generateSecretKey(size);
+        Size size = resolveSize();
+        SecretKey jcaKey = jca().generateSecretKey(size.bits());
         return new DefaultOctetSecretKey(jcaKey);
     }
 }

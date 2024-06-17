@@ -15,22 +15,29 @@
  */
 package scrapi.impl.msg;
 
-import scrapi.msg.Hasher;
-import scrapi.msg.MacAlgorithm;
+import scrapi.alg.Size;
 import scrapi.key.KeyGenerator;
 import scrapi.key.SecretKey;
+import scrapi.msg.Hasher;
+import scrapi.msg.MacAlgorithm;
 
 import java.security.Provider;
 
 abstract class AbstractMacAlgorithm<K extends SecretKey<?>, G extends KeyGenerator<K, G>>
-        extends AbstractIntegrityAlgorithm<MacAlgorithm<K, G>> implements MacAlgorithm<K, G> {
+        extends AbstractDigestAlgorithm<MacAlgorithm<K, G>> implements MacAlgorithm<K, G> {
 
-    protected AbstractMacAlgorithm(String id, Provider provider, int bitLength) {
-        super(id, provider, bitLength);
+    protected AbstractMacAlgorithm(String id, Provider provider, Size digestSize) {
+        super(id, provider, digestSize);
     }
 
     @Override
     public Hasher key(K key) {
         return new JcaMacDigester(this.ID, this.PROVIDER, key);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) return true;
+        return obj instanceof MacAlgorithm<?, ?> && super.equals(obj);
     }
 }

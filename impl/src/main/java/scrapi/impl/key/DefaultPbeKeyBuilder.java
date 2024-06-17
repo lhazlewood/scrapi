@@ -15,6 +15,7 @@
  */
 package scrapi.impl.key;
 
+import scrapi.alg.Size;
 import scrapi.key.PbeKey;
 import scrapi.util.Arrays;
 import scrapi.util.Assert;
@@ -30,7 +31,7 @@ public class DefaultPbeKeyBuilder
     private byte[] salt;
     private int iterations;
 
-    public DefaultPbeKeyBuilder(String jcaName, int derivedKeySize, int minIterations) {
+    public DefaultPbeKeyBuilder(String jcaName, Size derivedKeySize, int minIterations) {
         super(jcaName, derivedKeySize);
         this.MIN_ITERATIONS = DefaultPbeKey.assertIterationsGte(minIterations, DefaultPbeKey.MIN_ITERATIONS);
     }

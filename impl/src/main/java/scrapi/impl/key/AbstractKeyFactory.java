@@ -15,9 +15,10 @@
  */
 package scrapi.impl.key;
 
+import scrapi.alg.Size;
 import scrapi.impl.jca.AlgorithmSupport;
 import scrapi.impl.lang.Interval;
-import scrapi.impl.util.BitLengthValidator;
+import scrapi.impl.alg.SizeValidator;
 import scrapi.jca.Providable;
 import scrapi.key.Key;
 import scrapi.util.Assert;
@@ -27,16 +28,16 @@ import java.util.function.UnaryOperator;
 
 abstract class AbstractKeyFactory<K extends Key<?>, T extends Providable<T> & Supplier<K>> extends AlgorithmSupport<T> {
 
-    protected final int MIN_SIZE;
-    protected final UnaryOperator<Integer> SIZE_VALIDATOR;
+    protected final Size MIN_SIZE;
+    protected final UnaryOperator<Size> SIZE_VALIDATOR;
 
-    AbstractKeyFactory(String jcaName, int minSize) {
+    AbstractKeyFactory(String jcaName, Size minSize) {
         this(jcaName, "size", minSize);
     }
 
-    AbstractKeyFactory(String jcaName, String sizeName, int minSize) {
+    AbstractKeyFactory(String jcaName, String sizeName, Size minSize) {
         super(jcaName);
-        this.MIN_SIZE = Assert.gt(minSize, 0, "minSize must be > 0");
-        this.SIZE_VALIDATOR = new BitLengthValidator(sizeName, Interval.gte(minSize));
+        this.MIN_SIZE = Assert.notNull(minSize, "minSize must not be null");
+        this.SIZE_VALIDATOR = new SizeValidator(sizeName, Interval.gte(minSize));
     }
 }

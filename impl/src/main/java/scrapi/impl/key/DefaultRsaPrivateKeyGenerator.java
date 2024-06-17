@@ -15,6 +15,7 @@
  */
 package scrapi.impl.key;
 
+import scrapi.alg.Size;
 import scrapi.key.RsaPrivateKey;
 import scrapi.key.RsaPublicKey;
 import scrapi.util.Assert;
@@ -32,7 +33,7 @@ public class DefaultRsaPrivateKeyGenerator extends
      * https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-57pt1r5.pdf</a>, Table 2 (page 54),
      * RSA 3072-bit keys have 128 bits of security strength, so that's our default.
      */
-    private static final int DEFAULT_KEY_SIZE = AbstractRsaKey.MIN_SIZE + 1024;
+    private static final Size DEFAULT_KEY_SIZE = Size.bits(AbstractRsaKey.MIN_SIZE.bits() + 1024);
 
     public DefaultRsaPrivateKeyGenerator() {
         super(AbstractRsaKey.JCA_ALG_NAME, "RSA modulus size", AbstractRsaKey.MIN_SIZE, DEFAULT_KEY_SIZE);
@@ -40,8 +41,8 @@ public class DefaultRsaPrivateKeyGenerator extends
 
     @Override
     public RsaPrivateKey get() {
-        int size = resolveSize();
-        KeyPair pair = jca().generateKeyPair(size);
+        Size size = resolveSize();
+        KeyPair pair = jca().generateKeyPair(size.bits());
         RSAPublicKey jcaPub = Assert.isInstance(RSAPublicKey.class, pair.getPublic(), DefaultRsaPublicKey.JCA_PUB_TYPE_MSG);
         RsaPublicKey pub = new DefaultRsaPublicKey(jcaPub);
         PrivateKey jcaPriv = Assert.notNull(pair.getPrivate(), "RSA KeyPair private key cannot be null.");

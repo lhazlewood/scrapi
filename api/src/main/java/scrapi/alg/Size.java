@@ -13,18 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package scrapi.key;
+package scrapi.alg;
 
-import scrapi.alg.Size;
+import scrapi.util.Bytes;
 
-import java.util.Optional;
+public interface Size extends Comparable<Size> {
 
-public interface Key<K extends java.security.Key> {
+    int bits();
 
-    //TODO: I think we need metadata representable here, for example a key's intended/allowed usages
-    // and other metadata important for key usage, e.g. the key's algorithm, family, etc.
+    int bytes();
 
-    Optional<Size> size();
+    static Size bits(int bits) {
+        return DefaultSize.bits(bits);
+    }
 
-    K toJcaKey();
+    static Size bytes(int bytes) {
+        return DefaultSize.bytes(bytes);
+    }
+
+    static Size of(byte[] bytes) {
+        return DefaultSize.bytes(Bytes.length(bytes));
+    }
 }

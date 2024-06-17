@@ -23,7 +23,6 @@ import scrapi.util.Assert;
 import scrapi.util.Collections;
 
 import java.math.BigInteger;
-import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.interfaces.RSAKey;
 import java.security.interfaces.RSAMultiPrimePrivateCrtKey;

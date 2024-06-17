@@ -15,6 +15,7 @@
  */
 package scrapi.impl.key;
 
+import scrapi.alg.Size;
 import scrapi.impl.util.Parameter;
 import scrapi.impl.util.Parameters;
 import scrapi.key.AsymmetricKey;
@@ -39,7 +40,7 @@ abstract class AbstractRsaKey<K extends java.security.Key> extends AbstractKey<K
      * NIST/FIPS will not allow smaller lengths, so we won't either for safety.  Applications that require smaller
      * lengths will need to use the JCA APIs directly.
      */
-    static final int MIN_SIZE = 2048;
+    static final Size MIN_SIZE = Size.bits(2048);
 
     static final Parameter<BigInteger> N = Parameters.positiveBigInt("n", "RSA key modulus", false);
     static final Parameter<BigInteger> E = Parameters.positiveBigInt("e", "RSA key public exponent", false);
@@ -96,7 +97,7 @@ abstract class AbstractRsaKey<K extends java.security.Key> extends AbstractKey<K
     }
 
     @Override
-    public Optional<Integer> bitLength() {
-        return Optional.of(n().bitLength());
+    public Optional<Size> size() {
+        return Optional.of(Size.bits(n().bitLength()));
     }
 }

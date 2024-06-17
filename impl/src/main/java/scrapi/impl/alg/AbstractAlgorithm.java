@@ -50,4 +50,13 @@ public abstract class AbstractAlgorithm<A extends Algorithm<A>> implements Algor
     public String toString() {
         return this.ID;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) return true;
+        if (obj instanceof AbstractAlgorithm<?> other) {
+            return this.ID.equals(other.id());
+        }
+        return false;
+    }
 }

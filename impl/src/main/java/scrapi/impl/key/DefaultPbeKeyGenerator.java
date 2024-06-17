@@ -15,6 +15,7 @@
  */
 package scrapi.impl.key;
 
+import scrapi.alg.Size;
 import scrapi.key.PbeKey;
 import scrapi.util.Arrays;
 import scrapi.util.Assert;
@@ -37,7 +38,7 @@ public class DefaultPbeKeyGenerator extends AbstractKeyGenerator<PbeKey, PbeKey.
     private byte[] salt;
     private int iterations;
 
-    public DefaultPbeKeyGenerator(String jcaName, int keySize, int defaultIterations) {
+    public DefaultPbeKeyGenerator(String jcaName, Size keySize, int defaultIterations) {
         super(jcaName, "derived key size", keySize, keySize);
         this.alphabet = DEFAULT_ALPHABET;
         this.passwordLength = DEFAULT_PASSWORD_LENGTH;
@@ -54,10 +55,10 @@ public class DefaultPbeKeyGenerator extends AbstractKeyGenerator<PbeKey, PbeKey.
 
     @Override
     public PbeKey.Generator salt(byte[] salt) {
-        long bitLen = Bytes.bitLength(salt);
-        Assert.gt(bitLen, 0L, "salt must not be null or empty.");
-        if (bitLen < this.MIN_SIZE) {
-            String msg = "salt must be >= " + Bytes.bitsMsg(bitLen);
+        Size saltSize = Size.of(salt);
+        Assert.gt(saltSize, Size.bits(0), "salt must not be null or empty.");
+        if (saltSize.compareTo(this.MIN_SIZE) < 0) {
+            String msg = "salt must be >= " + saltSize;
             throw new IllegalArgumentException(msg);
         }
         this.salt = salt;
@@ -98,10 +99,10 @@ public class DefaultPbeKeyGenerator extends AbstractKeyGenerator<PbeKey, PbeKey.
         if (Arrays.isEmpty(password)) {
             password = randomPassword();
         }
-        int size = resolveSize();
+        Size size = resolveSize();
         byte[] salt = this.salt;
         if (Bytes.isEmpty(salt)) {
-            salt = Bytes.randomBits(size);
+            salt = Bytes.randomBits(size.bits());
         }
         return new DefaultPbeKey(this.jcaName, password, salt, this.iterations, size);
     }

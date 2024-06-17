@@ -15,6 +15,7 @@
  */
 package scrapi.impl.msg;
 
+import scrapi.impl.alg.AbstractAlgorithm;
 import scrapi.key.KeyGenerator;
 import scrapi.key.PrivateKey;
 import scrapi.key.PublicKey;
@@ -28,15 +29,15 @@ import java.security.SecureRandom;
 import java.util.function.Supplier;
 
 public class DefaultSignatureAlgorithm<U extends PublicKey<?>, R extends PrivateKey<?, U>, G extends KeyGenerator<R, G>>
-        extends AbstractIntegrityAlgorithm<SignatureAlgorithm<U, R, G>>
+        extends AbstractAlgorithm<SignatureAlgorithm<U, R, G>>
         implements SignatureAlgorithm<U, R, G> {
 
     protected final SecureRandom RANDOM;
 
     private final Supplier<G> SUPPLIER;
 
-    DefaultSignatureAlgorithm(String id, Provider provider, SecureRandom random, int bitLength, Supplier<G> genSupplier) {
-        super(id, provider, bitLength);
+    DefaultSignatureAlgorithm(String id, Provider provider, SecureRandom random, Supplier<G> genSupplier) {
+        super(id, provider);
         this.RANDOM = random;
         this.SUPPLIER = Assert.notNull(genSupplier, "KeyGenerator supplier cannot be null.");
     }
@@ -53,16 +54,22 @@ public class DefaultSignatureAlgorithm<U extends PublicKey<?>, R extends Private
 
     @Override
     public SignatureAlgorithm<U, R, G> provider(Provider provider) {
-        return new DefaultSignatureAlgorithm<>(this.ID, provider, this.RANDOM, this.BITLEN, this.SUPPLIER);
+        return new DefaultSignatureAlgorithm<>(this.ID, provider, this.RANDOM, this.SUPPLIER);
     }
 
     @Override
     public SignatureAlgorithm<U, R, G> random(SecureRandom random) {
-        return new DefaultSignatureAlgorithm<>(this.ID, this.PROVIDER, random, this.BITLEN, this.SUPPLIER);
+        return new DefaultSignatureAlgorithm<>(this.ID, this.PROVIDER, random, this.SUPPLIER);
     }
 
     @Override
     public G keygen() {
         return Assert.notNull(this.SUPPLIER.get(), "KeyGenerator suppler cannot produce null generators.");
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) return true;
+        return obj instanceof SignatureAlgorithm<?, ?, ?> && super.equals(obj);
     }
 }

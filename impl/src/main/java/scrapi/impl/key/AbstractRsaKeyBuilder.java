@@ -15,6 +15,7 @@
  */
 package scrapi.impl.key;
 
+import scrapi.alg.Size;
 import scrapi.key.KeyBuilder;
 import scrapi.key.RsaKey;
 import scrapi.util.Assert;
@@ -31,18 +32,18 @@ abstract class AbstractRsaKeyBuilder<K extends RsaKey<?>, T extends KeyBuilder<K
         this(AbstractRsaKey.MIN_SIZE);
     }
 
-    protected AbstractRsaKeyBuilder(int minSize) {
+    protected AbstractRsaKeyBuilder(Size minSize) {
         this(AbstractRsaKey.JCA_ALG_NAME, minSize);
     }
 
-    protected AbstractRsaKeyBuilder(String jcaName, int minSize) {
+    protected AbstractRsaKeyBuilder(String jcaName, Size minSize) {
         super(jcaName, "RSA Key modulus size", minSize);
     }
 
     @Override
     public T n(BigInteger modulus) {
         Assert.notNull(modulus, "RSA Key modulus cannot be null.");
-        this.SIZE_VALIDATOR.apply(modulus.bitLength());
+        this.SIZE_VALIDATOR.apply(Size.bits(modulus.bitLength()));
         this.modulus = AbstractRsaKey.N.check(modulus);
         return self();
     }

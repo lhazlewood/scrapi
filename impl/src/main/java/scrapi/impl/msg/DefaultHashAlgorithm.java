@@ -15,28 +15,35 @@
  */
 package scrapi.impl.msg;
 
+import scrapi.alg.Size;
 import scrapi.msg.HashAlgorithm;
 import scrapi.msg.Hasher;
 
 import java.security.Provider;
 
-class DefaultHashAlgorithm extends AbstractIntegrityAlgorithm<HashAlgorithm> implements HashAlgorithm {
+class DefaultHashAlgorithm extends AbstractDigestAlgorithm<HashAlgorithm> implements HashAlgorithm {
 
-    DefaultHashAlgorithm(String id, int bitLength) {
-        this(id, null, bitLength);
+    DefaultHashAlgorithm(String id, Size digestSize) {
+        this(id, null, digestSize);
     }
 
-    private DefaultHashAlgorithm(String id, Provider provider, int bitLength) {
-        super(id, provider, bitLength);
+    private DefaultHashAlgorithm(String id, Provider provider, Size digestSize) {
+        super(id, provider, digestSize);
     }
 
     @Override
     public HashAlgorithm provider(Provider provider) {
-        return new DefaultHashAlgorithm(this.ID, provider, this.BITLEN);
+        return new DefaultHashAlgorithm(this.ID, provider, this.DIGEST_SIZE);
     }
 
     @Override
     public Hasher get() {
         return new JcaMessageDigester(this.ID, this.PROVIDER);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) return true;
+        return obj instanceof HashAlgorithm && super.equals(obj);
     }
 }
