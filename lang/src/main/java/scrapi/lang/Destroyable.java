@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package scrapi;
+package scrapi.lang;
 
 /**
- * Potentially sensitive {@code Object}s (such as {@link scrapi.key.Key}s and credentials) may optionally implement
+ * Potentially sensitive {@code Object}s (such as keys and credentials) may optionally implement
  * this interface to provide the capability to destroy its contents.
  */
 public interface Destroyable {

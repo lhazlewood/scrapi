@@ -24,7 +24,7 @@ import scrapi.util.Strings;
 import javax.security.auth.DestroyFailedException;
 import javax.security.auth.Destroyable;
 
-abstract class AbstractKey<K extends java.security.Key> implements Key<K>, scrapi.Destroyable {
+abstract class AbstractKey<K extends java.security.Key> implements Key<K>, scrapi.lang.Destroyable {
 
     private static final String SUNPKCS11_GENERIC_SECRET_CLASSNAME = "sun.security.pkcs11.P11Key$P11SecretKey";
     private static final String SUNPKCS11_GENERIC_SECRET_ALGNAME = "Generic Secret"; // https://github.com/openjdk/jdk/blob/4f90abaf17716493bad740dcef76d49f16d69379/src/jdk.crypto.cryptoki/share/classes/sun/security/pkcs11/P11KeyStore.java#L1292

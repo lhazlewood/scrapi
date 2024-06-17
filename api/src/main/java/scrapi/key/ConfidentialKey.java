@@ -15,7 +15,7 @@
  */
 package scrapi.key;
 
-import scrapi.Destroyable;
+import scrapi.lang.Destroyable;
 
 public interface ConfidentialKey<K extends java.security.Key> extends Key<K>, Destroyable {
 }
