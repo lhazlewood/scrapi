@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package scrapi;
+package scrapi.lang;
 
 /**
  * Root class of security-related exceptions. Subclasses pertain to specific security error conditions that can be

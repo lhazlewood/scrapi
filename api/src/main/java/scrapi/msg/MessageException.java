@@ -15,7 +15,7 @@
  */
 package scrapi.msg;
 
-import scrapi.SecurityException;
+import scrapi.lang.SecurityException;
 
 public class MessageException extends SecurityException {
 

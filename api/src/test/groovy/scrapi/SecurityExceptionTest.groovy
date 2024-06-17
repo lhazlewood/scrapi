@@ -16,6 +16,7 @@
 package scrapi
 
 import org.junit.jupiter.api.Test
+import scrapi.lang.SecurityException
 
 import static org.junit.jupiter.api.Assertions.assertEquals
 import static org.junit.jupiter.api.Assertions.assertSame

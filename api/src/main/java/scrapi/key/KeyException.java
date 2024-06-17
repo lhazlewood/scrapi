@@ -15,7 +15,7 @@
  */
 package scrapi.key;
 
-import scrapi.SecurityException;
+import scrapi.lang.SecurityException;
 
 /**
  * General-purpose exception when encountering a problem with a cryptographic {@link Key}.

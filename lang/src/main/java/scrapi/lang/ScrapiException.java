@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package scrapi;
+package scrapi.lang;
 
 /**
  * Root class of all SCRAPI exceptions. Subclasses pertain to specific error conditions that can be independently

@@ -15,7 +15,7 @@
  */
 package scrapi.impl.jca;
 
-import scrapi.SecurityException;
+import scrapi.lang.SecurityException;
 import scrapi.lang.CheckedFunction;
 import scrapi.lang.CheckedSupplier;
 import scrapi.lang.Identified;
