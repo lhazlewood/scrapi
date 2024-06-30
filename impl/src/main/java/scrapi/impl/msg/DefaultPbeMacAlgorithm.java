@@ -77,7 +77,7 @@ public class DefaultPbeMacAlgorithm
         }
 
         @Override
-        public Hasher build() {
+        public Hasher get() {
             Assert.notEmpty(this.salt, "salt cannot be null or empty.");
             DefaultPbeKey.assertIterationsGte(this.iterations, DefaultPbeKey.MIN_ITERATIONS);
             Mac m = jca().withMac(mac -> {

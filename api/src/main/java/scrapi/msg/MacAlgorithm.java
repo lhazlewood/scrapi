@@ -18,11 +18,12 @@ package scrapi.msg;
 import scrapi.key.KeyGenerator;
 import scrapi.key.Keyable;
 import scrapi.key.SecretKey;
-import scrapi.lang.Builder;
+
+import java.util.function.Supplier;
 
 public interface MacAlgorithm<
         K extends SecretKey<?>,
-        HB extends Keyable<K, HB> & Builder<Hasher>,
+        HB extends Keyable<K, HB> & Supplier<Hasher>,
         G extends KeyGenerator<K, G>
         >
         extends DigestSized, AuthenticityAlgorithm<K, K, Hasher, Hasher, HB, HB, G> {

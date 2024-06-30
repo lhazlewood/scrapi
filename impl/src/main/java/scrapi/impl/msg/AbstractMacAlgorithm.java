@@ -19,15 +19,15 @@ import scrapi.alg.Size;
 import scrapi.key.KeyGenerator;
 import scrapi.key.Keyable;
 import scrapi.key.SecretKey;
-import scrapi.lang.Builder;
 import scrapi.msg.Hasher;
 import scrapi.msg.MacAlgorithm;
 
 import java.security.Provider;
+import java.util.function.Supplier;
 
 abstract class AbstractMacAlgorithm<
         K extends SecretKey<?>,
-        HB extends Keyable<K, HB> & Builder<Hasher>,
+        HB extends Keyable<K, HB> & Supplier<Hasher>,
         G extends KeyGenerator<K, G>
         >
         extends AbstractDigestAlgorithm<Hasher, Hasher, HB, HB> implements MacAlgorithm<K, HB, G> {

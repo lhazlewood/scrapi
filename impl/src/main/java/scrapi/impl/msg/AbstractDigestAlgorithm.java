@@ -17,7 +17,6 @@ package scrapi.impl.msg;
 
 import scrapi.alg.Size;
 import scrapi.impl.alg.AbstractAlgorithm;
-import scrapi.lang.Builder;
 import scrapi.msg.DigestSized;
 import scrapi.msg.IntegrityAlgorithm;
 import scrapi.msg.MessageConsumer;
@@ -31,8 +30,8 @@ import java.util.function.Supplier;
 abstract class AbstractDigestAlgorithm<
         D extends MessageConsumer<D> & Supplier<byte[]>,
         V extends MessageConsumer<V> & Predicate<byte[]>,
-        DB extends Builder<D>,
-        VB extends Builder<V>
+        DB extends Supplier<D>,
+        VB extends Supplier<V>
         >
         extends AbstractAlgorithm implements IntegrityAlgorithm<D, V, DB, VB>, DigestSized {
 

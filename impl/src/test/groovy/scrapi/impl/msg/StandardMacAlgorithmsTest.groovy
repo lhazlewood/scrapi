@@ -47,7 +47,7 @@ class StandardMacAlgorithmsTest {
             builder.salt(key.salt())
             builder.iterations(key.iterations())
         }
-        return builder.key(key).build()
+        return builder.key(key).get()
     }
 
     @Test

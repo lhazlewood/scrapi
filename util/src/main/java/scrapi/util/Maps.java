@@ -15,11 +15,10 @@
  */
 package scrapi.util;
 
-import scrapi.lang.Builder;
-
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Supplier;
 
 /**
  * Utility class to help with the manipulation of working with Maps.
@@ -51,7 +50,7 @@ public final class Maps {
     }
 
     /**
-     * Utility Builder class for fluently building maps:
+     * Utility builder class for fluently building maps:
      * <p> Typical usage: <pre>{@code
      * Map<K,V> result = Maps.of("key1", value1)
      *     .and("key2", value2)
@@ -62,7 +61,7 @@ public final class Maps {
      * @param <K> the maps key type
      * @param <V> the maps value type
      */
-    public interface MapBuilder<K, V> extends Builder<Map<K, V>> {
+    public interface MapBuilder<K, V> extends Supplier<Map<K, V>> {
         /**
          * Add a new entry to this map builder
          *
@@ -77,7 +76,7 @@ public final class Maps {
          *
          * @return the resulting Map object from this MapBuilder.
          */
-        Map<K, V> build();
+        Map<K, V> get();
     }
 
     private static class HashMapBuilder<K, V> implements MapBuilder<K, V> {
@@ -89,7 +88,7 @@ public final class Maps {
             return this;
         }
 
-        public Map<K, V> build() {
+        public Map<K, V> get() {
             return Collections.unmodifiableMap(data);
         }
     }

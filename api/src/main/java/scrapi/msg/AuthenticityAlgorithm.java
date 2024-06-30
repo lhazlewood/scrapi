@@ -20,7 +20,6 @@ import scrapi.key.Key;
 import scrapi.key.KeyGenerator;
 import scrapi.key.KeyGeneratorSupplier;
 import scrapi.key.Keyable;
-import scrapi.lang.Builder;
 
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -30,8 +29,8 @@ public interface AuthenticityAlgorithm<
         VK extends Key<?>,
         D extends MessageConsumer<D> & Supplier<byte[]>,
         V extends MessageConsumer<V> & Predicate<byte[]>,
-        DB extends Keyable<DK, DB> & Builder<D>,
-        VB extends Keyable<VK, VB> & Builder<V>,
+        DB extends Keyable<DK, DB> & Supplier<D>,
+        VB extends Keyable<VK, VB> & Supplier<V>,
         G extends KeyGenerator<DK, G>
         >
         extends IntegrityAlgorithm<D, V, DB, VB>, KeyGeneratorSupplier<DK, G> {

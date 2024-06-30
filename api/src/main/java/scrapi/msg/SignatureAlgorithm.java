@@ -20,7 +20,6 @@ import scrapi.key.KeyGenerator;
 import scrapi.key.Keyable;
 import scrapi.key.PrivateKey;
 import scrapi.key.PublicKey;
-import scrapi.lang.Builder;
 
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -30,8 +29,8 @@ public interface SignatureAlgorithm<
         S extends PrivateKey<?, P>,
         D extends MessageConsumer<D> & Supplier<byte[]>,
         V extends MessageConsumer<V> & Predicate<byte[]>,
-        DB extends Randomizable<DB> & Keyable<S, DB> & Builder<D>,
-        VB extends Keyable<P, VB> & Builder<V>,
+        DB extends Randomizable<DB> & Keyable<S, DB> & Supplier<D>,
+        VB extends Keyable<P, VB> & Supplier<V>,
         G extends KeyGenerator<S, G>
         >
         extends AuthenticityAlgorithm<S, P, D, V, DB, VB, G> {

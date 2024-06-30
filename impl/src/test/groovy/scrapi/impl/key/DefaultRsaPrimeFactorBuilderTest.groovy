@@ -31,7 +31,7 @@ class DefaultRsaPrimeFactorBuilderTest {
         // random BigInteger values are fine for this test, we're just seeing if the values are set correctly:
         def f = builder()
                 .prime(BigInteger.ONE).exponent(BigInteger.TWO).coefficient(BigInteger.TEN)
-                .build()
+                .get()
 
         assertEquals(BigInteger.ONE, f.prime())
         assertEquals(BigInteger.TWO, f.exponent())

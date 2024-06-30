@@ -46,7 +46,7 @@ public class DefaultRsaPrimeFactorBuilder implements RsaPrimeFactor.Builder {
     }
 
     @Override
-    public RsaPrimeFactor build() {
+    public RsaPrimeFactor get() {
         return new DefaultRsaPrimeFactor(new RSAOtherPrimeInfo(this.prime, this.exponent, this.coefficient));
     }
 }

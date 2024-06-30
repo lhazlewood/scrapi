@@ -17,14 +17,14 @@ package scrapi.impl.msg;
 
 import scrapi.alg.Size;
 import scrapi.impl.alg.AlgorithmSupport;
-import scrapi.lang.Builder;
 import scrapi.msg.HashAlgorithm;
 import scrapi.msg.Hasher;
 
 import java.security.Provider;
+import java.util.function.Supplier;
 
 class DefaultHashAlgorithm
-        extends AbstractDigestAlgorithm<Hasher, Hasher, Builder<Hasher>, Builder<Hasher>>
+        extends AbstractDigestAlgorithm<Hasher, Hasher, Supplier<Hasher>, Supplier<Hasher>>
         implements HashAlgorithm {
 
     DefaultHashAlgorithm(String id, Size digestSize) {
@@ -36,12 +36,12 @@ class DefaultHashAlgorithm
     }
 
     @Override
-    public Builder<Hasher> digester() {
+    public Supplier<Hasher> digester() {
         return new HasherBuilder(this.ID);
     }
 
     @Override
-    public Builder<Hasher> verifier() {
+    public Supplier<Hasher> verifier() {
         return digester();
     }
 
@@ -51,14 +51,14 @@ class DefaultHashAlgorithm
         return obj instanceof HashAlgorithm && super.equals(obj);
     }
 
-    private static class HasherBuilder extends AlgorithmSupport<HasherBuilder> implements Builder<Hasher> {
+    private static class HasherBuilder extends AlgorithmSupport<HasherBuilder> implements Supplier<Hasher> {
 
         public HasherBuilder(String jcaName) {
             super(jcaName);
         }
 
         @Override
-        public Hasher build() {
+        public Hasher get() {
             return new JcaMessageDigester(this.jcaName, this.provider);
         }
     }

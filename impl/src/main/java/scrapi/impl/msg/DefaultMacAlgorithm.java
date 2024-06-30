@@ -19,10 +19,10 @@ import scrapi.alg.Size;
 import scrapi.impl.key.DefaultOctetSecretKeyGenerator;
 import scrapi.impl.key.KeyableSupport;
 import scrapi.key.OctetSecretKey;
-import scrapi.lang.Builder;
 import scrapi.msg.Hasher;
 
 import java.security.Provider;
+import java.util.function.Supplier;
 
 public class DefaultMacAlgorithm extends
         AbstractMacAlgorithm<OctetSecretKey, DefaultMacAlgorithm.HasherBuilder, OctetSecretKey.Generator> {
@@ -47,14 +47,14 @@ public class DefaultMacAlgorithm extends
     }
 
     public static final class HasherBuilder extends KeyableSupport<OctetSecretKey, HasherBuilder>
-            implements Builder<Hasher> {
+            implements Supplier<Hasher> {
 
         HasherBuilder(String jcaName) {
             super(jcaName);
         }
 
         @Override
-        public Hasher build() {
+        public Hasher get() {
             return new JcaMacDigester(this.jcaName, this.provider, this.key);
         }
     }

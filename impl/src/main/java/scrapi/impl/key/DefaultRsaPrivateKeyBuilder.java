@@ -133,7 +133,7 @@ public class DefaultRsaPrivateKeyBuilder
         Assert.notNull(c, "Consumer cannot be null.");
         RsaPrimeFactor.Builder b = RsaPrimeFactor.builder();
         c.accept(b);
-        RsaPrimeFactor factor = b.build();
+        RsaPrimeFactor factor = b.get();
         return add(factor);
     }
 
