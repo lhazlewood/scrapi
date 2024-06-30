@@ -36,7 +36,7 @@ public class DefaultRsaPrivateKey extends AbstractRsaKey<java.security.PrivateKe
         super(key);
         this.publicKey = Assert.notNull(publicKey, "RsaPublicKey cannot be null.");
         RSAKey priv = Assert.isInstance(RSAKey.class, key, RSA_KEY_TYPE_MSG);
-        Assert.eq(priv.getModulus(), publicKey.n(), "RSA PrivateKey n and RsaPublicKey n must be equal.");
+        Assert.eq(priv.getModulus(), publicKey.modulus(), "RSA PrivateKey modulus and RsaPublicKey modulus must be equal.");
     }
 
     @Override
@@ -45,18 +45,18 @@ public class DefaultRsaPrivateKey extends AbstractRsaKey<java.security.PrivateKe
     }
 
     @Override
-    public BigInteger n() {
-        return this.publicKey.n(); // guaranteed to be the same in the constructor if possible
+    public BigInteger modulus() {
+        return this.publicKey.modulus(); // guaranteed to be the same in the constructor if possible
     }
 
     @Override
-    public BigInteger e() {
+    public BigInteger publicExponent() {
         // JCA RSA Private Keys don't expose this, so we delegate to the public key:
-        return publicKey.e();
+        return publicKey.publicExponent();
     }
 
     @Override
-    public Optional<BigInteger> d() {
+    public Optional<BigInteger> privateExponent() {
         BigInteger d = null;
         if (this.key instanceof RSAPrivateKey) {
             d = ((RSAPrivateKey) this.key).getPrivateExponent();

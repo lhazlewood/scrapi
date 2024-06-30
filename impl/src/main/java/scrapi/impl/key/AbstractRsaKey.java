@@ -70,13 +70,13 @@ abstract class AbstractRsaKey<K extends java.security.Key> extends AbstractKey<K
     }
 
     static BigInteger assertModulus(BigInteger n) {
-        Assert.notNull(n, "RSA key modulus 'n' must not be null.");
+        Assert.notNull(n, "RSA key modulus must not be null.");
         return Assert.gt(n, BigInteger.ZERO, "RSA key modulus 'n' must be greater than zero.");
     }
 
     static BigInteger assertExponent(BigInteger e) {
-        Assert.notNull(e, "RSA key public exponent 'e' must not be null.");
-        return Assert.gt(e, BigInteger.ZERO, "RSA key public exponent 'e' must be greater than zero.");
+        Assert.notNull(e, "RSA key public exponent must not be null.");
+        return Assert.gt(e, BigInteger.ZERO, "RSA key public exponent must be greater than zero.");
     }
 
     protected static <T extends java.security.Key> T assertRsaAlgName(T key) {
@@ -98,6 +98,6 @@ abstract class AbstractRsaKey<K extends java.security.Key> extends AbstractKey<K
 
     @Override
     public Optional<Size> size() {
-        return Optional.of(Size.bits(n().bitLength()));
+        return Optional.of(Size.bits(modulus().bitLength()));
     }
 }

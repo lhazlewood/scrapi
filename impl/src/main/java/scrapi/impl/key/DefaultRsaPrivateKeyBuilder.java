@@ -73,50 +73,50 @@ public class DefaultRsaPrivateKeyBuilder
     @Override
     public RsaPrivateKey.Builder publicKey(RsaPublicKey publicKey) {
         Assert.notNull(publicKey, "publicKey cannot be null");
-        BigInteger pubExp = Assert.notNull(publicKey.e(), "RsaPublicKey public exponent 'e' cannot be null");
-        n(publicKey.n());
-        e(pubExp);
+        BigInteger pubExp = Assert.notNull(publicKey.publicExponent(), "RsaPublicKey public exponent cannot be null");
+        modulus(publicKey.modulus());
+        publicExponent(pubExp);
         this.publicKey = publicKey;
         return self();
     }
 
     @Override
-    public RsaPrivateKey.Builder d(BigInteger privateExponent) {
+    public RsaPrivateKey.Builder privateExponent(BigInteger privateExponent) {
         this.privateExponent = Assert.notNull(privateExponent, "Private exponent cannot be null.");
         return self();
     }
 
     @Override
-    public RsaPrivateKey.Builder p(BigInteger firstFactor) {
-        this.prime1 = Assert.notNull(firstFactor, "prime1 cannot be null.");
+    public RsaPrivateKey.Builder firstFactor(BigInteger firstFactor) {
+        this.prime1 = Assert.notNull(firstFactor, "firstFactor cannot be null.");
         this.crtFieldsChanged.add(pName);
         return self();
     }
 
     @Override
-    public RsaPrivateKey.Builder q(BigInteger secondFactor) {
-        this.prime2 = Assert.notNull(secondFactor, "prime2 cannot be null.");
+    public RsaPrivateKey.Builder secondFactor(BigInteger secondFactor) {
+        this.prime2 = Assert.notNull(secondFactor, "secondFactor cannot be null.");
         this.crtFieldsChanged.add(qName);
         return self();
     }
 
     @Override
-    public RsaPrivateKey.Builder dP(BigInteger firstFactorCrtExponent) {
-        this.exponent1 = Assert.notNull(firstFactorCrtExponent, "exponent1 cannot be null.");
+    public RsaPrivateKey.Builder firstFactorExponent(BigInteger firstFactorExponent) {
+        this.exponent1 = Assert.notNull(firstFactorExponent, "firstFactorExponent cannot be null.");
         this.crtFieldsChanged.add(dPName);
         return self();
     }
 
     @Override
-    public RsaPrivateKey.Builder dQ(BigInteger secondFactorCrtExponent) {
-        this.exponent2 = Assert.notNull(secondFactorCrtExponent, "exponent2 cannot be null.");
+    public RsaPrivateKey.Builder secondFactorExponent(BigInteger secondFactorExponent) {
+        this.exponent2 = Assert.notNull(secondFactorExponent, "secondFactorExponent cannot be null.");
         this.crtFieldsChanged.add(dQName);
         return self();
     }
 
     @Override
-    public RsaPrivateKey.Builder qInv(BigInteger firstCrtExponent) {
-        this.coefficient = Assert.notNull(firstCrtExponent, "coefficient cannot be null.");
+    public RsaPrivateKey.Builder firstFactorCoefficient(BigInteger firstFactorCoefficient) {
+        this.coefficient = Assert.notNull(firstFactorCoefficient, "firstFactorCoefficient cannot be null.");
         this.crtFieldsChanged.add(qInvName);
         return self();
     }

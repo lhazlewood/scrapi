@@ -29,20 +29,20 @@ import java.util.function.Consumer;
 public interface CrtRsaPrivateKey extends RsaPrivateKey {
 
     /**
-     * Returns the first factor {@code p}, a positive integer.
+     * Returns the first factor, a positive integer.
      *
-     * @return the first factor {@code p}, a positive integer.
+     * @return the first factor, a positive integer.
      * @see <a href="https://datatracker.ietf.org/doc/html/rfc8017#section-3.2">RFC 8017, Section 3.2 (second representation)</a>
      */
-    BigInteger p();
+    BigInteger firstFactor();
 
     /**
-     * Returns the second factor {@code q}, a positive integer.
+     * Returns the second factor, a positive integer.
      *
-     * @return the second factor {@code q}, a positive integer.
+     * @return the second factor, a positive integer.
      * @see <a href="https://datatracker.ietf.org/doc/html/rfc8017#section-3.2">RFC 8017, Section 3.2 (second representation)</a>
      */
-    BigInteger q();
+    BigInteger secondFactor();
 
     /**
      * Returns the first factor's CRT exponent, a positive integer.
@@ -50,7 +50,7 @@ public interface CrtRsaPrivateKey extends RsaPrivateKey {
      * @return the first factor's CRT exponent, a positive integer.
      * @see <a href="https://datatracker.ietf.org/doc/html/rfc8017#section-3.2">RFC 8017, Section 3.2 (second representation)</a>
      */
-    BigInteger dP();
+    BigInteger firstFactorExponent();
 
     /**
      * Returns the second factor's CRT exponent, a positive integer.
@@ -58,7 +58,7 @@ public interface CrtRsaPrivateKey extends RsaPrivateKey {
      * @return the second factor's CRT exponent, a positive integer.
      * @see <a href="https://datatracker.ietf.org/doc/html/rfc8017#section-3.2">RFC 8017, Section 3.2 (second representation)</a>
      */
-    BigInteger dQ();
+    BigInteger secondFactorExponent();
 
     /**
      * Returns the (first) CRT coefficient, a positive integer.
@@ -66,27 +66,27 @@ public interface CrtRsaPrivateKey extends RsaPrivateKey {
      * @return the (first) CRT coefficient, a positive integer.
      * @see <a href="https://datatracker.ietf.org/doc/html/rfc8017#section-3.2">RFC 8017, Section 3.2 (second representation)</a>
      */
-    BigInteger qInv();
+    BigInteger firstFactorCoefficient();
 
     /**
-     * Returns any additional (possibly empty) prime factors of the {@link #n() n} {@code n}.
+     * Returns any additional (possibly empty) prime factors of the {@link #modulus() modulus} {@code modulus}.
      *
-     * @return any additional (possibly empty) prime factors of the {@link #n() n} {@code n}.
+     * @return any additional (possibly empty) prime factors of the {@link #modulus() modulus} {@code modulus}.
      * @see <a href="https://datatracker.ietf.org/doc/html/rfc8017#section-3.2">RFC 8017, Section 3.2 (second representation)</a>
      */
     List<RsaPrimeFactor> otherFactors();
 
     interface Mutator<T extends Mutator<T>> extends RsaPrivateKey.Mutator<T> {
 
-        T p(BigInteger firstFactor);
+        T firstFactor(BigInteger firstFactor);
 
-        T q(BigInteger secondFactor);
+        T secondFactor(BigInteger secondFactor);
 
-        T dP(BigInteger firstFactorCrtExponent);
+        T firstFactorExponent(BigInteger firstFactorExponent);
 
-        T dQ(BigInteger secondFactorCrtExponent);
+        T secondFactorExponent(BigInteger secondFactorExponent);
 
-        T qInv(BigInteger firstCrtExponent);
+        T firstFactorCoefficient(BigInteger firstFactorCoefficient);
 
         T add(RsaPrimeFactor factor);
 

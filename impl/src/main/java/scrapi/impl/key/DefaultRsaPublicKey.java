@@ -31,12 +31,12 @@ public class DefaultRsaPublicKey extends AbstractRsaKey<RSAPublicKey> implements
     }
 
     @Override
-    public BigInteger n() {
+    public BigInteger modulus() {
         return this.key.getModulus();
     }
 
     @Override
-    public BigInteger e() {
+    public BigInteger publicExponent() {
         return this.key.getPublicExponent();
     }
 }

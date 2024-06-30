@@ -41,7 +41,7 @@ abstract class AbstractRsaKeyBuilder<K extends RsaKey<?>, T extends KeyBuilder<K
     }
 
     @Override
-    public T n(BigInteger modulus) {
+    public T modulus(BigInteger modulus) {
         Assert.notNull(modulus, "RSA Key modulus cannot be null.");
         this.SIZE_VALIDATOR.apply(Size.bits(modulus.bitLength()));
         this.modulus = AbstractRsaKey.N.check(modulus);
@@ -49,7 +49,7 @@ abstract class AbstractRsaKeyBuilder<K extends RsaKey<?>, T extends KeyBuilder<K
     }
 
     @Override
-    public T e(BigInteger publicExponent) {
+    public T publicExponent(BigInteger publicExponent) {
         this.publicExponent = AbstractRsaKey.E.check(publicExponent);
         return self();
     }

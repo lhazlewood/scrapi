@@ -58,35 +58,35 @@ public class DefaultCrtRsaPrivateKey extends DefaultRsaPrivateKey implements Crt
     }
 
     @Override
-    public BigInteger p() {
+    public BigInteger firstFactor() {
         return key instanceof RSAPrivateCrtKey ?
                 ((RSAPrivateCrtKey) key).getPrimeP() :
                 ((RSAMultiPrimePrivateCrtKey) key).getPrimeP();
     }
 
     @Override
-    public BigInteger q() {
+    public BigInteger secondFactor() {
         return key instanceof RSAPrivateCrtKey ?
                 ((RSAPrivateCrtKey) key).getPrimeQ() :
                 ((RSAMultiPrimePrivateCrtKey) key).getPrimeQ();
     }
 
     @Override
-    public BigInteger dP() {
+    public BigInteger firstFactorExponent() {
         return key instanceof RSAPrivateCrtKey ?
                 ((RSAPrivateCrtKey) key).getPrimeExponentP() :
                 ((RSAMultiPrimePrivateCrtKey) key).getPrimeExponentP();
     }
 
     @Override
-    public BigInteger dQ() {
+    public BigInteger secondFactorExponent() {
         return key instanceof RSAPrivateCrtKey ?
                 ((RSAPrivateCrtKey) key).getPrimeExponentQ() :
                 ((RSAMultiPrimePrivateCrtKey) key).getPrimeExponentQ();
     }
 
     @Override
-    public BigInteger qInv() {
+    public BigInteger firstFactorCoefficient() {
         return key instanceof RSAPrivateCrtKey ?
                 ((RSAPrivateCrtKey) key).getCrtCoefficient() :
                 ((RSAMultiPrimePrivateCrtKey) key).getCrtCoefficient();

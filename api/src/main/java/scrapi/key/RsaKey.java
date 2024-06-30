@@ -20,25 +20,25 @@ import java.math.BigInteger;
 public interface RsaKey<K extends java.security.Key> extends AsymmetricKey<K> {
 
     /**
-     * Returns the modulus {@code n}, a positive integer.
+     * Returns the modulus, a positive integer.
      *
-     * @return the modulus {@code n}, a positive integer.
+     * @return the modulus, a positive integer.
      * @see <a href="https://datatracker.ietf.org/doc/html/rfc8017#section-3.1">RFC 8017, Section 3.1</a>
      */
-    BigInteger n();
+    BigInteger modulus();
 
     /**
-     * Returns the public exponent {@code e}, a positive integer.
+     * Returns the public exponent, a positive integer.
      *
-     * @return the public exponent {@code e}, a positive integer.
+     * @return the public exponent, a positive integer.
      * @see <a href="https://datatracker.ietf.org/doc/html/rfc8017#section-3.1">RFC 8017, Section 3.1</a>
      */
-    BigInteger e();
+    BigInteger publicExponent();
 
     interface Mutator<T extends Mutator<T>> {
 
-        T n(BigInteger modulus);
+        T modulus(BigInteger modulus);
 
-        T e(BigInteger publicExponent);
+        T publicExponent(BigInteger publicExponent);
     }
 }
