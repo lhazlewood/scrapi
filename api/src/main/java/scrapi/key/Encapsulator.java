@@ -15,8 +15,8 @@
  */
 package scrapi.key;
 
-import scrapi.jca.Providable;
-import scrapi.jca.Randomizable;
+import scrapi.alg.Providable;
+import scrapi.alg.Randomizable;
 
 import java.util.function.Supplier;
 

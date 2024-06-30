@@ -16,16 +16,13 @@
 package scrapi.lang;
 
 /**
- * Potentially sensitive {@code Object}s (such as keys and credentials) may optionally implement
+ * Potentially sensitive {@code Object}s (such as keys and credentials) may implement
  * this interface to provide the capability to destroy its contents.
  */
 public interface Destroyable {
 
     /**
-     * Destroy this {@code Object}.
-     *
-     * <p>Sensitive information associated with this {@code Object} is destroyed or cleared. Subsequent calls to
-     * certain methods on this {@code Object} will result in an {@code IllegalStateException} being thrown.
+     * Destroys or clears sensitive information associated with this {@code Object}.
      */
     void destroy();
 

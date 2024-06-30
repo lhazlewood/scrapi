@@ -25,6 +25,6 @@ public class DefaultRsaSignatureAlgorithm
         implements RsaSignatureAlgorithm {
 
     public DefaultRsaSignatureAlgorithm(String id) {
-        super(id, null, null, DefaultRsaPrivateKeyGenerator::new);
+        super(id, null, DefaultRsaPrivateKeyGenerator::new);
     }
 }

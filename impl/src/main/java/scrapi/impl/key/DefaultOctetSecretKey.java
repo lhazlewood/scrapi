@@ -23,8 +23,19 @@ import java.util.Optional;
 
 public class DefaultOctetSecretKey extends AbstractKey<javax.crypto.SecretKey> implements OctetSecretKey {
 
+    @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
+    private final Optional<Size> size;
+
     public DefaultOctetSecretKey(javax.crypto.SecretKey key) {
         super(key);
+        byte[] octets = null;
+        try {
+            octets = AbstractKey.findEncoded(key);
+            Size size = Bytes.isEmpty(octets) ? null : Size.of(octets);
+            this.size = Optional.ofNullable(size);
+        } finally {
+            Bytes.clear(octets);
+        }
     }
 
     @Override
@@ -34,6 +45,6 @@ public class DefaultOctetSecretKey extends AbstractKey<javax.crypto.SecretKey> i
 
     @Override
     public Optional<Size> size() {
-        return octets().map(b -> Size.bytes(Bytes.length(b)));
+        return this.size;
     }
 }

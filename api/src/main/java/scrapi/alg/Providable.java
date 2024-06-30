@@ -13,18 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package scrapi.key;
+package scrapi.alg;
 
+import java.security.Provider;
+
+/**
+ * Interface implemented by {@code Object}s that allow configuration of a JCA {@link Provider}.
+ *
+ * @param <T> the type of {@code Object} returned after setting the {@code Provider}, usually for method chaining.
+ * @see #provider(Provider)
+ * @since SCRAPI_RELEASE_VERSION
+ */
 @FunctionalInterface
-public interface Sizable<T> {
+public interface Providable<T> {
 
     /**
-     * Sets the size in <b>bits</b> (<em>not bytes</em>).
+     * Sets the JCA Security {@link Provider} to use if desired.  This is an optional property - if not specified,
+     * a default JCA Provider will be used when necessary.
      *
-     * @param sizeInBits the size in bits
+     * @param provider the JCA Security Provider instance to use if necessary.
      * @return the associated object for method chaining.
-     * @throws IllegalArgumentException if the specified size is invalid or insufficient
      */
-    T size(int sizeInBits) throws IllegalArgumentException;
-
+    T provider(Provider provider);
 }

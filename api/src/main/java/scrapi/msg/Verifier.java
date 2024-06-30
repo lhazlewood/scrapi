@@ -17,6 +17,6 @@ package scrapi.msg;
 
 import java.util.function.Predicate;
 
-public interface Verifier<T extends Verifier<T>> extends MessageConsumer<T>, Predicate<byte[]> {
+public interface Verifier extends MessageConsumer<Verifier>, Predicate<byte[]> {
 
 }

@@ -20,16 +20,11 @@ import scrapi.util.Assert;
 
 import java.security.Provider;
 
-public abstract class AbstractAlgorithm<A extends Algorithm<A>> implements Algorithm<A> {
+public abstract class AbstractAlgorithm implements Algorithm {
 
     protected final String ID;
 
     protected final Provider PROVIDER;
-
-    @SuppressWarnings("unchecked")
-    protected final A self() {
-        return (A) this;
-    }
 
     protected AbstractAlgorithm(String id, Provider provider) {
         this.ID = Assert.hasText(id, "Algorithm id cannot be null or empty.");
@@ -54,7 +49,7 @@ public abstract class AbstractAlgorithm<A extends Algorithm<A>> implements Algor
     @Override
     public boolean equals(Object obj) {
         if (obj == this) return true;
-        if (obj instanceof AbstractAlgorithm<?> other) {
+        if (obj instanceof Algorithm other) {
             return this.ID.equals(other.id());
         }
         return false;

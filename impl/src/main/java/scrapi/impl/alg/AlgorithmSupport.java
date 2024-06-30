@@ -13,16 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package scrapi.impl.jca;
+package scrapi.impl.alg;
 
-import scrapi.jca.Providable;
-import scrapi.jca.Randomizable;
+import scrapi.alg.Providable;
+import scrapi.alg.Randomizable;
+import scrapi.impl.jca.JcaTemplate;
 import scrapi.util.Assert;
 
 import java.security.Provider;
 import java.security.SecureRandom;
 
-public abstract class AlgorithmSupport<T extends Providable<T>> implements Providable<T>, Randomizable<T> {
+public abstract class AlgorithmSupport<T> implements Providable<T>, Randomizable<T> {
 
     protected final String jcaName;
     protected Provider provider;
@@ -43,10 +44,18 @@ public abstract class AlgorithmSupport<T extends Providable<T>> implements Provi
         return self();
     }
 
+    public Provider provider() {
+        return this.provider;
+    }
+
     @Override
     public T random(SecureRandom random) {
         this.random = random;
         return self();
+    }
+
+    public SecureRandom random() {
+        return this.random;
     }
 
     protected JcaTemplate jca() {

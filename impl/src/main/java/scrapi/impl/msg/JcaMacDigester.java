@@ -31,6 +31,10 @@ class JcaMacDigester extends AbstractMessageConsumer<Hasher> implements Hasher {
 
     private final Mac MAC;
 
+    JcaMacDigester(Mac mac) {
+        this.MAC = Assert.notNull(mac, "Mac cannot be null");
+    }
+
     JcaMacDigester(String id, Provider provider, SecretKey<?> key) {
         Assert.notNull(key, "SecretKey cannot be null.");
         javax.crypto.SecretKey jcaKey = Assert.notNull(key.toJcaKey(), JCA_KEY_NOT_NULL);

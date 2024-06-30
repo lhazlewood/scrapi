@@ -15,5 +15,7 @@
  */
 package scrapi.msg;
 
-public interface Signer extends Transformer<Signer> {
+import java.util.function.Supplier;
+
+public interface Signer extends MessageConsumer<Signer>, Supplier<byte[]> {
 }

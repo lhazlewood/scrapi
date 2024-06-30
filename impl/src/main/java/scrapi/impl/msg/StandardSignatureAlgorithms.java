@@ -19,9 +19,9 @@ import scrapi.impl.lang.IdentifiableRegistry;
 import scrapi.msg.SignatureAlgorithm;
 import scrapi.util.Collections;
 
-public final class StandardSignatureAlgorithms extends IdentifiableRegistry<String, SignatureAlgorithm<?, ?, ?>> {
+public final class StandardSignatureAlgorithms extends IdentifiableRegistry<String, SignatureAlgorithm<?, ?, ?, ?, ?, ?, ?>> {
     public StandardSignatureAlgorithms() {
-        super("Signature Algorithm", Collections.<SignatureAlgorithm<?, ?, ?>>of(
+        super("Signature Algorithm", Collections.<SignatureAlgorithm<?, ?, ?, ?, ?, ?, ?>>of(
                 new DefaultRsaSignatureAlgorithm("SHA1withRSA"),
                 new DefaultRsaSignatureAlgorithm("SHA224withRSA"),
                 new DefaultRsaSignatureAlgorithm("SHA256withRSA"),

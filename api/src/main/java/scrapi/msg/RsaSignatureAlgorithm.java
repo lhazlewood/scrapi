@@ -18,6 +18,12 @@ package scrapi.msg;
 import scrapi.key.RsaPrivateKey;
 import scrapi.key.RsaPublicKey;
 
-public interface RsaSignatureAlgorithm extends SignatureAlgorithm<RsaPublicKey, RsaPrivateKey, RsaPrivateKey.Generator> {
-
+public interface RsaSignatureAlgorithm extends SignatureAlgorithm<
+        RsaPublicKey,
+        RsaPrivateKey,
+        Signer,
+        Verifier,
+        SignerBuilder<RsaPrivateKey>,
+        VerifierBuilder<RsaPublicKey>,
+        RsaPrivateKey.Generator> {
 }

@@ -186,7 +186,6 @@ Signer signer = alg.key(aPrivateKey); // 'signer' is fully initialized and can _
 Verifier<?> verifier = alg.key(aPublicKey) // 'verifier' can _only_ be used to verify a data signature
 ```
 
-
 ### Keys
 
 #### Encoding/Decoding

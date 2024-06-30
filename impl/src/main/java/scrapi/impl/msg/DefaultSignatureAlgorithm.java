@@ -21,45 +21,36 @@ import scrapi.key.PrivateKey;
 import scrapi.key.PublicKey;
 import scrapi.msg.SignatureAlgorithm;
 import scrapi.msg.Signer;
+import scrapi.msg.SignerBuilder;
 import scrapi.msg.Verifier;
+import scrapi.msg.VerifierBuilder;
 import scrapi.util.Assert;
 
 import java.security.Provider;
-import java.security.SecureRandom;
 import java.util.function.Supplier;
 
-public class DefaultSignatureAlgorithm<U extends PublicKey<?>, R extends PrivateKey<?, U>, G extends KeyGenerator<R, G>>
-        extends AbstractAlgorithm<SignatureAlgorithm<U, R, G>>
-        implements SignatureAlgorithm<U, R, G> {
-
-    protected final SecureRandom RANDOM;
+public class DefaultSignatureAlgorithm<
+        U extends PublicKey<?>,
+        R extends PrivateKey<?, U>,
+        G extends KeyGenerator<R, G>>
+        extends AbstractAlgorithm
+        implements SignatureAlgorithm<U, R, Signer, Verifier, SignerBuilder<R>, VerifierBuilder<U>, G> {
 
     private final Supplier<G> SUPPLIER;
 
-    DefaultSignatureAlgorithm(String id, Provider provider, SecureRandom random, Supplier<G> genSupplier) {
+    DefaultSignatureAlgorithm(String id, Provider provider, Supplier<G> genSupplier) {
         super(id, provider);
-        this.RANDOM = random;
         this.SUPPLIER = Assert.notNull(genSupplier, "KeyGenerator supplier cannot be null.");
     }
 
     @Override
-    public Signer key(R privateKey) {
-        return new JcaSignatureSupport.JcaSigner(this.ID, this.PROVIDER, this.RANDOM, privateKey);
+    public SignerBuilder<R> digester() {
+        return new DefaultSignerBuilder<R>(this.ID).provider(this.PROVIDER);
     }
 
     @Override
-    public Verifier<?> key(U publicKey) {
-        return new JcaSignatureSupport.JcaVerifier(this.ID, this.PROVIDER, publicKey);
-    }
-
-    @Override
-    public SignatureAlgorithm<U, R, G> provider(Provider provider) {
-        return new DefaultSignatureAlgorithm<>(this.ID, provider, this.RANDOM, this.SUPPLIER);
-    }
-
-    @Override
-    public SignatureAlgorithm<U, R, G> random(SecureRandom random) {
-        return new DefaultSignatureAlgorithm<>(this.ID, this.PROVIDER, random, this.SUPPLIER);
+    public VerifierBuilder<U> verifier() {
+        return new DefaultVerifierBuilder<U>(this.ID).provider(this.PROVIDER);
     }
 
     @Override
@@ -70,6 +61,6 @@ public class DefaultSignatureAlgorithm<U extends PublicKey<?>, R extends Private
     @Override
     public boolean equals(Object obj) {
         if (obj == this) return true;
-        return obj instanceof SignatureAlgorithm<?, ?, ?> && super.equals(obj);
+        return obj instanceof SignatureAlgorithm && super.equals(obj);
     }
 }

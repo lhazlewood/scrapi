@@ -75,5 +75,4 @@ public class DefaultRsaPrivateKey extends AbstractRsaKey<java.security.PrivateKe
         }
         return new DefaultRsaPrivateKey(jcaPriv, pub);
     }
-
 }

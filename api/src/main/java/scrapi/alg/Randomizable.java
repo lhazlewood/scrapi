@@ -13,26 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package scrapi.jca;
+package scrapi.alg;
 
-import java.security.Provider;
+import java.security.SecureRandom;
 
 /**
- * Interface implemented by {@code Object}s that allow configuration of a JCA {@link Provider}.
+ * Interface implemented by {@code Object}s that allow configuration of a JCA {@link SecureRandom}.
  *
- * @param <T> the type of {@code Object} returned after setting the {@code Provider}, usually for method chaining.
- * @see #provider(Provider)
+ * @param <T> the type of {@code Object} returned after setting the {@code SecureRandom}, usually for method chaining.
  * @since SCRAPI_RELEASE_VERSION
  */
 @FunctionalInterface
-public interface Providable<T> {
+public interface Randomizable<T> {
 
     /**
-     * Sets the JCA Security {@link Provider} to use if desired.  This is an optional property - if not specified,
-     * a default JCA Provider will be used when necessary.
+     * Sets the JCA {@link SecureRandom} to use if desired.  This is an optional property - if not specified,
+     * a default {@code SecureRandom} will be used when necessary.
      *
-     * @param provider the JCA Security Provider instance to use if necessary.
+     * @param random the JCA {@code SecureRandom} instance to use if necessary.
      * @return the associated object for method chaining.
      */
-    T provider(Provider provider);
+    T random(SecureRandom random);
 }

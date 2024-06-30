@@ -15,5 +15,8 @@
  */
 package scrapi.msg;
 
-public interface Hasher extends Transformer<Hasher>, Verifier<Hasher> {
+import java.util.function.Predicate;
+import java.util.function.Supplier;
+
+public interface Hasher extends MessageConsumer<Hasher>, Supplier<byte[]>, Predicate<byte[]> {
 }

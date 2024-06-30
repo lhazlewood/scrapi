@@ -16,10 +16,23 @@
 package scrapi.msg;
 
 import scrapi.key.ConfidentialKey;
+import scrapi.key.Key;
 import scrapi.key.KeyGenerator;
 import scrapi.key.KeyGeneratorSupplier;
 import scrapi.key.Keyable;
+import scrapi.lang.Builder;
 
-public interface AuthenticityAlgorithm<K extends ConfidentialKey<?>, T extends Transformer<T>, G extends KeyGenerator<K, G>, A extends AuthenticityAlgorithm<K, T, G, A>>
-        extends IntegrityAlgorithm<A>, Keyable<K, T>, KeyGeneratorSupplier<K, G> {
+import java.util.function.Predicate;
+import java.util.function.Supplier;
+
+public interface AuthenticityAlgorithm<
+        DK extends ConfidentialKey<?>,
+        VK extends Key<?>,
+        D extends MessageConsumer<D> & Supplier<byte[]>,
+        V extends MessageConsumer<V> & Predicate<byte[]>,
+        DB extends Keyable<DK, DB> & Builder<D>,
+        VB extends Keyable<VK, VB> & Builder<V>,
+        G extends KeyGenerator<DK, G>
+        >
+        extends IntegrityAlgorithm<D, V, DB, VB>, KeyGeneratorSupplier<DK, G> {
 }

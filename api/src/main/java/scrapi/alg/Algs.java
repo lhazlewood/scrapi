@@ -82,7 +82,7 @@ public final class Algs {
         }
 
         private static final String IMPL_CLASSNAME = "scrapi.impl.msg.StandardMacAlgorithms";
-        private static final Registry<String, MacAlgorithm<?, ?>> REGISTRY = Classes.newInstance(IMPL_CLASSNAME);
+        private static final Registry<String, MacAlgorithm<?, ?, ?>> REGISTRY = Classes.newInstance(IMPL_CLASSNAME);
 
         /**
          * Returns a registry of all
@@ -93,30 +93,30 @@ public final class Algs {
          * <a href="https://docs.oracle.com/en/java/javase/21/docs/specs/security/standard-names.html#mac-algorithms">Java
          * Standard Mac Algorithms</a>.
          */
-        public static Registry<String, MacAlgorithm<?, ?>> get() {
+        public static Registry<String, MacAlgorithm<?, ?, ?>> get() {
             return REGISTRY;
         }
 
-        public static final MacAlgorithm<OctetSecretKey, OctetSecretKey.Generator> HMD5 = Algs.get(get(), "HmacMD5");
-        public static final MacAlgorithm<OctetSecretKey, OctetSecretKey.Generator> HS1 = Algs.get(get(), "HmacSHA1");
-        public static final MacAlgorithm<OctetSecretKey, OctetSecretKey.Generator> HS224 = Algs.get(get(), "HmacSHA224");
-        public static final MacAlgorithm<OctetSecretKey, OctetSecretKey.Generator> HS256 = Algs.get(get(), "HmacSHA256");
-        public static final MacAlgorithm<OctetSecretKey, OctetSecretKey.Generator> HS384 = Algs.get(get(), "HmacSHA384");
-        public static final MacAlgorithm<OctetSecretKey, OctetSecretKey.Generator> HS512 = Algs.get(get(), "HmacSHA512");
-        public static final MacAlgorithm<OctetSecretKey, OctetSecretKey.Generator> HS512_224 = Algs.get(get(), "HmacSHA512/224");
-        public static final MacAlgorithm<OctetSecretKey, OctetSecretKey.Generator> HS512_256 = Algs.get(get(), "HmacSHA512/256");
-        public static final MacAlgorithm<OctetSecretKey, OctetSecretKey.Generator> HS3_224 = Algs.get(get(), "HmacSHA3-224");
-        public static final MacAlgorithm<OctetSecretKey, OctetSecretKey.Generator> HS3_256 = Algs.get(get(), "HmacSHA3-256");
-        public static final MacAlgorithm<OctetSecretKey, OctetSecretKey.Generator> HS3_384 = Algs.get(get(), "HmacSHA3-384");
-        public static final MacAlgorithm<OctetSecretKey, OctetSecretKey.Generator> HS3_512 = Algs.get(get(), "HmacSHA3-512");
+        public static final MacAlgorithm<OctetSecretKey, ?, OctetSecretKey.Generator> HMD5 = Algs.get(get(), "HmacMD5");
+        public static final MacAlgorithm<OctetSecretKey, ?, OctetSecretKey.Generator> HS1 = Algs.get(get(), "HmacSHA1");
+        public static final MacAlgorithm<OctetSecretKey, ?, OctetSecretKey.Generator> HS224 = Algs.get(get(), "HmacSHA224");
+        public static final MacAlgorithm<OctetSecretKey, ?, OctetSecretKey.Generator> HS256 = Algs.get(get(), "HmacSHA256");
+        public static final MacAlgorithm<OctetSecretKey, ?, OctetSecretKey.Generator> HS384 = Algs.get(get(), "HmacSHA384");
+        public static final MacAlgorithm<OctetSecretKey, ?, OctetSecretKey.Generator> HS512 = Algs.get(get(), "HmacSHA512");
+        public static final MacAlgorithm<OctetSecretKey, ?, OctetSecretKey.Generator> HS512_224 = Algs.get(get(), "HmacSHA512/224");
+        public static final MacAlgorithm<OctetSecretKey, ?, OctetSecretKey.Generator> HS512_256 = Algs.get(get(), "HmacSHA512/256");
+        public static final MacAlgorithm<OctetSecretKey, ?, OctetSecretKey.Generator> HS3_224 = Algs.get(get(), "HmacSHA3-224");
+        public static final MacAlgorithm<OctetSecretKey, ?, OctetSecretKey.Generator> HS3_256 = Algs.get(get(), "HmacSHA3-256");
+        public static final MacAlgorithm<OctetSecretKey, ?, OctetSecretKey.Generator> HS3_384 = Algs.get(get(), "HmacSHA3-384");
+        public static final MacAlgorithm<OctetSecretKey, ?, OctetSecretKey.Generator> HS3_512 = Algs.get(get(), "HmacSHA3-512");
 
-        public static final MacAlgorithm<PbeKey, PbeKey.Generator> PBEHS1 = Algs.get(get(), "PBEWithHmacSHA1");
-        public static final MacAlgorithm<PbeKey, PbeKey.Generator> PBEHS224 = Algs.get(get(), "PBEWithHmacSHA224");
-        public static final MacAlgorithm<PbeKey, PbeKey.Generator> PBEHS256 = Algs.get(get(), "PBEWithHmacSHA256");
-        public static final MacAlgorithm<PbeKey, PbeKey.Generator> PBEHS384 = Algs.get(get(), "PBEWithHmacSHA384");
-        public static final MacAlgorithm<PbeKey, PbeKey.Generator> PBEHS512 = Algs.get(get(), "PBEWithHmacSHA512");
-        public static final MacAlgorithm<PbeKey, PbeKey.Generator> PBEHS512_224 = Algs.get(get(), "PBEWithHmacSHA512/224");
-        public static final MacAlgorithm<PbeKey, PbeKey.Generator> PBEHS512_256 = Algs.get(get(), "PBEWithHmacSHA512/256");
+        public static final MacAlgorithm<PbeKey, ?, PbeKey.Generator> PBEHS1 = Algs.get(get(), "PBEWithHmacSHA1");
+        public static final MacAlgorithm<PbeKey, ?, PbeKey.Generator> PBEHS224 = Algs.get(get(), "PBEWithHmacSHA224");
+        public static final MacAlgorithm<PbeKey, ?, PbeKey.Generator> PBEHS256 = Algs.get(get(), "PBEWithHmacSHA256");
+        public static final MacAlgorithm<PbeKey, ?, PbeKey.Generator> PBEHS384 = Algs.get(get(), "PBEWithHmacSHA384");
+        public static final MacAlgorithm<PbeKey, ?, PbeKey.Generator> PBEHS512 = Algs.get(get(), "PBEWithHmacSHA512");
+        public static final MacAlgorithm<PbeKey, ?, PbeKey.Generator> PBEHS512_224 = Algs.get(get(), "PBEWithHmacSHA512/224");
+        public static final MacAlgorithm<PbeKey, ?, PbeKey.Generator> PBEHS512_256 = Algs.get(get(), "PBEWithHmacSHA512/256");
 
         /*
          * Per <a href="https://datatracker.ietf.org/doc/html/rfc7292#appendix-B">RFC 7292, Appendix B</a>, the
@@ -135,31 +135,31 @@ public final class Algs {
 
         @SuppressWarnings("DeprecatedIsStillUsed")
         @Deprecated // per https://datatracker.ietf.org/doc/html/rfc7292#appendix-B
-        public static final MacAlgorithm<PbeKey, PbeKey.Generator> PKCS12HS1 = Algs.get(get(), "HmacPBESHA1");
+        public static final MacAlgorithm<PbeKey, ?, PbeKey.Generator> PKCS12HS1 = Algs.get(get(), "HmacPBESHA1");
 
         @SuppressWarnings("DeprecatedIsStillUsed")
         @Deprecated // per https://datatracker.ietf.org/doc/html/rfc7292#appendix-B
-        public static final MacAlgorithm<PbeKey, PbeKey.Generator> PKCS12HS224 = Algs.get(get(), "HmacPBESHA224");
+        public static final MacAlgorithm<PbeKey, ?, PbeKey.Generator> PKCS12HS224 = Algs.get(get(), "HmacPBESHA224");
 
         @SuppressWarnings("DeprecatedIsStillUsed")
         @Deprecated // per https://datatracker.ietf.org/doc/html/rfc7292#appendix-B
-        public static final MacAlgorithm<PbeKey, PbeKey.Generator> PKCS12HS256 = Algs.get(get(), "HmacPBESHA256");
+        public static final MacAlgorithm<PbeKey, ?, PbeKey.Generator> PKCS12HS256 = Algs.get(get(), "HmacPBESHA256");
 
         @SuppressWarnings("DeprecatedIsStillUsed")
         @Deprecated // per https://datatracker.ietf.org/doc/html/rfc7292#appendix-B
-        public static final MacAlgorithm<PbeKey, PbeKey.Generator> PKCS12HS384 = Algs.get(get(), "HmacPBESHA384");
+        public static final MacAlgorithm<PbeKey, ?, PbeKey.Generator> PKCS12HS384 = Algs.get(get(), "HmacPBESHA384");
 
         @SuppressWarnings("DeprecatedIsStillUsed")
         @Deprecated // per https://datatracker.ietf.org/doc/html/rfc7292#appendix-B
-        public static final MacAlgorithm<PbeKey, PbeKey.Generator> PKCS12HS512 = Algs.get(get(), "HmacPBESHA512");
+        public static final MacAlgorithm<PbeKey, ?, PbeKey.Generator> PKCS12HS512 = Algs.get(get(), "HmacPBESHA512");
 
         @SuppressWarnings("DeprecatedIsStillUsed")
         @Deprecated // per https://datatracker.ietf.org/doc/html/rfc7292#appendix-B
-        public static final MacAlgorithm<PbeKey, PbeKey.Generator> PKCS12HS512_224 = Algs.get(get(), "HmacPBESHA512/224");
+        public static final MacAlgorithm<PbeKey, ?, PbeKey.Generator> PKCS12HS512_224 = Algs.get(get(), "HmacPBESHA512/224");
 
         @SuppressWarnings("DeprecatedIsStillUsed")
         @Deprecated // per https://datatracker.ietf.org/doc/html/rfc7292#appendix-B
-        public static final MacAlgorithm<PbeKey, PbeKey.Generator> PKCS12HS512_256 = Algs.get(get(), "HmacPBESHA512/256");
+        public static final MacAlgorithm<PbeKey, ?, PbeKey.Generator> PKCS12HS512_256 = Algs.get(get(), "HmacPBESHA512/256");
     }
 
     public static final class Sig {
@@ -169,7 +169,7 @@ public final class Algs {
         }
 
         private static final String IMPL_CLASSNAME = "scrapi.impl.msg.StandardSignatureAlgorithms";
-        private static final Registry<String, SignatureAlgorithm<?, ?, ?>> REGISTRY = Classes.newInstance(IMPL_CLASSNAME);
+        private static final Registry<String, SignatureAlgorithm<?, ?, ?, ?, ?, ?, ?>> REGISTRY = Classes.newInstance(IMPL_CLASSNAME);
 
         /**
          * Returns a registry of all
@@ -180,7 +180,7 @@ public final class Algs {
          * <a href="https://docs.oracle.com/en/java/javase/21/docs/specs/security/standard-names.html#messagedigest-algorithms">Java
          * Standard Hash (aka Message Digest) Algorithms</a>.
          */
-        public static Registry<String, SignatureAlgorithm<?, ?, ?>> get() {
+        public static Registry<String, SignatureAlgorithm<?, ?, ?, ?, ?, ?, ?>> get() {
             return REGISTRY;
         }
 

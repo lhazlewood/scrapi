@@ -15,28 +15,8 @@
  */
 package scrapi.msg;
 
-import java.nio.ByteBuffer;
-import java.util.function.Supplier;
+import scrapi.lang.Builder;
 
-public interface HashAlgorithm extends IntegrityAlgorithm<HashAlgorithm>, DigestSized, Supplier<Hasher>, MessageConsumer<Hasher> {
+public interface HashAlgorithm extends DigestSized, IntegrityAlgorithm<Hasher, Hasher, Builder<Hasher>, Builder<Hasher>> {
 
-    @Override
-    default Hasher apply(byte input) {
-        return get().apply(input);
-    }
-
-    @Override
-    default Hasher apply(byte[] input) {
-        return get().apply(input);
-    }
-
-    @Override
-    default Hasher apply(byte[] input, int offset, int len) {
-        return get().apply(input, offset, len);
-    }
-
-    @Override
-    default Hasher apply(ByteBuffer input) {
-        return get().apply(input);
-    }
 }

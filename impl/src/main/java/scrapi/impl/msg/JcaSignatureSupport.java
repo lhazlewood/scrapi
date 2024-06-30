@@ -34,21 +34,16 @@ import java.security.SignatureException;
 
 abstract class JcaSignatureSupport<T extends MessageConsumer<T>, K extends AsymmetricKey<?>> extends AbstractMessageConsumer<T> {
 
-    private static final String JCA_KEY_TYPE_MSG = "AsymmetricKey must be an instance of either " +
-            PublicKey.class.getName() + " or " + PrivateKey.class.getName();
-
     protected final Signature SIG;
 
     protected JcaSignatureSupport(String id, Provider provider, final SecureRandom random, final K key) {
-        Assert.notNull(key, "Signature or Verification key cannot be null.");
-        if (!(key instanceof PublicKey || key instanceof PrivateKey)) {
-            throw new IllegalArgumentException(JCA_KEY_TYPE_MSG);
-        }
+        Assert.notNull(key, "Key cannot be null.");
         this.SIG = new JcaTemplate(id, provider, random).withSignature(sig -> {
-            if (key instanceof PrivateKey) {
-                sig.initSign(((PrivateKey<?, ?>) key).toJcaKey(), random);
+            if (key instanceof PrivateKey<?, ?> priv) {
+                sig.initSign(priv.toJcaKey(), random);
             } else {
-                sig.initVerify(((PublicKey<?>) key).toJcaKey());
+                PublicKey<?> pub = Assert.isInstance(PublicKey.class, key, "Unexpected AsymmetricKey type.");
+                sig.initVerify(pub.toJcaKey());
             }
             return sig;
         });
@@ -100,7 +95,8 @@ abstract class JcaSignatureSupport<T extends MessageConsumer<T>, K extends Asymm
         }
     }
 
-    static class JcaVerifier extends JcaSignatureSupport<JcaVerifier, PublicKey<?>> implements Verifier<JcaVerifier> {
+    static class JcaVerifier extends JcaSignatureSupport<Verifier, PublicKey<?>> implements Verifier {
+
         JcaVerifier(String id, Provider provider, PublicKey<?> key) {
             super(id, provider, null, key);
         }

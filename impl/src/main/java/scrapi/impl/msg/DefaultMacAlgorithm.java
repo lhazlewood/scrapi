@@ -17,23 +17,45 @@ package scrapi.impl.msg;
 
 import scrapi.alg.Size;
 import scrapi.impl.key.DefaultOctetSecretKeyGenerator;
+import scrapi.impl.key.KeyableSupport;
 import scrapi.key.OctetSecretKey;
+import scrapi.lang.Builder;
+import scrapi.msg.Hasher;
 
 import java.security.Provider;
 
-public class DefaultMacAlgorithm extends AbstractMacAlgorithm<OctetSecretKey, OctetSecretKey.Generator> {
+public class DefaultMacAlgorithm extends
+        AbstractMacAlgorithm<OctetSecretKey, DefaultMacAlgorithm.HasherBuilder, OctetSecretKey.Generator> {
 
     public DefaultMacAlgorithm(String id, Provider provider, Size digestSize) {
         super(id, provider, digestSize);
     }
 
     @Override
-    public DefaultMacAlgorithm provider(Provider provider) {
-        return new DefaultMacAlgorithm(this.ID, provider, this.DIGEST_SIZE);
+    public HasherBuilder digester() {
+        return new HasherBuilder(this.ID).provider(this.PROVIDER);
+    }
+
+    @Override
+    public HasherBuilder verifier() {
+        return digester();
     }
 
     @Override
     public OctetSecretKey.Generator keygen() {
         return new DefaultOctetSecretKeyGenerator(this.ID, this.DIGEST_SIZE);
+    }
+
+    public static final class HasherBuilder extends KeyableSupport<OctetSecretKey, HasherBuilder>
+            implements Builder<Hasher> {
+
+        HasherBuilder(String jcaName) {
+            super(jcaName);
+        }
+
+        @Override
+        public Hasher build() {
+            return new JcaMacDigester(this.jcaName, this.provider, this.key);
+        }
     }
 }

@@ -16,8 +16,15 @@
 package scrapi.msg;
 
 import scrapi.key.KeyGenerator;
+import scrapi.key.Keyable;
 import scrapi.key.SecretKey;
+import scrapi.lang.Builder;
 
-public interface MacAlgorithm<K extends SecretKey<?>, G extends KeyGenerator<K, G>>
-        extends AuthenticityAlgorithm<K, Hasher, G, MacAlgorithm<K, G>>, DigestSized {
+public interface MacAlgorithm<
+        K extends SecretKey<?>,
+        HB extends Keyable<K, HB> & Builder<Hasher>,
+        G extends KeyGenerator<K, G>
+        >
+        extends DigestSized, AuthenticityAlgorithm<K, K, Hasher, Hasher, HB, HB, G> {
+
 }

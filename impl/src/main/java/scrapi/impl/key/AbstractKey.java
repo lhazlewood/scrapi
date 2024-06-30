@@ -15,6 +15,8 @@
  */
 package scrapi.impl.key;
 
+import scrapi.impl.lang.NoOpCleanable;
+import scrapi.key.ConfidentialKey;
 import scrapi.key.Key;
 import scrapi.key.KeyException;
 import scrapi.util.Assert;
@@ -23,16 +25,25 @@ import scrapi.util.Strings;
 
 import javax.security.auth.DestroyFailedException;
 import javax.security.auth.Destroyable;
+import java.lang.ref.Cleaner;
 
-abstract class AbstractKey<K extends java.security.Key> implements Key<K>, scrapi.lang.Destroyable {
+abstract class AbstractKey<K extends java.security.Key> implements Key<K>, scrapi.lang.Destroyable, AutoCloseable {
 
     private static final String SUNPKCS11_GENERIC_SECRET_CLASSNAME = "sun.security.pkcs11.P11Key$P11SecretKey";
     private static final String SUNPKCS11_GENERIC_SECRET_ALGNAME = "Generic Secret"; // https://github.com/openjdk/jdk/blob/4f90abaf17716493bad740dcef76d49f16d69379/src/jdk.crypto.cryptoki/share/classes/sun/security/pkcs11/P11KeyStore.java#L1292
 
-    protected final K key;
+    static final Cleaner cleaner = Cleaner.create();
 
-    protected AbstractKey(K key) {
+    protected final K key;
+    private transient boolean destroyed;
+    private final Cleaner.Cleanable cleanable;
+
+    protected AbstractKey(final K key) {
         this.key = Assert.notNull(key, "Key cannot be null.");
+        this.cleanable = this instanceof ConfidentialKey<?> ? // private or secret key:
+                cleaner.register(this, new KeyDestroyer(key)) :
+                // nothing to clean on public keys:
+                NoOpCleanable.INSTANCE;
     }
 
     @Override
@@ -75,8 +86,7 @@ abstract class AbstractKey<K extends java.security.Key> implements Key<K>, scrap
         Integer bitlen = null;
 
         // try to parse the length from key specification
-        if (key instanceof javax.crypto.SecretKey) {
-            javax.crypto.SecretKey secretKey = (javax.crypto.SecretKey) key;
+        if (key instanceof javax.crypto.SecretKey secretKey) {
             if ("RAW".equals(secretKey.getFormat())) {
                 byte[] encoded = findEncoded(secretKey);
                 if (!Bytes.isEmpty(encoded)) {
@@ -84,11 +94,9 @@ abstract class AbstractKey<K extends java.security.Key> implements Key<K>, scrap
                     Bytes.clear(encoded);
                 }
             }
-        } else if (key instanceof java.security.interfaces.RSAKey) {
-            java.security.interfaces.RSAKey rsaKey = (java.security.interfaces.RSAKey) key;
+        } else if (key instanceof java.security.interfaces.RSAKey rsaKey) {
             bitlen = rsaKey.getModulus().bitLength();
-        } else if (key instanceof java.security.interfaces.ECKey) {
-            java.security.interfaces.ECKey ecKey = (java.security.interfaces.ECKey) key;
+        } else if (key instanceof java.security.interfaces.ECKey ecKey) {
             bitlen = ecKey.getParams().getOrder().bitLength();
         }
         // TODO:
@@ -101,21 +109,36 @@ abstract class AbstractKey<K extends java.security.Key> implements Key<K>, scrap
         return bitlen;
     }
 
+    record KeyDestroyer(java.security.Key key) implements Runnable {
+        @Override
+        public void run() {
+            if (!(key instanceof Destroyable dkey)) return;
+            try {
+                dkey.destroy();
+            } catch (DestroyFailedException e) {
+                String msg = "Unable to destroy internal JCA key of type " + this.key.getClass().getName() + ": " +
+                        e.getMessage();
+                throw new KeyException(msg, e);
+            }
+        }
+    }
+
     @Override
     public void destroy() {
-        if (!(this.key instanceof Destroyable)) return;
-        Destroyable destroyable = (Destroyable) this.key;
-        try {
-            destroyable.destroy();
-        } catch (DestroyFailedException e) {
-            String msg = "Unable to destroy internal JCA key of type " + this.key.getClass().getName() + ": " +
-                    e.getMessage();
-            throw new KeyException(msg, e);
+        if (!this.destroyed) {
+            this.destroyed = true;
+            this.cleanable.clean();
         }
     }
 
     @Override
     public boolean isDestroyed() {
-        return this.key instanceof Destroyable && ((Destroyable) this.key).isDestroyed();
+        return this.destroyed;
+    }
+
+    @SuppressWarnings("RedundantThrows")
+    @Override
+    public void close() throws Exception {
+        destroy();
     }
 }

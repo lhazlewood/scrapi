@@ -15,7 +15,7 @@
  */
 package scrapi.key;
 
-import scrapi.jca.Providable;
+import scrapi.alg.Providable;
 
 import java.util.function.Supplier;
 

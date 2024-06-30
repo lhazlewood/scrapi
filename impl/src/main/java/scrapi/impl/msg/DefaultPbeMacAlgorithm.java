@@ -18,14 +18,20 @@ package scrapi.impl.msg;
 import scrapi.alg.Size;
 import scrapi.impl.key.DefaultPbeKey;
 import scrapi.impl.key.DefaultPbeKeyGenerator;
+import scrapi.impl.key.KeyableSupport;
 import scrapi.key.PbeKey;
-import scrapi.msg.MacAlgorithm;
+import scrapi.msg.Hasher;
+import scrapi.msg.PbeMacAlgorithm;
 import scrapi.util.Assert;
+import scrapi.util.Bytes;
 
+import javax.crypto.Mac;
+import javax.crypto.spec.PBEParameterSpec;
 import java.security.Provider;
 
 public class DefaultPbeMacAlgorithm
-        extends AbstractMacAlgorithm<PbeKey, PbeKey.Generator> {
+        extends AbstractMacAlgorithm<PbeKey, PbeMacAlgorithm.HasherBuilder, PbeKey.Generator>
+        implements PbeMacAlgorithm {
 
     protected final int DEFAULT_ITERATIONS;
 
@@ -35,14 +41,51 @@ public class DefaultPbeMacAlgorithm
     }
 
     @Override
-    public MacAlgorithm<PbeKey, PbeKey.Generator> provider(Provider provider) {
-        Assert.notNull(provider, "Provider cannot not be null");
-        return new DefaultPbeMacAlgorithm(this.ID, provider, digestSize(), this.DEFAULT_ITERATIONS);
+    public HasherBuilder digester() {
+        return new DefaultHasherBuilder(this.ID).provider(this.PROVIDER).iterations(this.DEFAULT_ITERATIONS);
     }
 
+    @Override
+    public HasherBuilder verifier() {
+        return digester();
+    }
 
     @Override
     public PbeKey.Generator keygen() {
         return new DefaultPbeKeyGenerator(id(), digestSize(), this.DEFAULT_ITERATIONS);
+    }
+
+    static class DefaultHasherBuilder extends KeyableSupport<PbeKey, HasherBuilder> implements HasherBuilder {
+
+        private byte[] salt;
+        private int iterations;
+
+        public DefaultHasherBuilder(String jcaName) {
+            super(jcaName);
+        }
+
+        @Override
+        public HasherBuilder salt(byte[] salt) {
+            this.salt = Bytes.isEmpty(salt) ? null : salt.clone();
+            return self();
+        }
+
+        @Override
+        public HasherBuilder iterations(int iterations) {
+            this.iterations = iterations;
+            return self();
+        }
+
+        @Override
+        public Hasher build() {
+            Assert.notEmpty(this.salt, "salt cannot be null or empty.");
+            DefaultPbeKey.assertIterationsGte(this.iterations, DefaultPbeKey.MIN_ITERATIONS);
+            Mac m = jca().withMac(mac -> {
+                PBEParameterSpec spec = new PBEParameterSpec(this.salt, this.iterations);
+                mac.init(this.key.toJcaKey(), spec);
+                return mac;
+            });
+            return new JcaMacDigester(m);
+        }
     }
 }

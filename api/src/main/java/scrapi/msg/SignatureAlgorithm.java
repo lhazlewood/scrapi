@@ -15,13 +15,24 @@
  */
 package scrapi.msg;
 
-import scrapi.jca.Randomizable;
+import scrapi.alg.Randomizable;
 import scrapi.key.KeyGenerator;
+import scrapi.key.Keyable;
 import scrapi.key.PrivateKey;
 import scrapi.key.PublicKey;
+import scrapi.lang.Builder;
 
-public interface SignatureAlgorithm<U extends PublicKey<?>, R extends PrivateKey<?, U>, G extends KeyGenerator<R, G>>
-        extends AuthenticityAlgorithm<R, Signer, G, SignatureAlgorithm<U, R, G>>, Randomizable<SignatureAlgorithm<U, R, G>> {
+import java.util.function.Predicate;
+import java.util.function.Supplier;
 
-    Verifier<?> key(U publicKey);
+public interface SignatureAlgorithm<
+        P extends PublicKey<?>,
+        S extends PrivateKey<?, P>,
+        D extends MessageConsumer<D> & Supplier<byte[]>,
+        V extends MessageConsumer<V> & Predicate<byte[]>,
+        DB extends Randomizable<DB> & Keyable<S, DB> & Builder<D>,
+        VB extends Keyable<P, VB> & Builder<V>,
+        G extends KeyGenerator<S, G>
+        >
+        extends AuthenticityAlgorithm<S, P, D, V, DB, VB, G> {
 }

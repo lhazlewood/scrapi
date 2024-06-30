@@ -42,6 +42,14 @@ class StandardMacAlgorithmsTest {
         return b.get() as SecretKey
     }
 
+    static def hasher(def key, def builder) {
+        if (key instanceof PbeKey) {
+            builder.salt(key.salt())
+            builder.iterations(key.iterations())
+        }
+        return builder.key(key).build()
+    }
+
     @Test
     void equality() {
         assertEquals Algs.Mac.get(), new StandardMacAlgorithms()
@@ -87,14 +95,15 @@ class StandardMacAlgorithmsTest {
     void digestNoData() {
         for (MacAlgorithm alg : Algs.Mac.get().values()) {
             def key = newKey(alg)
-            byte[] digest = alg.key(key).get() // no 'apply' methods called, no data processed
+
+            byte[] digest = hasher(key, alg.digester()).get() // no 'apply' methods called, no data processed
             def jca = Mac.getInstance(alg.id() as String)
             jca.getMacLength()
             jca.init(key.toJcaKey())
             byte[] jcaDigest = jca.doFinal()
             assertTrue MessageDigest.isEqual(jcaDigest, digest)
             assertEquals alg.digestSize().bits(), Bytes.bitLength(digest)
-            assertTrue alg.key(key).test(digest)
+            assertTrue hasher(key, alg.verifier()).test(digest)
         }
     }
 
@@ -103,14 +112,14 @@ class StandardMacAlgorithmsTest {
         Algs.Mac.get().values().each {
             def key = newKey(it)
             def b = Bytes.random(1)[0]
-            byte[] digest = it.key(key).apply(b).get()
+            byte[] digest = hasher(key, it.digester()).apply(b).get()
             def jca = Mac.getInstance(it.id())
             jca.init(key.toJcaKey())
             jca.update(b)
             def jcaDigest = jca.doFinal()
             assertTrue MessageDigest.isEqual(jcaDigest, digest) // assert same result as JCA
             assertEquals it.digestSize().bits(), Bytes.bitLength(digest)
-            assertTrue it.key(key).apply(b).test(digest)
+            assertTrue hasher(key, it.verifier()).apply(b).test(digest)
         }
     }
 
@@ -119,7 +128,7 @@ class StandardMacAlgorithmsTest {
         Algs.Mac.get().values().each {
             def key = newKey(it)
             def buf = ByteBuffer.wrap(Bytes.random(16))
-            byte[] digest = it.key(key).apply(buf).get()
+            byte[] digest = hasher(key, it.digester()).apply(buf).get()
 
             buf.rewind() // to use in jca Mac calculation:
             def jca = Mac.getInstance(it.id())
@@ -130,7 +139,7 @@ class StandardMacAlgorithmsTest {
 
             assertTrue MessageDigest.isEqual(jcaDigest, digest) // assert same result as JCA
             assertEquals it.digestSize().bits(), Bytes.bitLength(digest)
-            assertTrue it.key(key).apply(buf).test(digest)
+            assertTrue hasher(key, it.verifier()).apply(buf).test(digest)
         }
     }
 
@@ -139,9 +148,9 @@ class StandardMacAlgorithmsTest {
         for (MacAlgorithm alg : Algs.Mac.get().values()) {
             def key = newKey(alg)
             byte[] data = Bytes.randomBits(alg.digestSize().bits())
-            byte[] digest = alg.key(key).apply(data).get()
+            byte[] digest = hasher(key, alg.digester()).apply(data).get()
             assertEquals alg.digestSize().bits(), Bytes.bitLength(digest)
-            assertTrue alg.key(key).apply(data).test(digest)
+            assertTrue hasher(key, alg.verifier()).apply(data).test(digest)
         }
     }
 
@@ -150,9 +159,11 @@ class StandardMacAlgorithmsTest {
         for (MacAlgorithm alg : Algs.Mac.get().values()) {
             def key = newKey(alg)
             byte[] data = Bytes.randomBits(alg.digestSize().bits() - Byte.SIZE) // 1 byte less than digest length
-            byte[] digest = alg.key(key).apply(data).get()
+            def h = hasher(key, alg.digester())
+            byte[] digest = h.apply(data).get()
             assertEquals alg.digestSize().bits(), Bytes.bitLength(digest) // digest is still same as alg bitLength
-            assertTrue alg.key(key).apply(data).test(digest)
+            h = hasher(key, alg.verifier())
+            assertTrue h.apply(data).test(digest)
         }
     }
 
@@ -160,15 +171,17 @@ class StandardMacAlgorithmsTest {
     void digestLargerLengths() {
         for (MacAlgorithm alg : Algs.Mac.get().values()) {
             def key = newKey(alg)
-            def hasher = alg.key(key)
+            def h = hasher(key, alg.digester())
             def bits = alg.digestSize().bits()
             def a = Bytes.randomBits(bits)
             def b = Bytes.randomBits(bits)
             def c = Bytes.randomBits(bits)
             // multiple .apply calls, total bytes applied are larger than bitLength:
-            byte[] digest = hasher.apply(a).apply(b).apply(c).get()
+            byte[] digest = h.apply(a).apply(b).apply(c).get()
             assertEquals alg.digestSize().bits(), Bytes.bitLength(digest) // digest is still same as alg bitLength
-            assertTrue alg.key(key).apply(a).apply(b).apply(c).test(digest)
+
+            h = hasher(key, alg.verifier())
+            assertTrue h.apply(a).apply(b).apply(c).test(digest)
         }
     }
 }

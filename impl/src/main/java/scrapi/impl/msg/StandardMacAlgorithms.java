@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public final class StandardMacAlgorithms extends IdentifiableRegistry<String, MacAlgorithm<?, ?>> {
+public final class StandardMacAlgorithms extends IdentifiableRegistry<String, MacAlgorithm<?, ?, ?>> {
 
     private static String suffix(HashAlgorithm alg) {
         String id = alg.id();
@@ -40,9 +40,9 @@ public final class StandardMacAlgorithms extends IdentifiableRegistry<String, Ma
     // ------------------------------------------------------------------------------------------------
     // https://docs.oracle.com/en/java/javase/21/docs/specs/security/standard-names.html#mac-algorithms
     // ------------------------------------------------------------------------------------------------
-    private static List<MacAlgorithm<?, ?>> createAlgs() {
+    private static List<MacAlgorithm<?, ?, ?>> createAlgs() {
         Collection<HashAlgorithm> hashAlgs = Algs.Hash.get().values();
-        List<MacAlgorithm<?, ?>> macs = new ArrayList<>(hashAlgs.size() * 3);
+        List<MacAlgorithm<?, ?, ?>> macs = new ArrayList<>(hashAlgs.size() * 3);
         for (HashAlgorithm hashAlg : hashAlgs) {
 
             if (Algs.Hash.MD2.equals(hashAlg)) continue; // no JCA standard hmac alg for this one

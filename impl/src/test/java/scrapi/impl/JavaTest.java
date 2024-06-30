@@ -18,6 +18,16 @@ package scrapi.impl;
 // various tests using the direct Java (not Groovy) APIs.
 public class JavaTest {
 
+//    void testWhatever() {
+//        byte[] digestA = Algs.PBEMAC
+//                .digester().password(pswd).salt(saltBytes).iterations(iterations).build()
+//                .apply(chunk1)/* ... */.apply(chunkN).get();
+//
+//        byte[] digestB = Algs.PBEMAC
+//                .digester(p -> p.password(pswd).salt(saltBytes).iterations(iterations))
+//                .apply(chunk1)/* ... */.apply(chunkN).get();
+//    }
+
 //    @Test
 //    void testing() throws Exception {
 //        byte[] salt = Bytes.randomBits(64);

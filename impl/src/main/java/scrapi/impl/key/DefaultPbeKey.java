@@ -104,6 +104,11 @@ public class DefaultPbeKey extends PBEKeySpec implements PbeKey, PBEKey {
     }
 
     @Override
+    public void close() throws Exception {
+        destroy();
+    }
+
+    @Override
     public PBEKey toJcaKey() {
         return this;
     }
