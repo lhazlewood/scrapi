@@ -17,8 +17,22 @@ package scrapi.key;
 
 import javax.crypto.SecretKey;
 
-public interface Password extends ConfidentialKey<SecretKey> {
+public interface Password extends scrapi.key.SecretKey<SecretKey> {
 
     char[] chars();
+
+    interface Generator extends KeyGenerator<Password, Generator> {
+
+        Generator alphabet(char[] alphabet);
+
+        Generator length(int numCharacters);
+    }
+
+    interface Stretcher<T extends Stretcher<T>> extends Keyable<Password, T> {
+
+        T salt(byte[] salt);
+
+        T iterations(int iterations);
+    }
 
 }

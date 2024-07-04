@@ -13,34 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package scrapi.key;
+package scrapi.msg;
 
-import javax.crypto.interfaces.PBEKey;
+import scrapi.key.Password;
 
-public interface PbeKey extends SecretKey<PBEKey> {
+import java.util.function.Supplier;
 
-    char[] password();
+public interface PasswordMacAlgorithm extends MacAlgorithm<Password, PasswordMacAlgorithm.HasherBuilder, Password.Generator> {
 
-    byte[] salt();
-
-    int iterations();
-
-    interface Mutator<T extends Mutator<T>> {
-
-        T password(char[] password);
-
-        T salt(byte[] salt);
-
-        T iterations(int iterations);
-    }
-
-    interface Generator extends Mutator<Generator>, KeyGenerator<PbeKey, Generator> {
-
-        Generator alphabet(char[] alphabet);
-
-        Generator passwordLength(int numCharacters);
-    }
-
-    interface Builder extends Mutator<Builder>, KeyBuilder<PbeKey, Builder> {
+    interface HasherBuilder extends Password.Stretcher<HasherBuilder>, Supplier<Hasher> {
     }
 }

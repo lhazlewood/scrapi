@@ -70,8 +70,8 @@ public final class StandardMacAlgorithms extends IdentifiableRegistry<String, Ma
                 defaultIterations = 1_300_000;
             }
 
-            macs.add(new DefaultPbeMacAlgorithm("PBEWithHmac" + suffix, null, digestSize, defaultIterations));
-            macs.add(new DefaultPbeMacAlgorithm("HmacPBE" + suffix, null, digestSize, defaultIterations));
+            macs.add(new DefaultPasswordMacAlgorithm("PBEWithHmac" + suffix, null, digestSize, defaultIterations));
+            macs.add(new DefaultPasswordMacAlgorithm("HmacPBE" + suffix, null, digestSize, defaultIterations));
         }
         return Collections.immutable(macs);
     }

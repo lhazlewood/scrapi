@@ -317,3 +317,33 @@ Consequently, scrapi adopts the simpler, polymorphic, and intuitive alternative 
 RsaPrivateKey
 |-- CrtRsaPrivateKey
 ```
+
+### Passwords are not Keys
+
+Because of their poor entropy, passwords are never safe inputs to almost all cryptographic algorithms. They're 
+only suitable as inputs to key stretching (derivation) algorithms, like PBKDF2 and Argon2, which _produce_ 
+cryptographically valid keys (i.e. keys indistinguishable from those produced by a random Oracle).
+
+The JCA fails this tenet with the `javax.crypto.interfaces.PBEKey` concept, which extends `javax.crypto.SecretKey`, 
+making it a valid compile-time argument for any cryptographic algorithm that accepts a `SecretKey`, even going so far 
+to make the password (UTF-8) bytes available via `getEncoded()` implementations. Any algorithm in the JCA that might not 
+check the key's `getAlgorithm()` name or that it is a password could introduce security weaknesses by using the
+password's non-uniform (non-random) bytes.
+
+In contrast, scrapi has a `scrapi.key.Password` concept that only provides access to password characters if necessary,
+and by using type-safe generics for argument type checking, ensures that `Password` instances are only usable in key
+stretching (derivation) algorithms that explicitly accept `Password`s.  More specifically, `scrapi.key.Password` 
+extends `scrapi.key.ConfidentialKey`, but _not_ `scrapi.key.SecretKey` (which can expose key byte array material), to 
+ensure it cannot be used as a standard key input to cryptographic algorithms that require binary
+key material.
+
+#### Salts and Iterations are not Key Properties
+
+Similarly, `javax.crypto.interfaces.PBEKey` has accessors `getSalt()` and `getIterationCount()`, implying they are 
+attributes (or perhaps metadata) of a `PBEKey`.  They are not; salts and iterations are _inputs_ to a key
+derivation algorithm that can produce a cryptographically valid key.
+
+That is, a `Password` can be the input key 
+material, but a salt and iteration count are separate concepts, and all three are inputs/arguments to a key derivation 
+algorithm. The JCA bundles all three concepts into one `Key` interface, conflating their purpose and muddying the 
+waters between what is valid key material vs what is needed as input for a separate algorithm.

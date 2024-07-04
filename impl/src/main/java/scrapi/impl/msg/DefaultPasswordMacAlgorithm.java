@@ -16,12 +16,12 @@
 package scrapi.impl.msg;
 
 import scrapi.alg.Size;
-import scrapi.impl.key.DefaultPbeKey;
-import scrapi.impl.key.DefaultPbeKeyGenerator;
+import scrapi.impl.key.DefaultPassword;
+import scrapi.impl.key.DefaultPasswordGenerator;
 import scrapi.impl.key.KeyableSupport;
-import scrapi.key.PbeKey;
+import scrapi.key.Password;
 import scrapi.msg.Hasher;
-import scrapi.msg.PbeMacAlgorithm;
+import scrapi.msg.PasswordMacAlgorithm;
 import scrapi.util.Assert;
 import scrapi.util.Bytes;
 
@@ -29,15 +29,15 @@ import javax.crypto.Mac;
 import javax.crypto.spec.PBEParameterSpec;
 import java.security.Provider;
 
-public class DefaultPbeMacAlgorithm
-        extends AbstractMacAlgorithm<PbeKey, PbeMacAlgorithm.HasherBuilder, PbeKey.Generator>
-        implements PbeMacAlgorithm {
+public class DefaultPasswordMacAlgorithm
+        extends AbstractMacAlgorithm<Password, PasswordMacAlgorithm.HasherBuilder, Password.Generator>
+        implements PasswordMacAlgorithm {
 
     protected final int DEFAULT_ITERATIONS;
 
-    protected DefaultPbeMacAlgorithm(String id, Provider provider, Size digestSize, int defaultIterations) {
+    protected DefaultPasswordMacAlgorithm(String id, Provider provider, Size digestSize, int defaultIterations) {
         super(id, provider, digestSize);
-        this.DEFAULT_ITERATIONS = DefaultPbeKey.assertIterationsGte(defaultIterations, DefaultPbeKey.MIN_ITERATIONS);
+        this.DEFAULT_ITERATIONS = DefaultPassword.assertIterationsGte(defaultIterations);
     }
 
     @Override
@@ -46,16 +46,11 @@ public class DefaultPbeMacAlgorithm
     }
 
     @Override
-    public HasherBuilder verifier() {
-        return digester();
+    public Password.Generator keygen() {
+        return new DefaultPasswordGenerator();
     }
 
-    @Override
-    public PbeKey.Generator keygen() {
-        return new DefaultPbeKeyGenerator(id(), digestSize(), this.DEFAULT_ITERATIONS);
-    }
-
-    static class DefaultHasherBuilder extends KeyableSupport<PbeKey, HasherBuilder> implements HasherBuilder {
+    static class DefaultHasherBuilder extends KeyableSupport<Password, HasherBuilder> implements HasherBuilder {
 
         private byte[] salt;
         private int iterations;
@@ -72,14 +67,14 @@ public class DefaultPbeMacAlgorithm
 
         @Override
         public HasherBuilder iterations(int iterations) {
-            this.iterations = iterations;
+            this.iterations = DefaultPassword.assertIterationsGte(iterations);
             return self();
         }
 
         @Override
         public Hasher get() {
             Assert.notEmpty(this.salt, "salt cannot be null or empty.");
-            DefaultPbeKey.assertIterationsGte(this.iterations, DefaultPbeKey.MIN_ITERATIONS);
+            DefaultPassword.assertIterationsGte(this.iterations);
             Mac m = jca().withMac(mac -> {
                 PBEParameterSpec spec = new PBEParameterSpec(this.salt, this.iterations);
                 mac.init(this.key.toJcaKey(), spec);

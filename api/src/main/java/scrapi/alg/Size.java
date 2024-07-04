@@ -17,7 +17,7 @@ package scrapi.alg;
 
 import scrapi.util.Bytes;
 
-public interface Size extends Comparable<Size> {
+public sealed interface Size extends Comparable<Size> permits DefaultSize {
 
     int bits();
 

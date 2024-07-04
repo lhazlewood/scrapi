@@ -37,11 +37,6 @@ public class DefaultMacAlgorithm extends
     }
 
     @Override
-    public HasherBuilder verifier() {
-        return digester();
-    }
-
-    @Override
     public OctetSecretKey.Generator keygen() {
         return new DefaultOctetSecretKeyGenerator(this.ID, this.DIGEST_SIZE);
     }

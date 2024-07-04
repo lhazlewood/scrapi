@@ -17,13 +17,15 @@ package scrapi.impl.msg
 
 import org.junit.jupiter.api.Test
 import scrapi.alg.Algs
-import scrapi.impl.key.DefaultPbeKey
-import scrapi.key.PbeKey
+import scrapi.impl.key.DefaultPassword
+import scrapi.key.Password
 import scrapi.key.SecretKey
+import scrapi.msg.Hasher
 import scrapi.msg.MacAlgorithm
 import scrapi.util.Bytes
 
 import javax.crypto.Mac
+import javax.crypto.spec.PBEParameterSpec
 import java.nio.ByteBuffer
 import java.security.MessageDigest
 
@@ -38,14 +40,13 @@ class StandardMacAlgorithmsTest {
 
     static SecretKey<? extends javax.crypto.SecretKey> newKey(MacAlgorithm alg) {
         def b = alg.keygen()
-        if (b instanceof PbeKey.Builder) b.iterations(DefaultPbeKey.MIN_ITERATIONS) // keep tests fast
         return b.get() as SecretKey
     }
 
-    static def hasher(def key, def builder) {
-        if (key instanceof PbeKey) {
-            builder.salt(key.salt())
-            builder.iterations(key.iterations())
+    static Hasher hasher(def key, def builder, def salt = null) {
+        if (builder instanceof Password.Stretcher) {
+            builder.salt(salt)
+            builder.iterations(DefaultPassword.MIN_ITERATIONS) // keep tests fast
         }
         return builder.key(key).get()
     }
@@ -95,15 +96,19 @@ class StandardMacAlgorithmsTest {
     void digestNoData() {
         for (MacAlgorithm alg : Algs.Mac.get().values()) {
             def key = newKey(alg)
-
-            byte[] digest = hasher(key, alg.digester()).get() // no 'apply' methods called, no data processed
+            def salt = Bytes.randomBits(alg.digestSize().bits())
+            byte[] digest = hasher(key, alg.digester(), salt).get() // no 'apply' methods called, no data processed
             def jca = Mac.getInstance(alg.id() as String)
             jca.getMacLength()
-            jca.init(key.toJcaKey())
+            if (key instanceof Password) {
+                jca.init(key.toJcaKey(), new PBEParameterSpec(salt, DefaultPassword.MIN_ITERATIONS))
+            } else {
+                jca.init(key.toJcaKey())
+            }
             byte[] jcaDigest = jca.doFinal()
             assertTrue MessageDigest.isEqual(jcaDigest, digest)
             assertEquals alg.digestSize().bits(), Bytes.bitLength(digest)
-            assertTrue hasher(key, alg.verifier()).test(digest)
+            assertTrue hasher(key, alg.verifier(), salt).test(digest)
         }
     }
 
@@ -112,14 +117,19 @@ class StandardMacAlgorithmsTest {
         Algs.Mac.get().values().each {
             def key = newKey(it)
             def b = Bytes.random(1)[0]
-            byte[] digest = hasher(key, it.digester()).apply(b).get()
+            def salt = Bytes.randomBits(it.digestSize().bits())
+            byte[] digest = hasher(key, it.digester(), salt).apply(b).get()
             def jca = Mac.getInstance(it.id())
-            jca.init(key.toJcaKey())
+            if (key instanceof Password) {
+                jca.init(key.toJcaKey(), new PBEParameterSpec(salt, DefaultPassword.MIN_ITERATIONS))
+            } else {
+                jca.init(key.toJcaKey())
+            }
             jca.update(b)
             def jcaDigest = jca.doFinal()
             assertTrue MessageDigest.isEqual(jcaDigest, digest) // assert same result as JCA
             assertEquals it.digestSize().bits(), Bytes.bitLength(digest)
-            assertTrue hasher(key, it.verifier()).apply(b).test(digest)
+            assertTrue hasher(key, it.verifier(), salt).apply(b).test(digest)
         }
     }
 
@@ -128,18 +138,23 @@ class StandardMacAlgorithmsTest {
         Algs.Mac.get().values().each {
             def key = newKey(it)
             def buf = ByteBuffer.wrap(Bytes.random(16))
-            byte[] digest = hasher(key, it.digester()).apply(buf).get()
+            def salt = Bytes.randomBits(it.digestSize().bits())
+            byte[] digest = hasher(key, it.digester(), salt).apply(buf).get()
 
             buf.rewind() // to use in jca Mac calculation:
             def jca = Mac.getInstance(it.id())
-            jca.init(key.toJcaKey())
+            if (key instanceof Password) {
+                jca.init(key.toJcaKey(), new PBEParameterSpec(salt, DefaultPassword.MIN_ITERATIONS))
+            } else {
+                jca.init(key.toJcaKey())
+            }
             jca.update(buf)
             def jcaDigest = jca.doFinal()
             buf.rewind()
 
             assertTrue MessageDigest.isEqual(jcaDigest, digest) // assert same result as JCA
             assertEquals it.digestSize().bits(), Bytes.bitLength(digest)
-            assertTrue hasher(key, it.verifier()).apply(buf).test(digest)
+            assertTrue hasher(key, it.verifier(), salt).apply(buf).test(digest)
         }
     }
 
@@ -148,9 +163,10 @@ class StandardMacAlgorithmsTest {
         for (MacAlgorithm alg : Algs.Mac.get().values()) {
             def key = newKey(alg)
             byte[] data = Bytes.randomBits(alg.digestSize().bits())
-            byte[] digest = hasher(key, alg.digester()).apply(data).get()
+            def salt = Bytes.randomBits(alg.digestSize().bits())
+            byte[] digest = hasher(key, alg.digester(), salt).apply(data).get()
             assertEquals alg.digestSize().bits(), Bytes.bitLength(digest)
-            assertTrue hasher(key, alg.verifier()).apply(data).test(digest)
+            assertTrue hasher(key, alg.verifier(), salt).apply(data).test(digest)
         }
     }
 
@@ -159,10 +175,11 @@ class StandardMacAlgorithmsTest {
         for (MacAlgorithm alg : Algs.Mac.get().values()) {
             def key = newKey(alg)
             byte[] data = Bytes.randomBits(alg.digestSize().bits() - Byte.SIZE) // 1 byte less than digest length
-            def h = hasher(key, alg.digester())
+            def salt = Bytes.randomBits(alg.digestSize().bits())
+            def h = hasher(key, alg.digester(), salt)
             byte[] digest = h.apply(data).get()
             assertEquals alg.digestSize().bits(), Bytes.bitLength(digest) // digest is still same as alg bitLength
-            h = hasher(key, alg.verifier())
+            h = hasher(key, alg.verifier(), salt)
             assertTrue h.apply(data).test(digest)
         }
     }
@@ -171,7 +188,8 @@ class StandardMacAlgorithmsTest {
     void digestLargerLengths() {
         for (MacAlgorithm alg : Algs.Mac.get().values()) {
             def key = newKey(alg)
-            def h = hasher(key, alg.digester())
+            def salt = Bytes.randomBits(alg.digestSize().bits())
+            def h = hasher(key, alg.digester(), salt)
             def bits = alg.digestSize().bits()
             def a = Bytes.randomBits(bits)
             def b = Bytes.randomBits(bits)
@@ -180,7 +198,7 @@ class StandardMacAlgorithmsTest {
             byte[] digest = h.apply(a).apply(b).apply(c).get()
             assertEquals alg.digestSize().bits(), Bytes.bitLength(digest) // digest is still same as alg bitLength
 
-            h = hasher(key, alg.verifier())
+            h = hasher(key, alg.verifier(), salt)
             assertTrue h.apply(a).apply(b).apply(c).test(digest)
         }
     }

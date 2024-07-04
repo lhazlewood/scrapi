@@ -37,6 +37,11 @@ abstract class AbstractMacAlgorithm<
     }
 
     @Override
+    public HB verifier() {
+        return digester();
+    }
+
+    @Override
     public boolean equals(Object obj) {
         if (obj == this) return true;
         return obj instanceof MacAlgorithm && super.equals(obj);

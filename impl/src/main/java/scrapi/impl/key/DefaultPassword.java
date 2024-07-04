@@ -22,48 +22,133 @@ import scrapi.util.Bytes;
 import scrapi.util.Strings;
 
 import javax.crypto.SecretKey;
-import java.io.Serial;
+import javax.crypto.spec.SecretKeySpec;
 import java.lang.ref.Cleaner;
+import java.lang.ref.Reference;
 import java.nio.CharBuffer;
-import java.security.MessageDigest;
 import java.util.Arrays;
-import java.util.Locale;
 import java.util.Optional;
 
-public class DefaultPassword extends AbstractKey<SecretKey> implements Password {
+public final class DefaultPassword implements Password, scrapi.lang.Destroyable, AutoCloseable {
 
-    private static final String JCA_ALG_NAME = "PBEKey";
+    public static final int MIN_ITERATIONS = 1024;
+    public static final String MIN_ITERATIONS_MSG = "iterations must be >= " + MIN_ITERATIONS;
 
     private final char[] chars;
-    private final Cleaner.Cleanable charsCleanable;
+    private transient boolean destroyed;
+    private final Cleaner.Cleanable cleanable;
 
-    protected DefaultPassword(final char[] chars) {
-        super(new DestroyableSecretKey(Strings.utf8(CharBuffer.wrap(
-                Assert.notEmpty(chars, "chars cannot be null or empty.").clone()
-        )), JCA_ALG_NAME));
-        char[] theChars = chars.clone();
+    public static int assertIterationsGte(int iterations) {
+        return Assert.gte(iterations, MIN_ITERATIONS, MIN_ITERATIONS_MSG);
+    }
+
+    public DefaultPassword(final char[] chars) {
+        char[] theChars = Assert.notEmpty(chars, "chars cannot be null or empty.").clone();
         this.chars = theChars;
-        this.charsCleanable = cleaner.register(this, new CharsClearer(theChars));
+        this.cleanable = AbstractKey.cleaner.register(this, new CharsClearer(theChars));
     }
 
     @Override
     public char[] chars() {
-        if (isDestroyed()) throw new IllegalStateException("Password has been destroyed");
-        return this.chars.clone();
+        try {
+            if (this.destroyed) throw new IllegalStateException("Password has been destroyed");
+            return this.chars.clone();
+        } finally {
+            // prevent this from being cleaned for the above block
+            Reference.reachabilityFence(this);
+        }
     }
 
     @Override
     public Optional<Size> size() {
+        // Passwords have poor entropy, so there is no direct bit size correlation - a KDF must be used instead to
+        // derive a valid key from the password:
         return Optional.empty();
     }
 
     @Override
     public void destroy() {
-        super.destroy();
-        this.charsCleanable.clean();
+        try {
+            if (!this.destroyed) {
+                this.destroyed = true;
+                this.cleanable.clean();
+            }
+        } finally {
+            Reference.reachabilityFence(this);
+        }
+    }
+
+    @Override
+    public boolean isDestroyed() {
+        return this.destroyed;
+    }
+
+    @Override
+    public void close() {
+        destroy();
+    }
+
+    @Override
+    public SecretKey toJcaKey() {
+        byte[] pwdBytes = Bytes.EMPTY;
+        try {
+            pwdBytes = Strings.utf8(CharBuffer.wrap(chars()));
+            return new SecretKeySpec(pwdBytes, "PBE");
+        } finally {
+            Arrays.fill(pwdBytes, (byte) 0);
+        }
+    }
+
+    @Override
+    public int hashCode() {
+        try {
+            int hashCode = 0;
+            for (int i = 1; i < this.chars.length; i++) {
+                hashCode += this.chars[i] * i;
+            }
+            return hashCode;
+        } finally {
+            // prevent this from being cleaned for the above block
+            Reference.reachabilityFence(this);
+        }
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) return true;
+        if (!(obj instanceof Password pwd)) return false;
+        char[] otherChars = Strings.EMPTY_CHARS;
+        try {
+            otherChars = pwd.chars();
+            return isEqual(this.chars, otherChars);
+        } finally {
+            Arrays.fill(otherChars, '\0');
+            // prevent this from being cleaned for the above block
+            Reference.reachabilityFence(this);
+        }
+    }
+
+    static boolean isEqual(char[] a, char[] b) {
+        if (a == b) return true;
+        if (a == null || b == null) return false;
+        int aLen = a.length;
+        int bLen = b.length;
+        if (bLen == 0) return aLen == 0;
+
+        int result = 0;
+        result |= aLen - bLen;
+
+        // time-constant comparison
+        for (int i = 0; i < aLen; i++) {
+            // If i >= lenB, indexB is 0; otherwise, i.
+            int indexB = ((i - bLen) >>> 31) * i;
+            result |= a[i] ^ b[indexB];
+        }
+        return result == 0;
     }
 
     private static final class CharsClearer implements Runnable {
+
         private final char[] chars;
 
         public CharsClearer(char[] chars) {
@@ -73,68 +158,6 @@ public class DefaultPassword extends AbstractKey<SecretKey> implements Password 
         @Override
         public void run() {
             Arrays.fill(this.chars, '\u0000');
-        }
-    }
-
-    private static final class DestroyableSecretKey implements SecretKey {
-
-        @Serial
-        private static final long serialVersionUID = 266611362737780161L;
-
-        private transient boolean destroyed;
-        private final byte[] bytes;
-        private final String alg;
-
-        public DestroyableSecretKey(byte[] bytes, String alg) {
-            this.bytes = Assert.notEmpty(bytes, "bytes cannot be null or empty.");
-            this.alg = Assert.hasText(alg, "alg cannot be null or empty.");
-        }
-
-        @Override
-        public String getAlgorithm() {
-            return this.alg;
-        }
-
-        @Override
-        public String getFormat() {
-            return "RAW";
-        }
-
-        @Override
-        public byte[] getEncoded() {
-            return this.bytes.clone();
-        }
-
-        @Override
-        public void destroy() {
-            this.destroyed = true;
-            Arrays.fill(this.bytes, (byte) 0);
-        }
-
-        @Override
-        public boolean isDestroyed() {
-            return this.destroyed;
-        }
-
-        @Override
-        public int hashCode() {
-            return Arrays.hashCode(this.bytes) ^ this.alg.toLowerCase(Locale.ENGLISH).hashCode();
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            if (this == obj) return true;
-            if (!(obj instanceof SecretKey sk)) return false;
-
-            String oAlg = sk.getAlgorithm();
-            if (!this.alg.equals(oAlg)) return false;
-
-            byte[] oBytes = AbstractKey.findEncoded(sk);
-            try {
-                return MessageDigest.isEqual(this.bytes, oBytes);
-            } finally {
-                Bytes.clear(oBytes);
-            }
         }
     }
 }
