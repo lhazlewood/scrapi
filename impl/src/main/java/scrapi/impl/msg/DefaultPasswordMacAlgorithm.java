@@ -27,6 +27,7 @@ import scrapi.util.Bytes;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.PBEParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
 import java.security.Provider;
 
 public class DefaultPasswordMacAlgorithm
@@ -73,11 +74,13 @@ public class DefaultPasswordMacAlgorithm
 
         @Override
         public Hasher get() {
+            Assert.notNull(this.key, "Password cannot be null or empty.");
             Assert.notEmpty(this.salt, "salt cannot be null or empty.");
             DefaultPassword.assertIterationsGte(this.iterations);
             Mac m = jca().withMac(mac -> {
+                SecretKeySpec keySpec = DefaultPassword.toJcaKey(this.key.chars());
                 PBEParameterSpec spec = new PBEParameterSpec(this.salt, this.iterations);
-                mac.init(this.key.toJcaKey(), spec);
+                mac.init(keySpec, spec);
                 return mac;
             });
             return new JcaMacDigester(m);

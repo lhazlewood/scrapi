@@ -88,15 +88,23 @@ public final class DefaultPassword implements Password, scrapi.lang.Destroyable,
         destroy();
     }
 
-    @Override
-    public SecretKey toJcaKey() {
+    public static SecretKeySpec toJcaKey(char[] chars) {
+        char[] pwd = Strings.EMPTY_CHARS;
         byte[] pwdBytes = Bytes.EMPTY;
         try {
-            pwdBytes = Strings.utf8(CharBuffer.wrap(chars()));
+            pwd = Assert.notEmpty(chars, "chars cannot be null or empty.").clone();
+            pwdBytes = Strings.utf8(CharBuffer.wrap(chars));
             return new SecretKeySpec(pwdBytes, "PBE");
         } finally {
+            Arrays.fill(pwd, '\0');
             Arrays.fill(pwdBytes, (byte) 0);
         }
+    }
+
+    @Override
+    public SecretKey toJcaKey() {
+        String msg = Password.class.getName() + " instances cannot be used directly as JCA keys.";
+        throw new UnsupportedOperationException(msg);
     }
 
     @Override

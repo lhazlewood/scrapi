@@ -22,6 +22,7 @@ import scrapi.key.Password
 import scrapi.key.SecretKey
 import scrapi.msg.Hasher
 import scrapi.msg.MacAlgorithm
+import scrapi.msg.PasswordMacAlgorithm
 import scrapi.util.Bytes
 
 import javax.crypto.Mac
@@ -33,23 +34,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals
 import static org.junit.jupiter.api.Assertions.assertTrue
 
 class StandardMacAlgorithmsTest {
-
-    static void assertId(String algId, MacAlgorithm alg) {
-        assertEquals algId, alg.id()
-    }
-
-    static SecretKey<? extends javax.crypto.SecretKey> newKey(MacAlgorithm alg) {
-        def b = alg.keygen()
-        return b.get() as SecretKey
-    }
-
-    static Hasher hasher(def key, def builder, def salt = null) {
-        if (builder instanceof Password.Stretcher) {
-            builder.salt(salt)
-            builder.iterations(DefaultPassword.MIN_ITERATIONS) // keep tests fast
-        }
-        return builder.key(key).get()
-    }
 
     @Test
     void equality() {
@@ -64,142 +48,114 @@ class StandardMacAlgorithmsTest {
     @SuppressWarnings('GrDeprecatedAPIUsage')
     @Test
     void instances() {
-        assertId 'HmacMD5', Algs.Mac.HMD5
-        assertId 'HmacSHA1', Algs.Mac.HS1
-        assertId 'HmacSHA224', Algs.Mac.HS224
-        assertId 'HmacSHA256', Algs.Mac.HS256
-        assertId 'HmacSHA384', Algs.Mac.HS384
-        assertId 'HmacSHA512', Algs.Mac.HS512
-        assertId 'HmacSHA512/224', Algs.Mac.HS512_224
-        assertId 'HmacSHA512/256', Algs.Mac.HS512_256
-        assertId 'HmacSHA3-224', Algs.Mac.HS3_224
-        assertId 'HmacSHA3-256', Algs.Mac.HS3_256
-        assertId 'HmacSHA3-384', Algs.Mac.HS3_384
-        assertId 'HmacSHA3-512', Algs.Mac.HS3_512
-        assertId 'PBEWithHmacSHA1', Algs.Mac.PBEHS1
-        assertId 'PBEWithHmacSHA224', Algs.Mac.PBEHS224
-        assertId 'PBEWithHmacSHA256', Algs.Mac.PBEHS256
-        assertId 'PBEWithHmacSHA384', Algs.Mac.PBEHS384
-        assertId 'PBEWithHmacSHA512', Algs.Mac.PBEHS512
-        assertId 'PBEWithHmacSHA512/224', Algs.Mac.PBEHS512_224
-        assertId 'PBEWithHmacSHA512/256', Algs.Mac.PBEHS512_256
-        assertId 'HmacPBESHA1', Algs.Mac.PKCS12HS1
-        assertId 'HmacPBESHA224', Algs.Mac.PKCS12HS224
-        assertId 'HmacPBESHA256', Algs.Mac.PKCS12HS256
-        assertId 'HmacPBESHA384', Algs.Mac.PKCS12HS384
-        assertId 'HmacPBESHA512', Algs.Mac.PKCS12HS512
-        assertId 'HmacPBESHA512/224', Algs.Mac.PKCS12HS512_224
-        assertId 'HmacPBESHA512/256', Algs.Mac.PKCS12HS512_256
+        assertEquals 'HmacMD5', Algs.Mac.HMD5.id()
+        assertEquals 'HmacSHA1', Algs.Mac.HS1.id()
+        assertEquals 'HmacSHA224', Algs.Mac.HS224.id()
+        assertEquals 'HmacSHA256', Algs.Mac.HS256.id()
+        assertEquals 'HmacSHA384', Algs.Mac.HS384.id()
+        assertEquals 'HmacSHA512', Algs.Mac.HS512.id()
+        assertEquals 'HmacSHA512/224', Algs.Mac.HS512_224.id()
+        assertEquals 'HmacSHA512/256', Algs.Mac.HS512_256.id()
+        assertEquals 'HmacSHA3-224', Algs.Mac.HS3_224.id()
+        assertEquals 'HmacSHA3-256', Algs.Mac.HS3_256.id()
+        assertEquals 'HmacSHA3-384', Algs.Mac.HS3_384.id()
+        assertEquals 'HmacSHA3-512', Algs.Mac.HS3_512.id()
+        assertEquals 'PBEWithHmacSHA1', Algs.Mac.PBEHS1.id()
+        assertEquals 'PBEWithHmacSHA224', Algs.Mac.PBEHS224.id()
+        assertEquals 'PBEWithHmacSHA256', Algs.Mac.PBEHS256.id()
+        assertEquals 'PBEWithHmacSHA384', Algs.Mac.PBEHS384.id()
+        assertEquals 'PBEWithHmacSHA512', Algs.Mac.PBEHS512.id()
+        assertEquals 'PBEWithHmacSHA512/224', Algs.Mac.PBEHS512_224.id()
+        assertEquals 'PBEWithHmacSHA512/256', Algs.Mac.PBEHS512_256.id()
+        assertEquals 'HmacPBESHA1', Algs.Mac.PKCS12HS1.id()
+        assertEquals 'HmacPBESHA224', Algs.Mac.PKCS12HS224.id()
+        assertEquals 'HmacPBESHA256', Algs.Mac.PKCS12HS256.id()
+        assertEquals 'HmacPBESHA384', Algs.Mac.PKCS12HS384.id()
+        assertEquals 'HmacPBESHA512', Algs.Mac.PKCS12HS512.id()
+        assertEquals 'HmacPBESHA512/224', Algs.Mac.PKCS12HS512_224.id()
+        assertEquals 'HmacPBESHA512/256', Algs.Mac.PKCS12HS512_256.id()
+    }
+
+    static def roundtrip(MacAlgorithm alg, def data) {
+
+        // wrap in a list if we need to for .apply call iteration:
+        if (data && !(data instanceof List)) data = [data]
+
+        def key = alg.keygen().get() as SecretKey
+
+        def salt = Bytes.randomBits(alg.digestSize().bits())
+        def iterations = DefaultPassword.MIN_ITERATIONS // keep password-based Mac tests fast
+
+        // Digest data using our API:
+        def hb = alg.digester().key(key)
+        if (alg instanceof PasswordMacAlgorithm) hb.salt(salt).iterations(iterations)
+        Hasher hasher = hb.get()
+        if (data) data.each { hasher.apply(it); if (it instanceof ByteBuffer) it.rewind() }
+        def digest = hasher.get()
+
+        // Digest the same data using the raw JCA API directly:
+        def jca = Mac.getInstance(alg.id() as String)
+        jca.getMacLength() // force JCA provider loaded
+        if (key instanceof Password) {
+            def sk = DefaultPassword.toJcaKey(key.chars())
+            jca.init(sk, new PBEParameterSpec(salt, iterations))
+        } else {
+            jca.init(key.toJcaKey())
+        }
+        if (data) data.each { jca.update(it); if (it instanceof ByteBuffer) it.rewind() }
+        byte[] jcaDigest = jca.doFinal()
+
+        // Assert that our Digest result is identical to the JCA output, and our verify implementation does the same:
+        assertTrue MessageDigest.isEqual(jcaDigest, digest)
+        assertEquals alg.digestSize().bits(), Bytes.bitLength(digest)
+        hb = alg.verifier().key(key)
+        if (alg instanceof PasswordMacAlgorithm) hb.salt(salt).iterations(iterations)
+        hasher = hb.get()
+        if (data) data.each { hasher.apply(it); if (it instanceof ByteBuffer) it.rewind() }
+        assertTrue hasher.test(digest)
     }
 
     @Test
     void digestNoData() {
-        for (MacAlgorithm alg : Algs.Mac.get().values()) {
-            def key = newKey(alg)
-            def salt = Bytes.randomBits(alg.digestSize().bits())
-            byte[] digest = hasher(key, alg.digester(), salt).get() // no 'apply' methods called, no data processed
-            def jca = Mac.getInstance(alg.id() as String)
-            jca.getMacLength()
-            if (key instanceof Password) {
-                jca.init(key.toJcaKey(), new PBEParameterSpec(salt, DefaultPassword.MIN_ITERATIONS))
-            } else {
-                jca.init(key.toJcaKey())
-            }
-            byte[] jcaDigest = jca.doFinal()
-            assertTrue MessageDigest.isEqual(jcaDigest, digest)
-            assertEquals alg.digestSize().bits(), Bytes.bitLength(digest)
-            assertTrue hasher(key, alg.verifier(), salt).test(digest)
-        }
+        Algs.Mac.get().values().each { roundtrip(it, null) }
     }
 
     @Test
     void digestOneByte() {
-        Algs.Mac.get().values().each {
-            def key = newKey(it)
-            def b = Bytes.random(1)[0]
-            def salt = Bytes.randomBits(it.digestSize().bits())
-            byte[] digest = hasher(key, it.digester(), salt).apply(b).get()
-            def jca = Mac.getInstance(it.id())
-            if (key instanceof Password) {
-                jca.init(key.toJcaKey(), new PBEParameterSpec(salt, DefaultPassword.MIN_ITERATIONS))
-            } else {
-                jca.init(key.toJcaKey())
-            }
-            jca.update(b)
-            def jcaDigest = jca.doFinal()
-            assertTrue MessageDigest.isEqual(jcaDigest, digest) // assert same result as JCA
-            assertEquals it.digestSize().bits(), Bytes.bitLength(digest)
-            assertTrue hasher(key, it.verifier(), salt).apply(b).test(digest)
-        }
+        def b = Bytes.random(1)[0]
+        Algs.Mac.get().values().each { roundtrip(it, b) }
     }
 
     @Test
     void digestByteBuffer() {
-        Algs.Mac.get().values().each {
-            def key = newKey(it)
-            def buf = ByteBuffer.wrap(Bytes.random(16))
-            def salt = Bytes.randomBits(it.digestSize().bits())
-            byte[] digest = hasher(key, it.digester(), salt).apply(buf).get()
-
-            buf.rewind() // to use in jca Mac calculation:
-            def jca = Mac.getInstance(it.id())
-            if (key instanceof Password) {
-                jca.init(key.toJcaKey(), new PBEParameterSpec(salt, DefaultPassword.MIN_ITERATIONS))
-            } else {
-                jca.init(key.toJcaKey())
-            }
-            jca.update(buf)
-            def jcaDigest = jca.doFinal()
-            buf.rewind()
-
-            assertTrue MessageDigest.isEqual(jcaDigest, digest) // assert same result as JCA
-            assertEquals it.digestSize().bits(), Bytes.bitLength(digest)
-            assertTrue hasher(key, it.verifier(), salt).apply(buf).test(digest)
-        }
+        def buf = ByteBuffer.wrap(Bytes.random(16))
+        Algs.Mac.get().values().each { roundtrip(it, buf) }
     }
 
     @Test
     void digestExactLengths() {
-        for (MacAlgorithm alg : Algs.Mac.get().values()) {
-            def key = newKey(alg)
-            byte[] data = Bytes.randomBits(alg.digestSize().bits())
-            def salt = Bytes.randomBits(alg.digestSize().bits())
-            byte[] digest = hasher(key, alg.digester(), salt).apply(data).get()
-            assertEquals alg.digestSize().bits(), Bytes.bitLength(digest)
-            assertTrue hasher(key, alg.verifier(), salt).apply(data).test(digest)
+        Algs.Mac.get().values().each {
+            byte[] data = Bytes.randomBits(it.digestSize().bits())
+            roundtrip(it, data)
         }
     }
 
     @Test
     void digestSmallerLengths() {
-        for (MacAlgorithm alg : Algs.Mac.get().values()) {
-            def key = newKey(alg)
-            byte[] data = Bytes.randomBits(alg.digestSize().bits() - Byte.SIZE) // 1 byte less than digest length
-            def salt = Bytes.randomBits(alg.digestSize().bits())
-            def h = hasher(key, alg.digester(), salt)
-            byte[] digest = h.apply(data).get()
-            assertEquals alg.digestSize().bits(), Bytes.bitLength(digest) // digest is still same as alg bitLength
-            h = hasher(key, alg.verifier(), salt)
-            assertTrue h.apply(data).test(digest)
+        Algs.Mac.get().values().each {
+            byte[] data = Bytes.randomBits(it.digestSize().bits() - Byte.SIZE) // 1 byte less than digest length
+            roundtrip(it, data)
         }
     }
 
     @Test
     void digestLargerLengths() {
-        for (MacAlgorithm alg : Algs.Mac.get().values()) {
-            def key = newKey(alg)
-            def salt = Bytes.randomBits(alg.digestSize().bits())
-            def h = hasher(key, alg.digester(), salt)
-            def bits = alg.digestSize().bits()
+        Algs.Mac.get().values().each {
+            def bits = it.digestSize().bits()
             def a = Bytes.randomBits(bits)
             def b = Bytes.randomBits(bits)
             def c = Bytes.randomBits(bits)
-            // multiple .apply calls, total bytes applied are larger than bitLength:
-            byte[] digest = h.apply(a).apply(b).apply(c).get()
-            assertEquals alg.digestSize().bits(), Bytes.bitLength(digest) // digest is still same as alg bitLength
-
-            h = hasher(key, alg.verifier(), salt)
-            assertTrue h.apply(a).apply(b).apply(c).test(digest)
+            roundtrip(it, [a, b, c]) // more bytes than digest length
         }
     }
 }

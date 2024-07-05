@@ -46,7 +46,7 @@ public class DefaultRsaPrivateKey extends AbstractRsaKey<java.security.PrivateKe
 
     @Override
     public BigInteger modulus() {
-        return this.publicKey.modulus(); // guaranteed to be the same in the constructor if possible
+        return this.publicKey.modulus(); // guaranteed to be the same in the constructor
     }
 
     @Override

@@ -93,7 +93,7 @@ public final class Algs {
          * <a href="https://docs.oracle.com/en/java/javase/21/docs/specs/security/standard-names.html#mac-algorithms">Java
          * Standard Mac Algorithms</a>.
          */
-        public static Registry<String, MacAlgorithm<?, ?, ?>> get() {
+        public static Registry<String, ? extends MacAlgorithm<?, ?, ?>> get() {
             return REGISTRY;
         }
 
