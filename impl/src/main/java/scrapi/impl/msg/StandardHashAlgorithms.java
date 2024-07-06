@@ -27,19 +27,19 @@ public final class StandardHashAlgorithms extends IdentifiableRegistry<String, H
     // ----------------------------------------------------------------------------------------------------------
     public StandardHashAlgorithms() {
         super("Hash Algorithm", Collections.<HashAlgorithm>of(
-                new DefaultHashAlgorithm("MD2", Size.bits(128)),
-                new DefaultHashAlgorithm("MD5", Size.bits(128)),
-                new DefaultHashAlgorithm("SHA-1", Size.bits(160)),
-                new DefaultHashAlgorithm("SHA-224", Size.bits(224)),
-                new DefaultHashAlgorithm("SHA-256", Size.bits(256)),
-                new DefaultHashAlgorithm("SHA-384", Size.bits(384)),
-                new DefaultHashAlgorithm("SHA-512", Size.bits(512)),
-                new DefaultHashAlgorithm("SHA-512/224", Size.bits(224)),
-                new DefaultHashAlgorithm("SHA-512/256", Size.bits(256)),
-                new DefaultHashAlgorithm("SHA3-224", Size.bits(224)),
-                new DefaultHashAlgorithm("SHA3-256", Size.bits(256)),
-                new DefaultHashAlgorithm("SHA3-384", Size.bits(384)),
-                new DefaultHashAlgorithm("SHA3-512", Size.bits(512))
+                new DefaultHashAlgorithm("MD2", null, Size.bits(128)),
+                new DefaultHashAlgorithm("MD5", null, Size.bits(128)),
+                new DefaultHashAlgorithm("SHA-1", null, Size.bits(160)),
+                new DefaultHashAlgorithm("SHA-224", null, Size.bits(224)),
+                new DefaultHashAlgorithm("SHA-256", null, Size.bits(256)),
+                new DefaultHashAlgorithm("SHA-384", null, Size.bits(384)),
+                new DefaultHashAlgorithm("SHA-512", null, Size.bits(512)),
+                new DefaultHashAlgorithm("SHA-512/224", null, Size.bits(224)),
+                new DefaultHashAlgorithm("SHA-512/256", null, Size.bits(256)),
+                new DefaultHashAlgorithm("SHA3-224", null, Size.bits(224)),
+                new DefaultHashAlgorithm("SHA3-256", null, Size.bits(256)),
+                new DefaultHashAlgorithm("SHA3-384", null, Size.bits(384)),
+                new DefaultHashAlgorithm("SHA3-512", null, Size.bits(512))
         ));
     }
 }

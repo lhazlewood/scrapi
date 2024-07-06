@@ -15,15 +15,17 @@
  */
 package scrapi.impl.key;
 
+import scrapi.alg.Providable;
 import scrapi.alg.Size;
-import scrapi.key.KeyBuilder;
 import scrapi.key.RsaKey;
-import scrapi.util.Assert;
 
 import java.math.BigInteger;
+import java.util.function.Supplier;
 
-abstract class AbstractRsaKeyBuilder<K extends RsaKey<?>, T extends KeyBuilder<K, T> & RsaKey.Mutator<T>>
+abstract class AbstractRsaKeyBuilder<K extends RsaKey<?>, T extends Providable<T> & Supplier<K> & RsaKey.Mutator<T>>
         extends AbstractKeyFactory<K, T> implements RsaKey.Mutator<T> {
+
+    private static final String SIZE_NAME = AbstractRsaKey.N.name() + " size";
 
     protected BigInteger modulus;
     protected BigInteger publicExponent;
@@ -37,14 +39,14 @@ abstract class AbstractRsaKeyBuilder<K extends RsaKey<?>, T extends KeyBuilder<K
     }
 
     protected AbstractRsaKeyBuilder(String jcaName, Size minSize) {
-        super(jcaName, "RSA Key modulus size", minSize);
+        super(jcaName, SIZE_NAME, minSize);
     }
 
     @Override
     public T modulus(BigInteger modulus) {
-        Assert.notNull(modulus, "RSA Key modulus cannot be null.");
-        this.SIZE_VALIDATOR.apply(Size.bits(modulus.bitLength()));
-        this.modulus = AbstractRsaKey.N.check(modulus);
+        BigInteger n = AbstractRsaKey.N.check(modulus);
+        this.SIZE_VALIDATOR.apply(Size.bits(n.bitLength()));
+        this.modulus = n;
         return self();
     }
 

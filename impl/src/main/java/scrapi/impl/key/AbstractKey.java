@@ -26,6 +26,7 @@ import scrapi.util.Strings;
 import javax.security.auth.DestroyFailedException;
 import javax.security.auth.Destroyable;
 import java.lang.ref.Cleaner;
+import java.lang.ref.Reference;
 
 abstract class AbstractKey<K extends java.security.Key> implements Key<K>, scrapi.lang.Destroyable, AutoCloseable {
 
@@ -109,7 +110,7 @@ abstract class AbstractKey<K extends java.security.Key> implements Key<K>, scrap
         return bitlen;
     }
 
-    record KeyDestroyer(java.security.Key key) implements Runnable {
+    private record KeyDestroyer(java.security.Key key) implements Runnable {
         @Override
         public void run() {
             if (!(key instanceof Destroyable dkey)) return;
@@ -125,9 +126,13 @@ abstract class AbstractKey<K extends java.security.Key> implements Key<K>, scrap
 
     @Override
     public void destroy() {
-        if (!this.destroyed) {
-            this.destroyed = true;
-            this.cleanable.clean();
+        try {
+            if (!this.destroyed) {
+                this.destroyed = true;
+                this.cleanable.clean();
+            }
+        } finally {
+            Reference.reachabilityFence(this);
         }
     }
 

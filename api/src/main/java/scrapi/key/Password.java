@@ -17,9 +17,7 @@ package scrapi.key;
 
 import scrapi.util.Classes;
 
-import javax.crypto.SecretKey;
-
-public interface Password extends scrapi.key.SecretKey<SecretKey> {
+public interface Password extends SecretKey<javax.crypto.SecretKey> {
 
     char[] chars();
 
@@ -33,10 +31,6 @@ public interface Password extends scrapi.key.SecretKey<SecretKey> {
         Generator alphabet(char[] alphabet);
 
         Generator length(int numCharacters);
-    }
-
-    static Generator generator() {
-        return Classes.newInstance("scrapi.impl.key.DefaultPasswordGenerator");
     }
 
     interface Stretcher<T extends Stretcher<T>> extends Keyable<Password, T> {

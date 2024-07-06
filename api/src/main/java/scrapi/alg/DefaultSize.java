@@ -62,10 +62,7 @@ final class DefaultSize implements Size {
     @Override
     public boolean equals(Object o) {
         if (o == this) return true;
-        if (o instanceof Size s) {
-            return bits == s.bits();
-        }
-        return false;
+        return o instanceof Size s && bits == s.bits();
     }
 
     @Override

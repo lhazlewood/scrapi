@@ -15,7 +15,10 @@
  */
 package scrapi.key;
 
+import scrapi.alg.Providable;
+
 import java.util.Optional;
+import java.util.function.Supplier;
 
 /**
  * An {@code OctetSecretKey} is a {@code SecretKey} where the key material is a single byte array value.
@@ -36,7 +39,7 @@ public interface OctetSecretKey extends SecretKey<javax.crypto.SecretKey> {
         T octets(byte[] octets);
     }
 
-    interface Builder extends Mutator<Builder>, KeyBuilder<OctetSecretKey, Builder> {
+    interface Builder extends Mutator<Builder>, Providable<Builder>, Supplier<OctetSecretKey> {
     }
 
     interface Generator extends KeyGenerator<OctetSecretKey, Generator> {

@@ -16,10 +16,12 @@
 package scrapi.impl.msg;
 
 import scrapi.alg.Size;
-import scrapi.impl.alg.AlgorithmSupport;
+import scrapi.impl.jca.JcaTemplate;
 import scrapi.msg.HashAlgorithm;
 import scrapi.msg.Hasher;
+import scrapi.util.Assert;
 
+import java.security.MessageDigest;
 import java.security.Provider;
 import java.util.function.Supplier;
 
@@ -27,17 +29,23 @@ class DefaultHashAlgorithm
         extends AbstractDigestAlgorithm<Hasher, Hasher, Supplier<Hasher>, Supplier<Hasher>>
         implements HashAlgorithm {
 
-    DefaultHashAlgorithm(String id, Size digestSize) {
-        this(id, null, digestSize);
+    private static Size digestSize(String jcaName, Provider provider) {
+        int numBytes = new JcaTemplate(jcaName, provider).withMessageDigest(MessageDigest::getDigestLength);
+        Assert.gt(numBytes, 0, "JCA digestLength must be > 0");
+        return Size.bytes(numBytes);
     }
 
-    private DefaultHashAlgorithm(String id, Provider provider, Size digestSize) {
+    DefaultHashAlgorithm(String id, Provider provider) {
+        this(id, provider, digestSize(id, provider));
+    }
+
+    DefaultHashAlgorithm(String id, Provider provider, Size digestSize) {
         super(id, provider, digestSize);
     }
 
     @Override
     public Supplier<Hasher> digester() {
-        return new HasherBuilder(this.ID);
+        return () -> new JcaMessageDigester(this.ID, this.PROVIDER);
     }
 
     @Override
@@ -51,15 +59,4 @@ class DefaultHashAlgorithm
         return obj instanceof HashAlgorithm && super.equals(obj);
     }
 
-    private static class HasherBuilder extends AlgorithmSupport<HasherBuilder> implements Supplier<Hasher> {
-
-        public HasherBuilder(String jcaName) {
-            super(jcaName);
-        }
-
-        @Override
-        public Hasher get() {
-            return new JcaMessageDigester(this.jcaName, this.provider);
-        }
-    }
 }

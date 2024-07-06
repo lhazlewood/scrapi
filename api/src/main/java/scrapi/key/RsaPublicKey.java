@@ -15,8 +15,13 @@
  */
 package scrapi.key;
 
+import scrapi.alg.Providable;
+
+import java.security.interfaces.RSAPublicKey;
+import java.util.function.Supplier;
+
 public interface RsaPublicKey extends PublicKey<java.security.interfaces.RSAPublicKey>, RsaKey<java.security.interfaces.RSAPublicKey> {
 
-    interface Builder extends RsaKey.Mutator<Builder>, KeyBuilder<RsaPublicKey, Builder> {
+    interface Builder extends RsaKey.Mutator<Builder>, Providable<Builder>, Supplier<RSAPublicKey> {
     }
 }

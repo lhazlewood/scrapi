@@ -28,10 +28,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue
 
 class StandardHashAlgorithmsTest {
 
-    static void assertId(String algId, HashAlgorithm alg) {
-        assertEquals algId, alg.id()
-    }
-
     @Test
     void equality() {
         assertEquals Algs.Hash.get(), new StandardHashAlgorithms()
@@ -43,20 +39,37 @@ class StandardHashAlgorithmsTest {
     }
 
     @Test
-    void instances() {
-        assertId 'MD2', Algs.Hash.MD2
-        assertId 'MD5', Algs.Hash.MD5
-        assertId 'SHA-1', Algs.Hash.SHA_1
-        assertId 'SHA-224', Algs.Hash.SHA_224
-        assertId 'SHA-256', Algs.Hash.SHA_256
-        assertId 'SHA-384', Algs.Hash.SHA_384
-        assertId 'SHA-512', Algs.Hash.SHA_512
-        assertId 'SHA-512/224', Algs.Hash.SHA_512_224
-        assertId 'SHA-512/256', Algs.Hash.SHA_512_256
-        assertId 'SHA3-224', Algs.Hash.SHA3_224
-        assertId 'SHA3-256', Algs.Hash.SHA3_256
-        assertId 'SHA3-384', Algs.Hash.SHA3_384
-        assertId 'SHA3-512', Algs.Hash.SHA3_512
+    void ids() {
+        assertEquals 'MD2', Algs.Hash.MD2.id()
+        assertEquals 'MD5', Algs.Hash.MD5.id()
+        assertEquals 'SHA-1', Algs.Hash.SHA_1.id()
+        assertEquals 'SHA-224', Algs.Hash.SHA_224.id()
+        assertEquals 'SHA-256', Algs.Hash.SHA_256.id()
+        assertEquals 'SHA-384', Algs.Hash.SHA_384.id()
+        assertEquals 'SHA-512', Algs.Hash.SHA_512.id()
+        assertEquals 'SHA-512/224', Algs.Hash.SHA_512_224.id()
+        assertEquals 'SHA-512/256', Algs.Hash.SHA_512_256.id()
+        assertEquals 'SHA3-224', Algs.Hash.SHA3_224.id()
+        assertEquals 'SHA3-256', Algs.Hash.SHA3_256.id()
+        assertEquals 'SHA3-384', Algs.Hash.SHA3_384.id()
+        assertEquals 'SHA3-512', Algs.Hash.SHA3_512.id()
+    }
+
+    @Test
+    void sizes() {
+        assertEquals 128, Algs.Hash.MD2.digestSize().bits()
+        assertEquals 128, Algs.Hash.MD5.digestSize().bits()
+        assertEquals 160, Algs.Hash.SHA_1.digestSize().bits()
+        assertEquals 224, Algs.Hash.SHA_224.digestSize().bits()
+        assertEquals 256, Algs.Hash.SHA_256.digestSize().bits()
+        assertEquals 384, Algs.Hash.SHA_384.digestSize().bits()
+        assertEquals 512, Algs.Hash.SHA_512.digestSize().bits()
+        assertEquals 224, Algs.Hash.SHA_512_224.digestSize().bits()
+        assertEquals 256, Algs.Hash.SHA_512_256.digestSize().bits()
+        assertEquals 224, Algs.Hash.SHA3_224.digestSize().bits()
+        assertEquals 256, Algs.Hash.SHA3_256.digestSize().bits()
+        assertEquals 384, Algs.Hash.SHA3_384.digestSize().bits()
+        assertEquals 512, Algs.Hash.SHA3_512.digestSize().bits()
     }
 
     @Test

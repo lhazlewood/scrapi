@@ -29,7 +29,7 @@ import java.nio.CharBuffer;
 import java.util.Arrays;
 import java.util.Optional;
 
-public final class DefaultPassword implements Password, scrapi.lang.Destroyable, AutoCloseable {
+public final class DefaultPassword implements Password {
 
     public static final int MIN_ITERATIONS = 1024;
     public static final String MIN_ITERATIONS_MSG = "iterations must be >= " + MIN_ITERATIONS;
@@ -155,14 +155,7 @@ public final class DefaultPassword implements Password, scrapi.lang.Destroyable,
         return result == 0;
     }
 
-    private static final class CharsClearer implements Runnable {
-
-        private final char[] chars;
-
-        public CharsClearer(char[] chars) {
-            this.chars = chars;
-        }
-
+    private record CharsClearer(char[] chars) implements Runnable {
         @Override
         public void run() {
             Arrays.fill(this.chars, '\u0000');

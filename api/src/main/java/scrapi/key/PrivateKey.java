@@ -15,7 +15,10 @@
  */
 package scrapi.key;
 
+import scrapi.alg.Providable;
+
 import java.security.KeyPair;
+import java.util.function.Supplier;
 
 public interface PrivateKey<K extends java.security.PrivateKey, P extends PublicKey<?>> extends AsymmetricKey<K>, ConfidentialKey<K> {
 
@@ -32,6 +35,6 @@ public interface PrivateKey<K extends java.security.PrivateKey, P extends Public
     }
 
     interface Builder<P extends PublicKey<?>, K extends PrivateKey<?, P>, T extends Builder<P, K, T>>
-            extends Mutator<P, T>, KeyBuilder<K, T> {
+            extends Mutator<P, T>, Providable<T>, Supplier<K> {
     }
 }

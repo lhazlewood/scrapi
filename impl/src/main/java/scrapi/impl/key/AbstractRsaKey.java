@@ -25,7 +25,6 @@ import scrapi.util.Collections;
 
 import java.math.BigInteger;
 import java.security.Key;
-import java.security.interfaces.RSAKey;
 import java.util.Optional;
 import java.util.Set;
 
@@ -62,21 +61,9 @@ abstract class AbstractRsaKey<K extends java.security.Key> extends AbstractKey<K
     private static final Set<String> JCA_ALG_NAMES =
             Collections.setOf("RSA", PSS_JCA_ALG_NAME, PSS_OID, RS256_OID, RS384_OID, RS512_OID, RSA_ENC_OID);
 
-    protected static final String RSA_KEY_TYPE_MSG = "JDK Key must be an instance of " + RSAKey.class.getName();
-
     protected static boolean isRsaAlgName(java.security.Key key) {
         String alg = findAlgorithm(key);
         return alg != null && JCA_ALG_NAMES.contains(alg);
-    }
-
-    static BigInteger assertModulus(BigInteger n) {
-        Assert.notNull(n, "RSA key modulus must not be null.");
-        return Assert.gt(n, BigInteger.ZERO, "RSA key modulus 'n' must be greater than zero.");
-    }
-
-    static BigInteger assertExponent(BigInteger e) {
-        Assert.notNull(e, "RSA key public exponent must not be null.");
-        return Assert.gt(e, BigInteger.ZERO, "RSA key public exponent must be greater than zero.");
     }
 
     protected static <T extends java.security.Key> T assertRsaAlgName(T key) {
@@ -93,7 +80,7 @@ abstract class AbstractRsaKey<K extends java.security.Key> extends AbstractKey<K
     }
 
     public AbstractRsaKey(K key) {
-        super(assertRsaAlgName(key));
+        super(assertRsaAlgName(Assert.notNull(key, "Key cannot be null.")));
     }
 
     @Override

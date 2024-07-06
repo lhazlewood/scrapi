@@ -18,12 +18,10 @@ package scrapi.impl.key;
 import scrapi.key.RsaPublicKey;
 
 import java.math.BigInteger;
-import java.security.interfaces.RSAKey;
 import java.security.interfaces.RSAPublicKey;
 
 public class DefaultRsaPublicKey extends AbstractRsaKey<RSAPublicKey> implements RsaPublicKey {
 
-    static final String JCA_BASE_TYPE_MSG = "JDK RSA PublicKey must be a " + RSAKey.class.getName() + " instance.";
     static final String JCA_PUB_TYPE_MSG = "JDK RSA PublicKey must be a " + RSAPublicKey.class.getName() + " instance.";
 
     public DefaultRsaPublicKey(RSAPublicKey key) {

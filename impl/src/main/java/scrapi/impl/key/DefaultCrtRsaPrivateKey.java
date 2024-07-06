@@ -15,6 +15,8 @@
  */
 package scrapi.impl.key;
 
+import scrapi.impl.util.Parameter;
+import scrapi.impl.util.Parameters;
 import scrapi.key.CrtRsaPrivateKey;
 import scrapi.key.RsaPrimeFactor;
 import scrapi.key.RsaPublicKey;
@@ -30,6 +32,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DefaultCrtRsaPrivateKey extends DefaultRsaPrivateKey implements CrtRsaPrivateKey {
+
+    static final Parameter<BigInteger> P = Parameters.positiveBigInt("p", "RSA key CRT first factor", true);
+    static final Parameter<BigInteger> Q = Parameters.positiveBigInt("q", "RSA key CRT second factor", true);
+    static final Parameter<BigInteger> DP = Parameters.positiveBigInt("dP", "RSA key first factor CRT exponent", true);
+    static final Parameter<BigInteger> DQ = Parameters.positiveBigInt("dQ", "RSA key second factor CRT exponent", true);
+    static final Parameter<BigInteger> QINV = Parameters.positiveBigInt("qInv", "RSA key first CRT coefficient", true);
 
     public static final String KEY_TYPE_MSG = "JCA CRT RSA PrivateKey instance must implement either " +
             RSAPrivateCrtKey.class.getName() + " or " + RSAMultiPrimePrivateCrtKey.class.getName() + ".";

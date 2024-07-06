@@ -15,6 +15,8 @@
  */
 package scrapi.impl.key;
 
+import scrapi.impl.util.Parameter;
+import scrapi.impl.util.Parameters;
 import scrapi.key.RsaPrivateKey;
 import scrapi.key.RsaPublicKey;
 import scrapi.util.Assert;
@@ -30,13 +32,17 @@ import java.util.Optional;
 public class DefaultRsaPrivateKey extends AbstractRsaKey<java.security.PrivateKey>
         implements RsaPrivateKey {
 
+    static final Parameter<BigInteger> D = Parameters.positiveBigInt("d", "RSA key private exponent", true);
+
     private final RsaPublicKey publicKey;
 
-    public DefaultRsaPrivateKey(java.security.PrivateKey key, RsaPublicKey publicKey) {
-        super(key);
+    public DefaultRsaPrivateKey(java.security.PrivateKey priv, RsaPublicKey publicKey) {
+        super(priv);
         this.publicKey = Assert.notNull(publicKey, "RsaPublicKey cannot be null.");
-        RSAKey priv = Assert.isInstance(RSAKey.class, key, RSA_KEY_TYPE_MSG);
-        Assert.eq(priv.getModulus(), publicKey.modulus(), "RSA PrivateKey modulus and RsaPublicKey modulus must be equal.");
+        if (priv instanceof RSAKey rsaPriv) { // might not implement RSAKey if HSM or PKCS11
+            Assert.eq(rsaPriv.getModulus(), publicKey.modulus(),
+                    "RSA PrivateKey modulus and RsaPublicKey modulus must be equal.");
+        }
     }
 
     @Override
@@ -57,10 +63,7 @@ public class DefaultRsaPrivateKey extends AbstractRsaKey<java.security.PrivateKe
 
     @Override
     public Optional<BigInteger> privateExponent() {
-        BigInteger d = null;
-        if (this.key instanceof RSAPrivateKey) {
-            d = ((RSAPrivateKey) this.key).getPrivateExponent();
-        }
+        BigInteger d = this.key instanceof RSAPrivateKey rsaPriv ? rsaPriv.getPrivateExponent() : null;
         return Optional.ofNullable(d);
     }
 
