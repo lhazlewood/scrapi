@@ -17,7 +17,7 @@ package scrapi.key;
 
 import java.util.function.Supplier;
 
-public interface Decapsulator extends Supplier<SecretKey<?>> {
+public interface Decapsulator extends Supplier<ConfidentialKey<?>> {
 
     Decapsulator ciphertext(byte[] ciphertext);
 

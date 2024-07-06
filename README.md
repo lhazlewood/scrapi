@@ -333,9 +333,8 @@ password's non-uniform (non-random) bytes.
 In contrast, scrapi has a `scrapi.key.Password` concept that only provides access to password characters if necessary,
 and by using type-safe generics for argument type checking, ensures that `Password` instances are only usable in key
 stretching (derivation) algorithms that explicitly accept `Password`s.  More specifically, `scrapi.key.Password` 
-extends `scrapi.key.ConfidentialKey`, but _not_ `scrapi.key.SecretKey` (which can expose key byte array material), to 
-ensure it cannot be used as a standard key input to cryptographic algorithms that require binary
-key material.
+extends `scrapi.key.ConfidentialKey`, but _not_ `scrapi.key.OctetSecretKey` (which can expose key byte array material), 
+to ensure it cannot be used as a standard key input to cryptographic algorithms that require binary key material.
 
 #### Salts and Iterations are not Key Properties
 

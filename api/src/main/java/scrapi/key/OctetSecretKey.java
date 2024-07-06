@@ -21,11 +21,11 @@ import java.util.Optional;
 import java.util.function.Supplier;
 
 /**
- * An {@code OctetSecretKey} is a {@code SecretKey} where the key material is a single byte array value.
+ * An {@code OctetSecretKey} is a {@code ConfidentialKey} where the key material is a single byte array value.
  *
  * @since SCRAPI_RELEASE_VERSION
  */
-public interface OctetSecretKey extends SecretKey<javax.crypto.SecretKey> {
+public interface OctetSecretKey extends ConfidentialKey<javax.crypto.SecretKey> {
 
     //TODO: Ed448 and ED25519 keys can be considered 'octet' keys as well, even though they are public and private keys
     // perhaps we should change OctetSecretKey to be an interface that extends from Key?

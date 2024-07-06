@@ -15,7 +15,7 @@
  */
 package scrapi.key;
 
-public interface Encapsulation extends Keyed<SecretKey<?>> {
+public interface Encapsulation extends Keyed<ConfidentialKey<?>> {
 
     byte[] ciphertext();
 }

@@ -18,14 +18,15 @@ package scrapi.impl.msg
 import org.junit.jupiter.api.Test
 import scrapi.alg.Algs
 import scrapi.impl.key.DefaultPassword
+import scrapi.key.ConfidentialKey
 import scrapi.key.Password
-import scrapi.key.SecretKey
 import scrapi.msg.Hasher
 import scrapi.msg.MacAlgorithm
 import scrapi.msg.PasswordMacAlgorithm
 import scrapi.util.Bytes
 
 import javax.crypto.Mac
+import javax.crypto.SecretKey
 import javax.crypto.spec.PBEParameterSpec
 import java.nio.ByteBuffer
 import java.security.MessageDigest
@@ -81,7 +82,7 @@ class StandardMacAlgorithmsTest {
         // wrap in a list if we need to for .apply call iteration:
         if (data && !(data instanceof List)) data = [data]
 
-        def key = alg.keygen().get() as SecretKey
+        def key = alg.keygen().get() as ConfidentialKey<SecretKey>
 
         def salt = Bytes.randomBits(alg.digestSize().bits())
         def iterations = DefaultPassword.MIN_ITERATIONS // keep password-based Mac tests fast

@@ -15,14 +15,14 @@
  */
 package scrapi.msg;
 
+import scrapi.key.ConfidentialKey;
 import scrapi.key.KeyGenerator;
 import scrapi.key.Keyable;
-import scrapi.key.SecretKey;
 
 import java.util.function.Supplier;
 
 public interface MacAlgorithm<
-        K extends SecretKey<?>,
+        K extends ConfidentialKey<?>,
         HB extends Keyable<K, HB> & Supplier<Hasher>,
         G extends KeyGenerator<K, G>
         >
