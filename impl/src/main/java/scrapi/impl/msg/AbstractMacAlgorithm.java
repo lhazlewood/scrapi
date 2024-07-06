@@ -16,9 +16,9 @@
 package scrapi.impl.msg;
 
 import scrapi.alg.Size;
-import scrapi.key.ConfidentialKey;
 import scrapi.key.KeyGenerator;
 import scrapi.key.Keyable;
+import scrapi.key.SymmetricKey;
 import scrapi.msg.Hasher;
 import scrapi.msg.MacAlgorithm;
 
@@ -26,7 +26,7 @@ import java.security.Provider;
 import java.util.function.Supplier;
 
 abstract class AbstractMacAlgorithm<
-        K extends ConfidentialKey<?>,
+        K extends SymmetricKey,
         HB extends Keyable<K, HB> & Supplier<Hasher>,
         G extends KeyGenerator<K, G>
         >

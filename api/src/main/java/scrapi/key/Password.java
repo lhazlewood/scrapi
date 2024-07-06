@@ -17,7 +17,7 @@ package scrapi.key;
 
 import scrapi.util.Classes;
 
-public interface Password extends ConfidentialKey<javax.crypto.SecretKey> {
+public interface Password extends SymmetricKey {
 
     char[] chars();
 

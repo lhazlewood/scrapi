@@ -25,7 +25,7 @@ import java.util.function.Supplier;
  *
  * @since SCRAPI_RELEASE_VERSION
  */
-public interface OctetSecretKey extends ConfidentialKey<javax.crypto.SecretKey> {
+public interface OctetSecretKey extends SymmetricKey {
 
     //TODO: Ed448 and ED25519 keys can be considered 'octet' keys as well, even though they are public and private keys
     // perhaps we should change OctetSecretKey to be an interface that extends from Key?

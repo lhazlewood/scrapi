@@ -13,19 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package scrapi.msg;
+package scrapi.key;
 
-import scrapi.key.KeyGenerator;
-import scrapi.key.Keyable;
-import scrapi.key.SymmetricKey;
-
-import java.util.function.Supplier;
-
-public interface MacAlgorithm<
-        K extends SymmetricKey,
-        HB extends Keyable<K, HB> & Supplier<Hasher>,
-        G extends KeyGenerator<K, G>
-        >
-        extends DigestSized, AuthenticityAlgorithm<K, K, Hasher, Hasher, HB, HB, G> {
-
+public interface SymmetricKey extends ConfidentialKey<javax.crypto.SecretKey> {
 }
