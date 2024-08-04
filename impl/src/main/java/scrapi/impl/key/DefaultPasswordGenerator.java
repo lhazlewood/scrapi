@@ -16,6 +16,7 @@
 package scrapi.impl.key;
 
 import scrapi.key.Password;
+import scrapi.key.PasswordGenerator;
 import scrapi.util.Assert;
 import scrapi.util.Randoms;
 import scrapi.util.Strings;
@@ -24,7 +25,7 @@ import java.security.Provider;
 import java.security.SecureRandom;
 import java.util.Arrays;
 
-public class DefaultPasswordGenerator implements Password.Generator {
+public class DefaultPasswordGenerator implements PasswordGenerator {
 
     private static final char[] DEFAULT_ALPHABET =
             "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789~`!@#$%^&*()-_+={}[]|\\;:\"<>,./?"
@@ -53,25 +54,25 @@ public class DefaultPasswordGenerator implements Password.Generator {
     }
 
     @Override
-    public Password.Generator provider(Provider provider) {
+    public PasswordGenerator provider(Provider provider) {
         // no-op, not used in this implementation
         return this;
     }
 
     @Override
-    public Password.Generator random(SecureRandom random) {
+    public PasswordGenerator random(SecureRandom random) {
         this.random = random != null ? random : Randoms.secureRandom(); // always assume a default
         return this;
     }
 
     @Override
-    public Password.Generator alphabet(char[] alphabet) {
+    public PasswordGenerator alphabet(char[] alphabet) {
         this.alphabet = Assert.notEmpty(alphabet, "alphabet must not be null or empty.");
         return this;
     }
 
     @Override
-    public Password.Generator length(int numCharacters) {
+    public PasswordGenerator length(int numCharacters) {
         this.length = Assert.gte(numCharacters, MIN_PASSWORD_LENGTH, PASSWORD_LENGTH_MSG);
         return this;
     }

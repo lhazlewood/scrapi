@@ -65,7 +65,7 @@ class StandardSignatureAlgorithmsTest {
         Algs.Sig.get().values().each { SignatureAlgorithm alg ->
             def size = Size.bits(2048) // keep build times short
             def priv = alg.keygen().size(size).get() as RsaPrivateKey
-            byte[] sig = alg.digester().key(priv).get().get()
+            byte[] sig = alg.digester(priv).get()
             def jca = Signature.getInstance(alg.id() as String)
             jca.initSign(priv.toJcaKey())
             byte[] jcaSig = jca.sign()
@@ -74,7 +74,7 @@ class StandardSignatureAlgorithmsTest {
             jca = Signature.getInstance(alg.id() as String)
             jca.initVerify(priv.publicKey().toJcaKey())
             assertTrue jca.verify(jcaSig)
-            assertTrue alg.verifier().key(priv.publicKey()).get().test(sig)
+            assertTrue alg.verifier(priv.publicKey()).test(sig)
         }
     }
 
@@ -86,7 +86,7 @@ class StandardSignatureAlgorithmsTest {
 
             byte b = Bytes.random(1)[0]
 
-            byte[] sig = alg.digester().key(priv).get().apply(b).get()
+            byte[] sig = alg.digester(priv).apply(b).get()
             def jca = Signature.getInstance(alg.id() as String)
             jca.initSign(priv.toJcaKey())
             jca.update(b)
@@ -99,7 +99,7 @@ class StandardSignatureAlgorithmsTest {
             jca.initVerify(priv.publicKey().toJcaKey())
             jca.update(b)
             assertTrue jca.verify(jcaSig)
-            assertTrue alg.verifier().key(priv.publicKey()).get().apply(b).test(sig)
+            assertTrue alg.verifier(priv.publicKey()).apply(b).test(sig)
         }
     }
 //

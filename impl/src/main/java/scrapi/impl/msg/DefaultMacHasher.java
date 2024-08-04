@@ -16,7 +16,7 @@
 package scrapi.impl.msg;
 
 import scrapi.impl.jca.JcaTemplate;
-import scrapi.key.ConfidentialKey;
+import scrapi.key.SymmetricKey;
 import scrapi.msg.Hasher;
 import scrapi.util.Assert;
 
@@ -25,18 +25,18 @@ import java.nio.ByteBuffer;
 import java.security.MessageDigest;
 import java.security.Provider;
 
-class JcaMacDigester extends AbstractMessageConsumer<Hasher> implements Hasher {
+class DefaultMacHasher extends AbstractMessageConsumer<Hasher> implements Hasher {
 
-    public static final String JCA_KEY_NOT_NULL = ConfidentialKey.class.getName() + " toJcaKey() value cannot be null.";
+    public static final String JCA_KEY_NOT_NULL = SymmetricKey.class.getName() + " toJcaKey() value cannot be null.";
 
     private final Mac MAC;
 
-    JcaMacDigester(Mac mac) {
+    DefaultMacHasher(Mac mac) {
         this.MAC = Assert.notNull(mac, "Mac cannot be null");
     }
 
-    JcaMacDigester(String id, Provider provider, ConfidentialKey<? extends javax.crypto.SecretKey> key) {
-        Assert.notNull(key, "ConfidentialKey cannot be null.");
+    DefaultMacHasher(String id, Provider provider, SymmetricKey key) {
+        Assert.notNull(key, "MAC key cannot be null.");
         javax.crypto.SecretKey jcaKey = Assert.notNull(key.toJcaKey(), JCA_KEY_NOT_NULL);
         this.MAC = new JcaTemplate(id, provider).withMac(mac -> {
             mac.init(jcaKey);

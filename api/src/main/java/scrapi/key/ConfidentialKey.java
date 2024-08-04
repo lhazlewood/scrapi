@@ -18,4 +18,10 @@ package scrapi.key;
 import scrapi.lang.Destroyable;
 
 public interface ConfidentialKey<K extends java.security.Key> extends Key<K>, Destroyable, AutoCloseable {
+
+    /**
+     * @inheritDoc
+     */
+    @Override
+    void close(); // declared due to https://bugs.openjdk.org/browse/JDK-8155591 and https://bugs.openjdk.org/browse/JDK-7027157
 }

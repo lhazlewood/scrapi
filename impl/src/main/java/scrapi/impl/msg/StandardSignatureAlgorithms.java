@@ -15,24 +15,30 @@
  */
 package scrapi.impl.msg;
 
+import scrapi.impl.key.DefaultRsaPrivateKeyGenerator;
 import scrapi.impl.lang.IdentifiableRegistry;
 import scrapi.msg.SignatureAlgorithm;
 import scrapi.util.Collections;
 
-public final class StandardSignatureAlgorithms extends IdentifiableRegistry<String, SignatureAlgorithm<?, ?, ?, ?, ?, ?, ?>> {
+public final class StandardSignatureAlgorithms extends IdentifiableRegistry<String, SignatureAlgorithm<?, ?, ?, ?, ?>> {
+
+    private static SignatureAlgorithm<?, ?, ?, ?, ?> rsa(String id) {
+        return new DefaultSignatureAlgorithm<>(id, null, DefaultRsaPrivateKeyGenerator::new);
+    }
+
     public StandardSignatureAlgorithms() {
-        super("Signature Algorithm", Collections.<SignatureAlgorithm<?, ?, ?, ?, ?, ?, ?>>of(
-                new DefaultRsaSignatureAlgorithm("SHA1withRSA"),
-                new DefaultRsaSignatureAlgorithm("SHA224withRSA"),
-                new DefaultRsaSignatureAlgorithm("SHA256withRSA"),
-                new DefaultRsaSignatureAlgorithm("SHA384withRSA"),
-                new DefaultRsaSignatureAlgorithm("SHA512withRSA"),
-                new DefaultRsaSignatureAlgorithm("SHA512/224withRSA"),
-                new DefaultRsaSignatureAlgorithm("SHA512/256withRSA"),
-                new DefaultRsaSignatureAlgorithm("SHA3-224withRSA"),
-                new DefaultRsaSignatureAlgorithm("SHA3-256withRSA"),
-                new DefaultRsaSignatureAlgorithm("SHA3-384withRSA"),
-                new DefaultRsaSignatureAlgorithm("SHA3-512withRSA")
+        super("Signature Algorithm", Collections.<SignatureAlgorithm<?, ?, ?, ?, ?>>of(
+                rsa("SHA1withRSA"),
+                rsa("SHA224withRSA"),
+                rsa("SHA256withRSA"),
+                rsa("SHA384withRSA"),
+                rsa("SHA512withRSA"),
+                rsa("SHA512/224withRSA"),
+                rsa("SHA512/256withRSA"),
+                rsa("SHA3-224withRSA"),
+                rsa("SHA3-256withRSA"),
+                rsa("SHA3-384withRSA"),
+                rsa("SHA3-512withRSA")
         ));
     }
 }

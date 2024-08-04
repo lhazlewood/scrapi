@@ -37,6 +37,4 @@ public interface RsaPrivateKey extends PrivateKey<java.security.PrivateKey, RsaP
     interface Builder extends PrivateKey.Builder<RsaPublicKey, RsaPrivateKey, Builder>, CrtRsaPrivateKey.Mutator<Builder> {
     }
 
-    interface Generator extends PrivateKey.Generator<RsaPrivateKey, Generator> {
-    }
 }

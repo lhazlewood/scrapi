@@ -19,26 +19,29 @@ import scrapi.alg.Size;
 import scrapi.key.KeyGenerator;
 import scrapi.key.Keyable;
 import scrapi.key.SymmetricKey;
-import scrapi.msg.Hasher;
 import scrapi.msg.MacAlgorithm;
+import scrapi.util.Assert;
 
 import java.security.Provider;
 import java.util.function.Supplier;
 
 abstract class AbstractMacAlgorithm<
         K extends SymmetricKey,
-        HB extends Keyable<K, HB> & Supplier<Hasher>,
+        P extends Keyable<K, P>,
         G extends KeyGenerator<K, G>
         >
-        extends AbstractDigestAlgorithm<Hasher, Hasher, HB, HB> implements MacAlgorithm<K, HB, G> {
+        extends AbstractDigestAlgorithm implements MacAlgorithm<K, P, G> {
 
-    protected AbstractMacAlgorithm(String id, Provider provider, Size digestSize) {
+    private final Supplier<G> keygen;
+
+    protected AbstractMacAlgorithm(String id, Provider provider, Size digestSize, Supplier<G> keygen) {
         super(id, provider, digestSize);
+        this.keygen = Assert.notNull(keygen, "keygen cannot be null");
     }
 
     @Override
-    public HB verifier() {
-        return digester();
+    public G keygen() {
+        return this.keygen.get();
     }
 
     @Override

@@ -19,8 +19,7 @@ import scrapi.impl.alg.AlgorithmSupport;
 import scrapi.key.Key;
 import scrapi.key.Keyable;
 
-public abstract class KeyableSupport<K extends Key<?>, T>
-        extends AlgorithmSupport<T> implements Keyable<K, T> {
+public class KeyableSupport<K extends Key<?>, T> extends AlgorithmSupport<T> implements Keyable<K, T> {
 
     protected K key;
 

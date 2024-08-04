@@ -24,9 +24,7 @@ import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.interfaces.RSAPublicKey;
 
-public class DefaultRsaPrivateKeyGenerator extends
-        AbstractKeyGenerator<RsaPrivateKey, RsaPrivateKey.Generator>
-        implements RsaPrivateKey.Generator {
+public class DefaultRsaPrivateKeyGenerator extends AbstractKeyGenerator<RsaPrivateKey, DefaultRsaPrivateKeyGenerator> {
 
     /**
      * Per NIST doc <a href="https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-57pt1r5.pdf">

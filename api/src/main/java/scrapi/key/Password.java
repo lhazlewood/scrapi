@@ -25,19 +25,4 @@ public interface Password extends SymmetricKey {
         Object[] args = new Object[]{chars};
         return Classes.newInstance("scrapi.impl.key.DefaultPassword", args);
     }
-
-    interface Generator extends KeyGenerator<Password, Generator> {
-
-        Generator alphabet(char[] alphabet);
-
-        Generator length(int numCharacters);
-    }
-
-    interface Stretcher<T extends Stretcher<T>> extends Keyable<Password, T> {
-
-        T salt(byte[] salt);
-
-        T iterations(int iterations);
-    }
-
 }

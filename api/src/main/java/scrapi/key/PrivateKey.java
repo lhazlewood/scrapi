@@ -16,6 +16,7 @@
 package scrapi.key;
 
 import scrapi.alg.Providable;
+import scrapi.util.Assert;
 
 import java.security.KeyPair;
 import java.util.function.Supplier;
@@ -24,10 +25,11 @@ public interface PrivateKey<K extends java.security.PrivateKey, P extends Public
 
     P publicKey();
 
-    KeyPair toJcaKeyPair();
-
-    interface Generator<K extends PrivateKey<?, ?>, T extends Generator<K, T>>
-            extends KeyGenerator<K, T> {
+    default KeyPair toJcaKeyPair() {
+        PublicKey<?> pk = Assert.stateNotNull(publicKey(), "publicKey must not be null.");
+        java.security.PublicKey jcaPub = Assert.stateNotNull(pk.toJcaKey(), "publicKey JCA key must not be null.");
+        java.security.PrivateKey jcaPriv = Assert.stateNotNull(toJcaKey(), "JCA key must not be null.");
+        return new KeyPair(jcaPub, jcaPriv);
     }
 
     interface Mutator<U extends PublicKey<?>, T extends Mutator<U, T>> {

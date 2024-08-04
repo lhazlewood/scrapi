@@ -18,15 +18,13 @@ package scrapi.impl.msg
 import org.junit.jupiter.api.Test
 import scrapi.alg.Algs
 import scrapi.impl.key.DefaultPassword
-import scrapi.key.ConfidentialKey
 import scrapi.key.Password
+import scrapi.key.SymmetricKey
 import scrapi.msg.Hasher
 import scrapi.msg.MacAlgorithm
-import scrapi.msg.PasswordMacAlgorithm
 import scrapi.util.Bytes
 
 import javax.crypto.Mac
-import javax.crypto.SecretKey
 import javax.crypto.spec.PBEParameterSpec
 import java.nio.ByteBuffer
 import java.security.MessageDigest
@@ -82,15 +80,19 @@ class StandardMacAlgorithmsTest {
         // wrap in a list if we need to for .apply call iteration:
         if (data && !(data instanceof List)) data = [data]
 
-        def key = alg.keygen().get() as ConfidentialKey<SecretKey>
+        def key = alg.keygen().get() as SymmetricKey
 
         def salt = Bytes.randomBits(alg.digestSize().bits())
         def iterations = DefaultPassword.MIN_ITERATIONS // keep password-based Mac tests fast
 
+        def configurer = { params ->
+            params.key(key)
+            if (key instanceof Password) {
+                params.salt(salt).iterations(iterations)
+            }
+        }
         // Digest data using our API:
-        def hb = alg.digester().key(key)
-        if (alg instanceof PasswordMacAlgorithm) hb.salt(salt).iterations(iterations)
-        Hasher hasher = hb.get()
+        def hasher = alg.digester(configurer) as Hasher
         if (data) data.each { hasher.apply(it); if (it instanceof ByteBuffer) it.rewind() }
         def digest = hasher.get()
 
@@ -109,9 +111,7 @@ class StandardMacAlgorithmsTest {
         // Assert that our Digest result is identical to the JCA output, and our verify implementation does the same:
         assertTrue MessageDigest.isEqual(jcaDigest, digest)
         assertEquals alg.digestSize().bits(), Bytes.bitLength(digest)
-        hb = alg.verifier().key(key)
-        if (alg instanceof PasswordMacAlgorithm) hb.salt(salt).iterations(iterations)
-        hasher = hb.get()
+        hasher = alg.verifier(configurer)
         if (data) data.each { hasher.apply(it); if (it instanceof ByteBuffer) it.rewind() }
         assertTrue hasher.test(digest)
     }

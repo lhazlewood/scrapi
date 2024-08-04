@@ -13,12 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package scrapi.msg;
+package scrapi.impl.msg;
 
 import scrapi.alg.Providable;
 import scrapi.alg.Randomizable;
 import scrapi.key.Keyable;
 import scrapi.key.PrivateKey;
+import scrapi.msg.Signer;
 
 import java.util.function.Supplier;
 

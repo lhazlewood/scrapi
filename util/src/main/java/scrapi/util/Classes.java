@@ -168,7 +168,6 @@ public final class Classes {
      * @param <T>  the type of object created
      * @return a new instance of the specified class name
      */
-    @SuppressWarnings("unchecked")
     public static <T> T newInstance(String fqcn) {
         return newInstance(forName(fqcn));
     }
@@ -198,13 +197,12 @@ public final class Classes {
      * @param <T>  the type of the object created
      * @return the newly created object
      */
-    @SuppressWarnings("unchecked")
     public static <T> T newInstance(String fqcn, Object... args) {
         return newInstance(forName(fqcn), args);
     }
 
     /**
-     * Creates a new instance of the specified {@code clazz} via {@code clazz.newInstance()}.
+     * Creates a new instance of the specified {@code clazz} via {@code clazz.getConstructor().newInstance()}.
      *
      * @param clazz the class to invoke
      * @param <T>   the type of the object created
@@ -216,7 +214,7 @@ public final class Classes {
             throw new IllegalArgumentException(msg);
         }
         try {
-            return clazz.newInstance();
+            return clazz.getConstructor().newInstance();
         } catch (Exception e) {
             throw new InstantiationException("Unable to instantiate class [" + clazz.getName() + "]", e);
         }
@@ -256,7 +254,6 @@ public final class Classes {
         } catch (NoSuchMethodException e) {
             throw new IllegalStateException(e);
         }
-
     }
 
     /**

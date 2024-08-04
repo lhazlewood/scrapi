@@ -21,20 +21,19 @@ import scrapi.key.PrivateKey;
 import scrapi.key.PublicKey;
 import scrapi.msg.SignatureAlgorithm;
 import scrapi.msg.Signer;
-import scrapi.msg.SignerBuilder;
 import scrapi.msg.Verifier;
-import scrapi.msg.VerifierBuilder;
 import scrapi.util.Assert;
 
 import java.security.Provider;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-public class DefaultSignatureAlgorithm<
+class DefaultSignatureAlgorithm<
         U extends PublicKey<?>,
         R extends PrivateKey<?, U>,
         G extends KeyGenerator<R, G>>
         extends AbstractAlgorithm
-        implements SignatureAlgorithm<U, R, Signer, Verifier, SignerBuilder<R>, VerifierBuilder<U>, G> {
+        implements SignatureAlgorithm<U, R, DefaultSignerBuilder<R>, DefaultVerifierBuilder<U>, G> {
 
     private final Supplier<G> SUPPLIER;
 
@@ -44,13 +43,17 @@ public class DefaultSignatureAlgorithm<
     }
 
     @Override
-    public SignerBuilder<R> digester() {
-        return new DefaultSignerBuilder<R>(this.ID).provider(this.PROVIDER);
+    public Signer digester(Consumer<DefaultSignerBuilder<R>> c) {
+        DefaultSignerBuilder<R> b = new DefaultSignerBuilder<R>(this.ID).provider(this.PROVIDER);
+        c.accept(b);
+        return b.get();
     }
 
     @Override
-    public VerifierBuilder<U> verifier() {
-        return new DefaultVerifierBuilder<U>(this.ID).provider(this.PROVIDER);
+    public Verifier verifier(Consumer<DefaultVerifierBuilder<U>> c) {
+        DefaultVerifierBuilder<U> b = new DefaultVerifierBuilder<U>(this.ID).provider(this.PROVIDER);
+        c.accept(b);
+        return b.get();
     }
 
     @Override

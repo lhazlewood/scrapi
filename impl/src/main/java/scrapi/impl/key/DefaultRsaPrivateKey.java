@@ -67,11 +67,6 @@ public class DefaultRsaPrivateKey extends AbstractRsaKey<java.security.PrivateKe
         return Optional.ofNullable(d);
     }
 
-    @Override
-    public KeyPair toJcaKeyPair() {
-        return new KeyPair(this.publicKey.toJcaKey(), toJcaKey());
-    }
-
     static RsaPrivateKey of(java.security.PrivateKey jcaPriv, RsaPublicKey pub) {
         if (jcaPriv instanceof RSAPrivateCrtKey || jcaPriv instanceof RSAMultiPrimePrivateCrtKey) {
             return new DefaultCrtRsaPrivateKey(jcaPriv, pub);

@@ -20,7 +20,9 @@ import scrapi.key.Key;
 import scrapi.key.KeyGenerator;
 import scrapi.key.KeyGeneratorSupplier;
 import scrapi.key.Keyable;
+import scrapi.util.Assert;
 
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
@@ -29,9 +31,23 @@ public interface AuthenticityAlgorithm<
         VK extends Key<?>,
         D extends MessageConsumer<D> & Supplier<byte[]>,
         V extends MessageConsumer<V> & Predicate<byte[]>,
-        DB extends Keyable<DK, DB> & Supplier<D>,
-        VB extends Keyable<VK, VB> & Supplier<V>,
+        DP extends Keyable<DK, DP>,
+        VP extends Keyable<VK, VP>,
         G extends KeyGenerator<DK, G>
         >
-        extends IntegrityAlgorithm<D, V, DB, VB>, KeyGeneratorSupplier<DK, G> {
+        extends IntegrityAlgorithm, KeyGeneratorSupplier<DK, G> {
+
+    default D digester(DK key) {
+        Assert.notNull(key, "key cannot be null.");
+        return digester(c -> c.key(key));
+    }
+
+    D digester(Consumer<DP> c);
+
+    default V verifier(VK key) {
+        Assert.notNull(key, "key cannot be null.");
+        return verifier(c -> c.key(key));
+    }
+
+    V verifier(Consumer<VP> c);
 }

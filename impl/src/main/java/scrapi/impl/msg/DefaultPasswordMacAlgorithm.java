@@ -20,8 +20,9 @@ import scrapi.impl.key.DefaultPassword;
 import scrapi.impl.key.DefaultPasswordGenerator;
 import scrapi.impl.key.KeyableSupport;
 import scrapi.key.Password;
+import scrapi.key.PasswordGenerator;
+import scrapi.key.PasswordStretcher;
 import scrapi.msg.Hasher;
-import scrapi.msg.PasswordMacAlgorithm;
 import scrapi.util.Assert;
 import scrapi.util.Bytes;
 
@@ -29,50 +30,49 @@ import javax.crypto.Mac;
 import javax.crypto.spec.PBEParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.security.Provider;
+import java.util.function.Consumer;
 
 public class DefaultPasswordMacAlgorithm
-        extends AbstractMacAlgorithm<Password, PasswordMacAlgorithm.HasherBuilder, Password.Generator>
-        implements PasswordMacAlgorithm {
+        extends AbstractMacAlgorithm<Password, DefaultPasswordMacAlgorithm.PasswordHasherBuilder, PasswordGenerator> {
 
     protected final int DEFAULT_ITERATIONS;
 
     protected DefaultPasswordMacAlgorithm(String id, Provider provider, Size digestSize, int defaultIterations) {
-        super(id, provider, digestSize);
+        super(id, provider, digestSize, DefaultPasswordGenerator::new);
         this.DEFAULT_ITERATIONS = DefaultPassword.assertIterationsGte(defaultIterations);
     }
 
+    @SuppressWarnings("ClassEscapesDefinedScope")
     @Override
-    public HasherBuilder digester() {
-        return new DefaultHasherBuilder(this.ID).provider(this.PROVIDER).iterations(this.DEFAULT_ITERATIONS);
+    public Hasher digester(Consumer<PasswordHasherBuilder> c) {
+        PasswordHasherBuilder builder =
+                new PasswordHasherBuilder(this.ID).provider(this.PROVIDER).iterations(this.DEFAULT_ITERATIONS);
+        c.accept(builder);
+        return builder.get();
     }
 
-    @Override
-    public Password.Generator keygen() {
-        return new DefaultPasswordGenerator();
-    }
-
-    static class DefaultHasherBuilder extends KeyableSupport<Password, HasherBuilder> implements HasherBuilder {
+    static class PasswordHasherBuilder extends KeyableSupport<Password, PasswordHasherBuilder>
+            implements PasswordStretcher<PasswordHasherBuilder> {
 
         private byte[] salt;
         private int iterations;
 
-        public DefaultHasherBuilder(String jcaName) {
+        public PasswordHasherBuilder(String jcaName) {
             super(jcaName);
         }
 
         @Override
-        public HasherBuilder salt(byte[] salt) {
+        public PasswordHasherBuilder salt(byte[] salt) {
             this.salt = Bytes.isEmpty(salt) ? null : salt.clone();
             return self();
         }
 
         @Override
-        public HasherBuilder iterations(int iterations) {
+        public PasswordHasherBuilder iterations(int iterations) {
             this.iterations = DefaultPassword.assertIterationsGte(iterations);
             return self();
         }
 
-        @Override
         public Hasher get() {
             Assert.notNull(this.key, "Password cannot be null or empty.");
             Assert.notEmpty(this.salt, "salt cannot be null or empty.");
@@ -83,7 +83,7 @@ public class DefaultPasswordMacAlgorithm
                 mac.init(keySpec, spec);
                 return mac;
             });
-            return new JcaMacDigester(m);
+            return new DefaultMacHasher(m);
         }
     }
 }

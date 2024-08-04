@@ -16,11 +16,14 @@
 package scrapi.alg;
 
 import scrapi.key.OctetSecretKey;
+import scrapi.key.Password;
+import scrapi.key.PasswordGenerator;
+import scrapi.key.PasswordStretcher;
+import scrapi.key.RsaPrivateKey;
+import scrapi.key.RsaPublicKey;
 import scrapi.lang.Registry;
 import scrapi.msg.HashAlgorithm;
 import scrapi.msg.MacAlgorithm;
-import scrapi.msg.PasswordMacAlgorithm;
-import scrapi.msg.RsaSignatureAlgorithm;
 import scrapi.msg.SignatureAlgorithm;
 import scrapi.util.Classes;
 
@@ -97,26 +100,26 @@ public final class Algs {
             return REGISTRY;
         }
 
-        public static final MacAlgorithm<OctetSecretKey, ?, OctetSecretKey.Generator> HMD5 = Algs.get(get(), "HmacMD5");
-        public static final MacAlgorithm<OctetSecretKey, ?, OctetSecretKey.Generator> HS1 = Algs.get(get(), "HmacSHA1");
-        public static final MacAlgorithm<OctetSecretKey, ?, OctetSecretKey.Generator> HS224 = Algs.get(get(), "HmacSHA224");
-        public static final MacAlgorithm<OctetSecretKey, ?, OctetSecretKey.Generator> HS256 = Algs.get(get(), "HmacSHA256");
-        public static final MacAlgorithm<OctetSecretKey, ?, OctetSecretKey.Generator> HS384 = Algs.get(get(), "HmacSHA384");
-        public static final MacAlgorithm<OctetSecretKey, ?, OctetSecretKey.Generator> HS512 = Algs.get(get(), "HmacSHA512");
-        public static final MacAlgorithm<OctetSecretKey, ?, OctetSecretKey.Generator> HS512_224 = Algs.get(get(), "HmacSHA512/224");
-        public static final MacAlgorithm<OctetSecretKey, ?, OctetSecretKey.Generator> HS512_256 = Algs.get(get(), "HmacSHA512/256");
-        public static final MacAlgorithm<OctetSecretKey, ?, OctetSecretKey.Generator> HS3_224 = Algs.get(get(), "HmacSHA3-224");
-        public static final MacAlgorithm<OctetSecretKey, ?, OctetSecretKey.Generator> HS3_256 = Algs.get(get(), "HmacSHA3-256");
-        public static final MacAlgorithm<OctetSecretKey, ?, OctetSecretKey.Generator> HS3_384 = Algs.get(get(), "HmacSHA3-384");
-        public static final MacAlgorithm<OctetSecretKey, ?, OctetSecretKey.Generator> HS3_512 = Algs.get(get(), "HmacSHA3-512");
+        public static final MacAlgorithm<OctetSecretKey, ?, ?> HMD5 = Algs.get(get(), "HmacMD5");
+        public static final MacAlgorithm<OctetSecretKey, ?, ?> HS1 = Algs.get(get(), "HmacSHA1");
+        public static final MacAlgorithm<OctetSecretKey, ?, ?> HS224 = Algs.get(get(), "HmacSHA224");
+        public static final MacAlgorithm<OctetSecretKey, ?, ?> HS256 = Algs.get(get(), "HmacSHA256");
+        public static final MacAlgorithm<OctetSecretKey, ?, ?> HS384 = Algs.get(get(), "HmacSHA384");
+        public static final MacAlgorithm<OctetSecretKey, ?, ?> HS512 = Algs.get(get(), "HmacSHA512");
+        public static final MacAlgorithm<OctetSecretKey, ?, ?> HS512_224 = Algs.get(get(), "HmacSHA512/224");
+        public static final MacAlgorithm<OctetSecretKey, ?, ?> HS512_256 = Algs.get(get(), "HmacSHA512/256");
+        public static final MacAlgorithm<OctetSecretKey, ?, ?> HS3_224 = Algs.get(get(), "HmacSHA3-224");
+        public static final MacAlgorithm<OctetSecretKey, ?, ?> HS3_256 = Algs.get(get(), "HmacSHA3-256");
+        public static final MacAlgorithm<OctetSecretKey, ?, ?> HS3_384 = Algs.get(get(), "HmacSHA3-384");
+        public static final MacAlgorithm<OctetSecretKey, ?, ?> HS3_512 = Algs.get(get(), "HmacSHA3-512");
 
-        public static final PasswordMacAlgorithm PBEHS1 = Algs.get(get(), "PBEWithHmacSHA1");
-        public static final PasswordMacAlgorithm PBEHS224 = Algs.get(get(), "PBEWithHmacSHA224");
-        public static final PasswordMacAlgorithm PBEHS256 = Algs.get(get(), "PBEWithHmacSHA256");
-        public static final PasswordMacAlgorithm PBEHS384 = Algs.get(get(), "PBEWithHmacSHA384");
-        public static final PasswordMacAlgorithm PBEHS512 = Algs.get(get(), "PBEWithHmacSHA512");
-        public static final PasswordMacAlgorithm PBEHS512_224 = Algs.get(get(), "PBEWithHmacSHA512/224");
-        public static final PasswordMacAlgorithm PBEHS512_256 = Algs.get(get(), "PBEWithHmacSHA512/256");
+        public static final MacAlgorithm<Password, ? extends PasswordStretcher<?>, PasswordGenerator> PBEHS1 = Algs.get(get(), "PBEWithHmacSHA1");
+        public static final MacAlgorithm<Password, ? extends PasswordStretcher<?>, PasswordGenerator> PBEHS224 = Algs.get(get(), "PBEWithHmacSHA224");
+        public static final MacAlgorithm<Password, ? extends PasswordStretcher<?>, PasswordGenerator> PBEHS256 = Algs.get(get(), "PBEWithHmacSHA256");
+        public static final MacAlgorithm<Password, ? extends PasswordStretcher<?>, PasswordGenerator> PBEHS384 = Algs.get(get(), "PBEWithHmacSHA384");
+        public static final MacAlgorithm<Password, ? extends PasswordStretcher<?>, PasswordGenerator> PBEHS512 = Algs.get(get(), "PBEWithHmacSHA512");
+        public static final MacAlgorithm<Password, ? extends PasswordStretcher<?>, PasswordGenerator> PBEHS512_224 = Algs.get(get(), "PBEWithHmacSHA512/224");
+        public static final MacAlgorithm<Password, ? extends PasswordStretcher<?>, PasswordGenerator> PBEHS512_256 = Algs.get(get(), "PBEWithHmacSHA512/256");
 
         /*
          * Per <a href="https://datatracker.ietf.org/doc/html/rfc7292#appendix-B">RFC 7292, Appendix B</a>, the
@@ -135,31 +138,31 @@ public final class Algs {
 
         @SuppressWarnings("DeprecatedIsStillUsed")
         @Deprecated // per https://datatracker.ietf.org/doc/html/rfc7292#appendix-B
-        public static final PasswordMacAlgorithm PKCS12HS1 = Algs.get(get(), "HmacPBESHA1");
+        public static final MacAlgorithm<Password, ? extends PasswordStretcher<?>, PasswordGenerator> PKCS12HS1 = Algs.get(get(), "HmacPBESHA1");
 
         @SuppressWarnings("DeprecatedIsStillUsed")
         @Deprecated // per https://datatracker.ietf.org/doc/html/rfc7292#appendix-B
-        public static final PasswordMacAlgorithm PKCS12HS224 = Algs.get(get(), "HmacPBESHA224");
+        public static final MacAlgorithm<Password, ? extends PasswordStretcher<?>, PasswordGenerator> PKCS12HS224 = Algs.get(get(), "HmacPBESHA224");
 
         @SuppressWarnings("DeprecatedIsStillUsed")
         @Deprecated // per https://datatracker.ietf.org/doc/html/rfc7292#appendix-B
-        public static final PasswordMacAlgorithm PKCS12HS256 = Algs.get(get(), "HmacPBESHA256");
+        public static final MacAlgorithm<Password, ? extends PasswordStretcher<?>, PasswordGenerator> PKCS12HS256 = Algs.get(get(), "HmacPBESHA256");
 
         @SuppressWarnings("DeprecatedIsStillUsed")
         @Deprecated // per https://datatracker.ietf.org/doc/html/rfc7292#appendix-B
-        public static final PasswordMacAlgorithm PKCS12HS384 = Algs.get(get(), "HmacPBESHA384");
+        public static final MacAlgorithm<Password, ? extends PasswordStretcher<?>, PasswordGenerator> PKCS12HS384 = Algs.get(get(), "HmacPBESHA384");
 
         @SuppressWarnings("DeprecatedIsStillUsed")
         @Deprecated // per https://datatracker.ietf.org/doc/html/rfc7292#appendix-B
-        public static final PasswordMacAlgorithm PKCS12HS512 = Algs.get(get(), "HmacPBESHA512");
+        public static final MacAlgorithm<Password, ? extends PasswordStretcher<?>, PasswordGenerator> PKCS12HS512 = Algs.get(get(), "HmacPBESHA512");
 
         @SuppressWarnings("DeprecatedIsStillUsed")
         @Deprecated // per https://datatracker.ietf.org/doc/html/rfc7292#appendix-B
-        public static final PasswordMacAlgorithm PKCS12HS512_224 = Algs.get(get(), "HmacPBESHA512/224");
+        public static final MacAlgorithm<Password, ? extends PasswordStretcher<?>, PasswordGenerator> PKCS12HS512_224 = Algs.get(get(), "HmacPBESHA512/224");
 
         @SuppressWarnings("DeprecatedIsStillUsed")
         @Deprecated // per https://datatracker.ietf.org/doc/html/rfc7292#appendix-B
-        public static final PasswordMacAlgorithm PKCS12HS512_256 = Algs.get(get(), "HmacPBESHA512/256");
+        public static final MacAlgorithm<Password, ? extends PasswordStretcher<?>, PasswordGenerator> PKCS12HS512_256 = Algs.get(get(), "HmacPBESHA512/256");
     }
 
     public static final class Sig {
@@ -169,7 +172,7 @@ public final class Algs {
         }
 
         private static final String IMPL_CLASSNAME = "scrapi.impl.msg.StandardSignatureAlgorithms";
-        private static final Registry<String, SignatureAlgorithm<?, ?, ?, ?, ?, ?, ?>> REGISTRY = Classes.newInstance(IMPL_CLASSNAME);
+        private static final Registry<String, SignatureAlgorithm<?, ?, ?, ?, ?>> REGISTRY = Classes.newInstance(IMPL_CLASSNAME);
 
         /**
          * Returns a registry of all
@@ -180,21 +183,21 @@ public final class Algs {
          * <a href="https://docs.oracle.com/en/java/javase/21/docs/specs/security/standard-names.html#messagedigest-algorithms">Java
          * Standard Hash (aka Message Digest) Algorithms</a>.
          */
-        public static Registry<String, SignatureAlgorithm<?, ?, ?, ?, ?, ?, ?>> get() {
+        public static Registry<String, SignatureAlgorithm<?, ?, ?, ?, ?>> get() {
             return REGISTRY;
         }
 
-        public static final RsaSignatureAlgorithm RS1 = Algs.get(get(), "SHA1withRSA");
-        public static final RsaSignatureAlgorithm RS224 = Algs.get(get(), "SHA224withRSA");
-        public static final RsaSignatureAlgorithm RS256 = Algs.get(get(), "SHA256withRSA");
-        public static final RsaSignatureAlgorithm RS384 = Algs.get(get(), "SHA384withRSA");
-        public static final RsaSignatureAlgorithm RS512 = Algs.get(get(), "SHA512withRSA");
-        public static final RsaSignatureAlgorithm RS512_224 = Algs.get(get(), "SHA512/224withRSA");
-        public static final RsaSignatureAlgorithm RS512_256 = Algs.get(get(), "SHA512/256withRSA");
-        public static final RsaSignatureAlgorithm RS3_224 = Algs.get(get(), "SHA3-224withRSA");
-        public static final RsaSignatureAlgorithm RS3_256 = Algs.get(get(), "SHA3-256withRSA");
-        public static final RsaSignatureAlgorithm RS3_384 = Algs.get(get(), "SHA3-384withRSA");
-        public static final RsaSignatureAlgorithm RS3_512 = Algs.get(get(), "SHA3-512withRSA");
+        public static final SignatureAlgorithm<RsaPublicKey, RsaPrivateKey, ?, ?, ?> RS1 = Algs.get(get(), "SHA1withRSA");
+        public static final SignatureAlgorithm<RsaPublicKey, RsaPrivateKey, ?, ?, ?> RS224 = Algs.get(get(), "SHA224withRSA");
+        public static final SignatureAlgorithm<RsaPublicKey, RsaPrivateKey, ?, ?, ?> RS256 = Algs.get(get(), "SHA256withRSA");
+        public static final SignatureAlgorithm<RsaPublicKey, RsaPrivateKey, ?, ?, ?> RS384 = Algs.get(get(), "SHA384withRSA");
+        public static final SignatureAlgorithm<RsaPublicKey, RsaPrivateKey, ?, ?, ?> RS512 = Algs.get(get(), "SHA512withRSA");
+        public static final SignatureAlgorithm<RsaPublicKey, RsaPrivateKey, ?, ?, ?> RS512_224 = Algs.get(get(), "SHA512/224withRSA");
+        public static final SignatureAlgorithm<RsaPublicKey, RsaPrivateKey, ?, ?, ?> RS512_256 = Algs.get(get(), "SHA512/256withRSA");
+        public static final SignatureAlgorithm<RsaPublicKey, RsaPrivateKey, ?, ?, ?> RS3_224 = Algs.get(get(), "SHA3-224withRSA");
+        public static final SignatureAlgorithm<RsaPublicKey, RsaPrivateKey, ?, ?, ?> RS3_256 = Algs.get(get(), "SHA3-256withRSA");
+        public static final SignatureAlgorithm<RsaPublicKey, RsaPrivateKey, ?, ?, ?> RS3_384 = Algs.get(get(), "SHA3-384withRSA");
+        public static final SignatureAlgorithm<RsaPublicKey, RsaPrivateKey, ?, ?, ?> RS3_512 = Algs.get(get(), "SHA3-512withRSA");
 
     }
 }

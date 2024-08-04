@@ -220,8 +220,7 @@ public final class Strings {
         int len = buf.limit();
         byte[] bytes = new byte[len];
         buf.get(bytes, 0, len);
-        //noinspection RedundantCast
-        ((ByteBuffer) buf.clear()).put(new byte[len]); // clear out any buffered bytes (might be a password)
+        buf.clear().put(new byte[len]); // clear out any buffered bytes (might be a password)
         cb.reset();
         return bytes;
     }

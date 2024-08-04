@@ -19,13 +19,17 @@ import scrapi.key.KeyGenerator;
 import scrapi.key.Keyable;
 import scrapi.key.SymmetricKey;
 
-import java.util.function.Supplier;
+import java.util.function.Consumer;
 
 public interface MacAlgorithm<
         K extends SymmetricKey,
-        HB extends Keyable<K, HB> & Supplier<Hasher>,
+        P extends Keyable<K, P>,
         G extends KeyGenerator<K, G>
         >
-        extends DigestSized, AuthenticityAlgorithm<K, K, Hasher, Hasher, HB, HB, G> {
+        extends AuthenticityAlgorithm<K, K, Hasher, Hasher, P, P, G>, DigestSized {
 
+    @Override
+    default Hasher verifier(Consumer<P> c) {
+        return digester(c);
+    }
 }

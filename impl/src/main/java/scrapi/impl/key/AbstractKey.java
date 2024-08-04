@@ -143,7 +143,7 @@ abstract class AbstractKey<K extends java.security.Key> implements Key<K>, scrap
 
     @SuppressWarnings("RedundantThrows")
     @Override
-    public void close() throws Exception {
+    public void close() {
         destroy();
     }
 }
