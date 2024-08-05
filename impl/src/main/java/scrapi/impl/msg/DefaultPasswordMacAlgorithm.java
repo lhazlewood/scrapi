@@ -24,7 +24,6 @@ import scrapi.key.PasswordGenerator;
 import scrapi.key.PasswordStretcher;
 import scrapi.msg.Hasher;
 import scrapi.util.Assert;
-import scrapi.util.Bytes;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.PBEParameterSpec;
@@ -33,7 +32,7 @@ import java.security.Provider;
 import java.util.function.Consumer;
 
 public class DefaultPasswordMacAlgorithm
-        extends AbstractMacAlgorithm<Password, DefaultPasswordMacAlgorithm.PasswordHasherBuilder, PasswordGenerator> {
+        extends AbstractMacAlgorithm<Password, DefaultPasswordMacAlgorithm.PbeParams, PasswordGenerator> {
 
     protected final int DEFAULT_ITERATIONS;
 
@@ -42,33 +41,30 @@ public class DefaultPasswordMacAlgorithm
         this.DEFAULT_ITERATIONS = DefaultPassword.assertIterationsGte(defaultIterations);
     }
 
-    @SuppressWarnings("ClassEscapesDefinedScope")
     @Override
-    public Hasher digester(Consumer<PasswordHasherBuilder> c) {
-        PasswordHasherBuilder builder =
-                new PasswordHasherBuilder(this.ID).provider(this.PROVIDER).iterations(this.DEFAULT_ITERATIONS);
-        c.accept(builder);
-        return builder.get();
+    public Hasher producer(Consumer<PbeParams> c) {
+        PbeParams params = new PbeParams(this.ID).provider(this.PROVIDER).iterations(this.DEFAULT_ITERATIONS);
+        c.accept(params);
+        return params.get();
     }
 
-    static class PasswordHasherBuilder extends KeyableSupport<Password, PasswordHasherBuilder>
-            implements PasswordStretcher<PasswordHasherBuilder> {
+    public static class PbeParams extends KeyableSupport<Password, PbeParams> implements PasswordStretcher<PbeParams> {
 
         private byte[] salt;
         private int iterations;
 
-        public PasswordHasherBuilder(String jcaName) {
+        public PbeParams(String jcaName) {
             super(jcaName);
         }
 
         @Override
-        public PasswordHasherBuilder salt(byte[] salt) {
-            this.salt = Bytes.isEmpty(salt) ? null : salt.clone();
+        public PbeParams salt(byte[] salt) {
+            this.salt = Assert.notEmpty(salt, "salt cannot be null or empty").clone();
             return self();
         }
 
         @Override
-        public PasswordHasherBuilder iterations(int iterations) {
+        public PbeParams iterations(int iterations) {
             this.iterations = DefaultPassword.assertIterationsGte(iterations);
             return self();
         }

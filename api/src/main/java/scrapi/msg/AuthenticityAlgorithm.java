@@ -27,22 +27,22 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 public interface AuthenticityAlgorithm<
-        DK extends ConfidentialKey<?>,
+        PK extends ConfidentialKey<?>,
         VK extends Key<?>,
-        D extends MessageConsumer<D> & Supplier<byte[]>,
+        P extends MessageConsumer<P> & Supplier<byte[]>,
         V extends MessageConsumer<V> & Predicate<byte[]>,
-        DP extends Keyable<DK, DP>,
+        PP extends Keyable<PK, PP>,
         VP extends Keyable<VK, VP>,
-        G extends KeyGenerator<DK, G>
+        G extends KeyGenerator<PK, G>
         >
-        extends IntegrityAlgorithm, KeyGeneratorSupplier<DK, G> {
+        extends IntegrityAlgorithm, KeyGeneratorSupplier<PK, G> {
 
-    default D digester(DK key) {
+    default P producer(PK key) {
         Assert.notNull(key, "key cannot be null.");
-        return digester(c -> c.key(key));
+        return producer(c -> c.key(key));
     }
 
-    D digester(Consumer<DP> c);
+    P producer(Consumer<PP> c);
 
     default V verifier(VK key) {
         Assert.notNull(key, "key cannot be null.");

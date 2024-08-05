@@ -15,17 +15,27 @@
  */
 package scrapi.impl.msg;
 
-import scrapi.impl.key.KeyableSupport;
 import scrapi.key.PrivateKey;
+import scrapi.msg.MessageException;
 import scrapi.msg.Signer;
 
-class DefaultSignerBuilder<K extends PrivateKey<?, ?>> extends KeyableSupport<K, DefaultSignerBuilder<K>> {
+import java.security.Provider;
+import java.security.SecureRandom;
+import java.security.SignatureException;
 
-    public DefaultSignerBuilder(String jcaName) {
-        super(jcaName);
+class DefaultSigner extends AbstractSignatureConsumer<PrivateKey<?, ?>, Signer> implements Signer {
+
+    DefaultSigner(String id, Provider provider, SecureRandom random, PrivateKey<?, ?> key) {
+        super(id, provider, random, key);
     }
 
-    Signer get() {
-        return new DefaultSigner(this.jcaName, this.provider, this.random, this.key);
+    @Override
+    public byte[] get() {
+        try {
+            return this.SIG.sign();
+        } catch (SignatureException e) {
+            String msg = "Unable to produce signature: " + e.getMessage();
+            throw new MessageException(msg, e);
+        }
     }
 }

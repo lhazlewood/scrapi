@@ -30,6 +30,6 @@ public interface MacAlgorithm<
 
     @Override
     default Hasher verifier(Consumer<P> c) {
-        return digester(c);
+        return producer(c);
     }
 }

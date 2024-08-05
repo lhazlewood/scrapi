@@ -92,7 +92,7 @@ class StandardMacAlgorithmsTest {
             }
         }
         // Digest data using our API:
-        def hasher = alg.digester(configurer) as Hasher
+        def hasher = alg.producer(configurer) as Hasher
         if (data) data.each { hasher.apply(it); if (it instanceof ByteBuffer) it.rewind() }
         def digest = hasher.get()
 

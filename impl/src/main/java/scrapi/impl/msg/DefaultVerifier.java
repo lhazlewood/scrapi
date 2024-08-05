@@ -15,17 +15,26 @@
  */
 package scrapi.impl.msg;
 
-import scrapi.impl.key.KeyableSupport;
 import scrapi.key.PublicKey;
+import scrapi.msg.MessageException;
 import scrapi.msg.Verifier;
 
-class DefaultVerifierBuilder<K extends PublicKey<?>> extends KeyableSupport<K, DefaultVerifierBuilder<K>> {
+import java.security.Provider;
+import java.security.SignatureException;
 
-    public DefaultVerifierBuilder(String jcaName) {
-        super(jcaName);
+class DefaultVerifier extends AbstractSignatureConsumer<PublicKey<?>, Verifier> implements Verifier {
+
+    DefaultVerifier(String id, Provider provider, PublicKey<?> key) {
+        super(id, provider, null, key);
     }
 
-    Verifier get() {
-        return new DefaultVerifier(this.jcaName, this.provider, this.key);
+    @Override
+    public boolean test(byte[] bytes) {
+        try {
+            return this.SIG.verify(bytes);
+        } catch (SignatureException e) {
+            String msg = "Unable to verify signature: " + e.getMessage();
+            throw new MessageException(msg, e);
+        }
     }
 }

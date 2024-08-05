@@ -13,16 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package scrapi.key;
+package scrapi.impl.key;
 
-import scrapi.alg.Randomizable;
+import scrapi.key.Key;
 
-import java.util.function.Supplier;
+import java.security.Provider;
 
-public interface KeyGen<K extends Key<?>, R extends Supplier<K>, T extends KeyGen<K, R, T>>
-        extends Randomizable<T>, KeyFactory<K, R, T> {
+public class SimpleKeyedParams<K extends Key<?>> extends KeyableSupport<K, SimpleKeyedParams<K>> {
 
-    default K generate() {
-        return get().get();
+    public SimpleKeyedParams(String jcaName, Provider provider) {
+        super(jcaName);
+        this.provider = provider;
     }
 }

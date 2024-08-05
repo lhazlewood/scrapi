@@ -17,35 +17,23 @@ package scrapi.impl.msg;
 
 import scrapi.alg.Size;
 import scrapi.impl.key.DefaultOctetSecretKeyGenerator;
-import scrapi.impl.key.KeyableSupport;
+import scrapi.impl.key.SimpleKeyedParams;
 import scrapi.key.OctetSecretKey;
 import scrapi.msg.Hasher;
 
 import java.security.Provider;
 import java.util.function.Consumer;
 
-public class DefaultMacAlgorithm extends AbstractMacAlgorithm<OctetSecretKey, DefaultMacAlgorithm.MacHasherBuilder, OctetSecretKey.Generator> {
+public class DefaultMacAlgorithm extends AbstractMacAlgorithm<OctetSecretKey, SimpleKeyedParams<OctetSecretKey>, OctetSecretKey.Generator> {
 
     public DefaultMacAlgorithm(String id, Provider provider, Size digestSize) {
         super(id, provider, digestSize, () -> new DefaultOctetSecretKeyGenerator(id, digestSize));
     }
 
-    @SuppressWarnings("ClassEscapesDefinedScope")
     @Override
-    public Hasher digester(Consumer<MacHasherBuilder> c) {
-        MacHasherBuilder builder = new MacHasherBuilder(this.ID).provider(this.PROVIDER);
-        c.accept(builder);
-        return builder.get();
-    }
-
-    static final class MacHasherBuilder extends KeyableSupport<OctetSecretKey, MacHasherBuilder> {
-
-        MacHasherBuilder(String jcaName) {
-            super(jcaName);
-        }
-
-        Hasher get() {
-            return new DefaultMacHasher(this.jcaName, this.provider, this.key);
-        }
+    public Hasher producer(Consumer<SimpleKeyedParams<OctetSecretKey>> c) {
+        SimpleKeyedParams<OctetSecretKey> params = new SimpleKeyedParams<>(this.ID, this.PROVIDER);
+        c.accept(params);
+        return new DefaultMacHasher(this.ID, this.PROVIDER, params.key());
     }
 }

@@ -22,28 +22,31 @@ import scrapi.key.PublicKey;
 import scrapi.lang.CheckedRunnable;
 import scrapi.msg.MessageConsumer;
 import scrapi.msg.MessageException;
-import scrapi.msg.Signer;
-import scrapi.msg.Verifier;
 import scrapi.util.Assert;
 
 import java.nio.ByteBuffer;
 import java.security.Provider;
 import java.security.SecureRandom;
 import java.security.Signature;
-import java.security.SignatureException;
 
-abstract class JcaSignatureSupport<T extends MessageConsumer<T>, K extends AsymmetricKey<?>> extends AbstractMessageConsumer<T> {
+abstract class AbstractSignatureConsumer<
+        K extends AsymmetricKey<?>,
+        T extends MessageConsumer<T>
+        >
+        extends AbstractMessageConsumer<T> {
 
     protected final Signature SIG;
 
-    protected JcaSignatureSupport(String id, Provider provider, final SecureRandom random, final K key) {
+    protected AbstractSignatureConsumer(String id, Provider provider, final SecureRandom random, final K key) {
         Assert.notNull(key, "Key cannot be null.");
         this.SIG = new JcaTemplate(id, provider, random).withSignature(sig -> {
             if (key instanceof PrivateKey<?, ?> priv) {
                 sig.initSign(priv.toJcaKey(), random);
-            } else {
-                PublicKey<?> pub = Assert.isInstance(PublicKey.class, key, "Unexpected AsymmetricKey type.");
+            } else if (key instanceof PublicKey<?> pub) {
                 sig.initVerify(pub.toJcaKey());
+            } else {
+                String msg = "Unsupported key type: " + key.getClass().getName();
+                throw new IllegalArgumentException(msg);
             }
             return sig;
         });
@@ -53,7 +56,7 @@ abstract class JcaSignatureSupport<T extends MessageConsumer<T>, K extends Asymm
         try {
             r.run();
         } catch (Throwable t) {
-            String msg = "Unable to apply data to " + Signature.class.getName() + " instance: " + t.getMessage();
+            String msg = "Unable to apply data to " + Signature.class.getName() + ": " + t.getMessage();
             throw new MessageException(msg, t);
         }
     }
@@ -76,39 +79,5 @@ abstract class JcaSignatureSupport<T extends MessageConsumer<T>, K extends Asymm
     @Override
     protected void doApply(ByteBuffer input) {
         apply(() -> this.SIG.update(input));
-    }
-
-    static class JcaSigner extends JcaSignatureSupport<Signer, PrivateKey<?, ?>> implements Signer {
-
-        JcaSigner(String id, Provider provider, SecureRandom random, PrivateKey<?, ?> key) {
-            super(id, provider, random, key);
-        }
-
-        @Override
-        public byte[] get() {
-            try {
-                return this.SIG.sign();
-            } catch (SignatureException e) {
-                String msg = "Unable to sign data: " + e.getMessage();
-                throw new MessageException(msg, e);
-            }
-        }
-    }
-
-    static class JcaVerifier extends JcaSignatureSupport<Verifier, PublicKey<?>> implements Verifier {
-
-        JcaVerifier(String id, Provider provider, PublicKey<?> key) {
-            super(id, provider, null, key);
-        }
-
-        @Override
-        public boolean test(byte[] bytes) {
-            try {
-                return this.SIG.verify(bytes);
-            } catch (SignatureException e) {
-                String msg = "Unable to verify signature: " + e.getMessage();
-                throw new MessageException(msg, e);
-            }
-        }
     }
 }
