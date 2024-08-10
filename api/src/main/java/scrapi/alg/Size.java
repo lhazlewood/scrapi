@@ -19,6 +19,10 @@ import scrapi.util.Bytes;
 
 public sealed interface Size extends Comparable<Size> permits DefaultSize {
 
+    Size ZERO = DefaultSize.ZERO;
+    Size MIN = ZERO;
+    Size MAX = DefaultSize.MAX;
+
     int bits();
 
     int bytes();

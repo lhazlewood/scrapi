@@ -15,7 +15,42 @@
  */
 package scrapi.msg;
 
+import java.nio.ByteBuffer;
 import java.util.function.Supplier;
 
-public interface HashAlgorithm extends IntegrityAlgorithm, DigestSized, Supplier<Hasher> {
+public interface HashAlgorithm extends IntegrityAlgorithm<Hasher, Hasher, Supplier<Hasher>, Supplier<Hasher>>, DigestSized, Hasher {
+
+    default Supplier<Hasher> verifier() {
+        return creator();
+    }
+
+    @Override
+    default boolean test(byte[] bytes) {
+        return creator().get().test(bytes);
+    }
+
+    @Override
+    default byte[] get() {
+        return creator().get().get();
+    }
+
+    @Override
+    default Hasher apply(byte input) {
+        return creator().get().apply(input);
+    }
+
+    @Override
+    default Hasher apply(byte[] input) {
+        return creator().get().apply(input);
+    }
+
+    @Override
+    default Hasher apply(byte[] input, int offset, int len) {
+        return creator().get().apply(input);
+    }
+
+    @Override
+    default Hasher apply(ByteBuffer input) {
+        return creator().get().apply(input);
+    }
 }

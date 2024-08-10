@@ -39,7 +39,7 @@ final class Providers {
      * and returned.</p>
      *
      * <p>If a new BC provider is created and returned, it is <em>not</em> registered in the JVM via
-     * {@code Security.addProvider} to ensure JJWT doesn't interfere with the application security provider
+     * {@code Security.addProvider} to ensure we don't interfere with the application security provider
      * configuration and/or expectations.</p>
      *
      * @return any available BouncyCastle Provider, or {@code null} if BouncyCastle is not available.
@@ -62,7 +62,7 @@ final class Providers {
                 }
             }
 
-            //user hasn't created the BC provider, so we'll create one just for JJWT's needs:
+            //user hasn't created the BC provider, so we'll create one just for our needs:
             provider = Classes.newInstance(clazz);
             BC_PROVIDER.set(provider);
         }

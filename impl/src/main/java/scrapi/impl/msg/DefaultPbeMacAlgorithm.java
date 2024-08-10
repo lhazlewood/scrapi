@@ -21,50 +21,49 @@ import scrapi.impl.key.DefaultPasswordGenerator;
 import scrapi.impl.key.KeyableSupport;
 import scrapi.key.Password;
 import scrapi.key.PasswordGenerator;
-import scrapi.key.PasswordStretcher;
 import scrapi.msg.Hasher;
+import scrapi.msg.PbeHasherBuilder;
+import scrapi.msg.PbeMacAlgorithm;
 import scrapi.util.Assert;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.PBEParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.security.Provider;
-import java.util.function.Consumer;
 
-public class DefaultPasswordMacAlgorithm
-        extends AbstractMacAlgorithm<Password, DefaultPasswordMacAlgorithm.PbeParams, PasswordGenerator> {
+public class DefaultPbeMacAlgorithm
+        extends AbstractMacAlgorithm<Password, PbeHasherBuilder, PasswordGenerator>
+        implements PbeMacAlgorithm {
 
     protected final int DEFAULT_ITERATIONS;
 
-    protected DefaultPasswordMacAlgorithm(String id, Provider provider, Size digestSize, int defaultIterations) {
+    protected DefaultPbeMacAlgorithm(String id, Provider provider, Size digestSize, int defaultIterations) {
         super(id, provider, digestSize, DefaultPasswordGenerator::new);
         this.DEFAULT_ITERATIONS = DefaultPassword.assertIterationsGte(defaultIterations);
     }
 
     @Override
-    public Hasher producer(Consumer<PbeParams> c) {
-        PbeParams params = new PbeParams(this.ID).provider(this.PROVIDER).iterations(this.DEFAULT_ITERATIONS);
-        c.accept(params);
-        return params.get();
+    public PbeHasherBuilder creator() {
+        return new Builder(this.ID).provider(this.PROVIDER).iterations(this.DEFAULT_ITERATIONS);
     }
 
-    public static class PbeParams extends KeyableSupport<Password, PbeParams> implements PasswordStretcher<PbeParams> {
+    private static class Builder extends KeyableSupport<Password, PbeHasherBuilder> implements PbeHasherBuilder {
 
         private byte[] salt;
         private int iterations;
 
-        public PbeParams(String jcaName) {
+        public Builder(String jcaName) {
             super(jcaName);
         }
 
         @Override
-        public PbeParams salt(byte[] salt) {
+        public PbeHasherBuilder salt(byte[] salt) {
             this.salt = Assert.notEmpty(salt, "salt cannot be null or empty").clone();
             return self();
         }
 
         @Override
-        public PbeParams iterations(int iterations) {
+        public PbeHasherBuilder iterations(int iterations) {
             this.iterations = DefaultPassword.assertIterationsGte(iterations);
             return self();
         }

@@ -17,5 +17,17 @@ package scrapi.msg;
 
 import scrapi.alg.Algorithm;
 
-public interface IntegrityAlgorithm extends Algorithm {
+import java.util.function.Predicate;
+import java.util.function.Supplier;
+
+public interface IntegrityAlgorithm<
+        D extends MessageConsumer<D> & Supplier<byte[]>,
+        V extends MessageConsumer<V> & Predicate<byte[]>,
+        DB extends Supplier<D>,
+        VB extends Supplier<V>
+        > extends Algorithm {
+
+    DB creator();
+
+    VB verifier();
 }

@@ -15,16 +15,29 @@
  */
 package scrapi.impl;
 
+import scrapi.alg.Algs;
+import scrapi.key.RsaPublicKey;
+
 // various tests using the direct Java (not Groovy) APIs.
 public class JavaTest {
 
+    void test() {
+        byte[] input = null;
+        Algs.Mac.HMD5.key(null).apply(input).get();
+        Algs.Mac.HMD5.creator(c -> c.key(null)).apply(new byte[21]).get();
+        Algs.Mac.PBEHS1.creator(c -> c.key(null).salt(null)).apply(new byte[21]).get();
+        Algs.Mac.PBEHS1.creator().key(null).salt(null).get().apply(new byte[21]).get();
+        Algs.Sig.RS256.verifier(c -> c.key(null)).apply((byte) 'f').test(null);
+        Algs.Sig.RS256.key((RsaPublicKey) null).apply((byte) 'f').test(null);
+    }
+
 //    void testWhatever() {
 //        byte[] digestA = Algs.PBEMAC
-//                .digester().password(pswd).salt(saltBytes).iterations(iterations).build()
+//                .with().password(pswd).salt(saltBytes).iterations(iterations).build()
 //                .apply(chunk1)/* ... */.apply(chunkN).get();
 //
 //        byte[] digestB = Algs.PBEMAC
-//                .digester(p -> p.password(pswd).salt(saltBytes).iterations(iterations))
+//                .with(p -> p.password(pswd).salt(saltBytes).iterations(iterations))
 //                .apply(chunk1)/* ... */.apply(chunkN).get();
 //    }
 
@@ -35,21 +48,21 @@ public class JavaTest {
 //        PBEParameterSpec paramSpec = new PBEParameterSpec(salt, 20);
 //        PBEKeySpec keySpec = new PBEKeySpec(password, salt, 20, 256);
 //        SecretKeyFactory f = SecretKeyFactory.getInstance("PBEWithHmacSHA256AndAES_128");
-//        SecretKey key = f.generateSecret(keySpec);
+//        SecretKey with = f.generateSecret(keySpec);
 //        Mac mac = Mac.getInstance("HmacPBESHA256");
 //        mac.getMacLength(); // force SPI lookup
-//        mac.init(key);
+//        mac.init(with);
 //        mac.update(salt);
 //        byte[] digest = mac.doFinal();
-//        System.out.println(key);
+//        System.out.println(with);
 //        System.out.println("Digest: " + Strings.toHex(digest));
 //    }
 
 //    @Test
 //    void sigNoData() throws Exception {
 //        Algs.Sig.get().values().stream().filter(s -> s instanceof RsaSignatureAlgorithm).map(s -> (RsaSignatureAlgorithm) s).forEach(rsa -> {
-//            RsaPrivateKey priv = rsa.key().size(1024).build(); // keep build times short
-//            byte[] sig = rsa.key(priv).get();
+//            RsaPrivateKey priv = rsa.with().size(1024).build(); // keep build times short
+//            byte[] sig = rsa.with(priv).get();
 //            byte[] jcaSig;
 //            Signature jca;
 //            try {
@@ -64,7 +77,7 @@ public class JavaTest {
 //            try {
 //                jca.initVerify(priv.publicKey().toJcaKey());
 //                assertTrue(jca.verify(jcaSig));
-//                assertTrue(rsa.key(priv.publicKey()).test(sig));
+//                assertTrue(rsa.with(priv.publicKey()).test(sig));
 //            } catch (Exception e) {
 //                throw new RuntimeException(e);
 //            }
@@ -75,10 +88,10 @@ public class JavaTest {
 //    void sigNoData2() {
 //        Algs.Sig.get().values().stream().filter(s -> s instanceof RsaSignatureAlgorithm)
 //                .map(s -> (RsaSignatureAlgorithm) s).forEach(rsa -> {
-//                    RsaPrivateKey priv = rsa.key().size(1024).build(); // keep build times short
-//                    byte[] sig = rsa.key(priv).get();
+//                    RsaPrivateKey priv = rsa.with().size(1024).build(); // keep build times short
+//                    byte[] sig = rsa.with(priv).get();
 //                    assertEquals(Bytes.bitLength(sig), (long) priv.bitLength().get()); // RSA signature length is equal to the modulus length
-//                    assert rsa.key(priv.publicKey()).test(sig);
+//                    assert rsa.with(priv.publicKey()).test(sig);
 //                });
 //    }
 }

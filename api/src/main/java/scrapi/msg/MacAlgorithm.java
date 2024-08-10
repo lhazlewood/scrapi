@@ -18,18 +18,27 @@ package scrapi.msg;
 import scrapi.key.KeyGenerator;
 import scrapi.key.Keyable;
 import scrapi.key.SymmetricKey;
+import scrapi.util.Assert;
 
-import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 public interface MacAlgorithm<
         K extends SymmetricKey,
-        P extends Keyable<K, P>,
+        DB extends Keyable<K, DB> & Supplier<Hasher>,
         G extends KeyGenerator<K, G>
         >
-        extends AuthenticityAlgorithm<K, K, Hasher, Hasher, P, P, G>, DigestSized {
+        extends AuthenticityAlgorithm<K, K, Hasher, Hasher, DB, DB, G>, DigestSized {
 
     @Override
-    default Hasher verifier(Consumer<P> c) {
-        return producer(c);
+    default Hasher key(K key) {
+        Assert.notNull(key, "Key cannot be null.");
+        DB builder = creator();
+        builder.key(key);
+        return builder.get();
+    }
+
+    @Override
+    default DB verifier() {
+        return creator();
     }
 }

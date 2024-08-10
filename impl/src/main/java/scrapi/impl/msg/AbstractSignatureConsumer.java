@@ -45,7 +45,7 @@ abstract class AbstractSignatureConsumer<
             } else if (key instanceof PublicKey<?> pub) {
                 sig.initVerify(pub.toJcaKey());
             } else {
-                String msg = "Unsupported key type: " + key.getClass().getName();
+                String msg = "Unsupported with type: " + key.getClass().getName();
                 throw new IllegalArgumentException(msg);
             }
             return sig;

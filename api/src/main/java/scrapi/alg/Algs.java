@@ -16,14 +16,12 @@
 package scrapi.alg;
 
 import scrapi.key.OctetSecretKey;
-import scrapi.key.Password;
-import scrapi.key.PasswordGenerator;
-import scrapi.key.PasswordStretcher;
 import scrapi.key.RsaPrivateKey;
 import scrapi.key.RsaPublicKey;
 import scrapi.lang.Registry;
 import scrapi.msg.HashAlgorithm;
 import scrapi.msg.MacAlgorithm;
+import scrapi.msg.PbeMacAlgorithm;
 import scrapi.msg.SignatureAlgorithm;
 import scrapi.util.Classes;
 
@@ -113,13 +111,13 @@ public final class Algs {
         public static final MacAlgorithm<OctetSecretKey, ?, ?> HS3_384 = Algs.get(get(), "HmacSHA3-384");
         public static final MacAlgorithm<OctetSecretKey, ?, ?> HS3_512 = Algs.get(get(), "HmacSHA3-512");
 
-        public static final MacAlgorithm<Password, ? extends PasswordStretcher<?>, PasswordGenerator> PBEHS1 = Algs.get(get(), "PBEWithHmacSHA1");
-        public static final MacAlgorithm<Password, ? extends PasswordStretcher<?>, PasswordGenerator> PBEHS224 = Algs.get(get(), "PBEWithHmacSHA224");
-        public static final MacAlgorithm<Password, ? extends PasswordStretcher<?>, PasswordGenerator> PBEHS256 = Algs.get(get(), "PBEWithHmacSHA256");
-        public static final MacAlgorithm<Password, ? extends PasswordStretcher<?>, PasswordGenerator> PBEHS384 = Algs.get(get(), "PBEWithHmacSHA384");
-        public static final MacAlgorithm<Password, ? extends PasswordStretcher<?>, PasswordGenerator> PBEHS512 = Algs.get(get(), "PBEWithHmacSHA512");
-        public static final MacAlgorithm<Password, ? extends PasswordStretcher<?>, PasswordGenerator> PBEHS512_224 = Algs.get(get(), "PBEWithHmacSHA512/224");
-        public static final MacAlgorithm<Password, ? extends PasswordStretcher<?>, PasswordGenerator> PBEHS512_256 = Algs.get(get(), "PBEWithHmacSHA512/256");
+        public static final PbeMacAlgorithm PBEHS1 = Algs.get(get(), "PBEWithHmacSHA1");
+        public static final PbeMacAlgorithm PBEHS224 = Algs.get(get(), "PBEWithHmacSHA224");
+        public static final PbeMacAlgorithm PBEHS256 = Algs.get(get(), "PBEWithHmacSHA256");
+        public static final PbeMacAlgorithm PBEHS384 = Algs.get(get(), "PBEWithHmacSHA384");
+        public static final PbeMacAlgorithm PBEHS512 = Algs.get(get(), "PBEWithHmacSHA512");
+        public static final PbeMacAlgorithm PBEHS512_224 = Algs.get(get(), "PBEWithHmacSHA512/224");
+        public static final PbeMacAlgorithm PBEHS512_256 = Algs.get(get(), "PBEWithHmacSHA512/256");
 
         /*
          * Per <a href="https://datatracker.ietf.org/doc/html/rfc7292#appendix-B">RFC 7292, Appendix B</a>, the
@@ -138,31 +136,31 @@ public final class Algs {
 
         @SuppressWarnings("DeprecatedIsStillUsed")
         @Deprecated // per https://datatracker.ietf.org/doc/html/rfc7292#appendix-B
-        public static final MacAlgorithm<Password, ? extends PasswordStretcher<?>, PasswordGenerator> PKCS12HS1 = Algs.get(get(), "HmacPBESHA1");
+        public static final PbeMacAlgorithm PKCS12HS1 = Algs.get(get(), "HmacPBESHA1");
 
         @SuppressWarnings("DeprecatedIsStillUsed")
         @Deprecated // per https://datatracker.ietf.org/doc/html/rfc7292#appendix-B
-        public static final MacAlgorithm<Password, ? extends PasswordStretcher<?>, PasswordGenerator> PKCS12HS224 = Algs.get(get(), "HmacPBESHA224");
+        public static final PbeMacAlgorithm PKCS12HS224 = Algs.get(get(), "HmacPBESHA224");
 
         @SuppressWarnings("DeprecatedIsStillUsed")
         @Deprecated // per https://datatracker.ietf.org/doc/html/rfc7292#appendix-B
-        public static final MacAlgorithm<Password, ? extends PasswordStretcher<?>, PasswordGenerator> PKCS12HS256 = Algs.get(get(), "HmacPBESHA256");
+        public static final PbeMacAlgorithm PKCS12HS256 = Algs.get(get(), "HmacPBESHA256");
 
         @SuppressWarnings("DeprecatedIsStillUsed")
         @Deprecated // per https://datatracker.ietf.org/doc/html/rfc7292#appendix-B
-        public static final MacAlgorithm<Password, ? extends PasswordStretcher<?>, PasswordGenerator> PKCS12HS384 = Algs.get(get(), "HmacPBESHA384");
+        public static final PbeMacAlgorithm PKCS12HS384 = Algs.get(get(), "HmacPBESHA384");
 
         @SuppressWarnings("DeprecatedIsStillUsed")
         @Deprecated // per https://datatracker.ietf.org/doc/html/rfc7292#appendix-B
-        public static final MacAlgorithm<Password, ? extends PasswordStretcher<?>, PasswordGenerator> PKCS12HS512 = Algs.get(get(), "HmacPBESHA512");
+        public static final PbeMacAlgorithm PKCS12HS512 = Algs.get(get(), "HmacPBESHA512");
 
         @SuppressWarnings("DeprecatedIsStillUsed")
         @Deprecated // per https://datatracker.ietf.org/doc/html/rfc7292#appendix-B
-        public static final MacAlgorithm<Password, ? extends PasswordStretcher<?>, PasswordGenerator> PKCS12HS512_224 = Algs.get(get(), "HmacPBESHA512/224");
+        public static final PbeMacAlgorithm PKCS12HS512_224 = Algs.get(get(), "HmacPBESHA512/224");
 
         @SuppressWarnings("DeprecatedIsStillUsed")
         @Deprecated // per https://datatracker.ietf.org/doc/html/rfc7292#appendix-B
-        public static final MacAlgorithm<Password, ? extends PasswordStretcher<?>, PasswordGenerator> PKCS12HS512_256 = Algs.get(get(), "HmacPBESHA512/256");
+        public static final PbeMacAlgorithm PKCS12HS512_256 = Algs.get(get(), "HmacPBESHA512/256");
     }
 
     public static final class Sig {

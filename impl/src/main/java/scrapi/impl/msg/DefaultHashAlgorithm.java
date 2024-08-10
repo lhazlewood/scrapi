@@ -23,8 +23,10 @@ import scrapi.util.Assert;
 
 import java.security.MessageDigest;
 import java.security.Provider;
+import java.util.function.Supplier;
 
-class DefaultHashAlgorithm extends AbstractDigestAlgorithm implements HashAlgorithm {
+class DefaultHashAlgorithm extends AbstractDigestAlgorithm<Hasher, Hasher, Supplier<Hasher>, Supplier<Hasher>>
+        implements HashAlgorithm {
 
     private static Size digestSize(String jcaName, Provider provider) {
         int numBytes = new JcaTemplate(jcaName, provider).withMessageDigest(MessageDigest::getDigestLength);
@@ -41,8 +43,8 @@ class DefaultHashAlgorithm extends AbstractDigestAlgorithm implements HashAlgori
     }
 
     @Override
-    public Hasher get() {
-        return new JcaMessageDigester(this.ID, this.PROVIDER);
+    public Supplier<Hasher> creator() {
+        return () -> new JcaMessageDigester(this.ID, this.PROVIDER);
     }
 
     @Override
@@ -50,5 +52,4 @@ class DefaultHashAlgorithm extends AbstractDigestAlgorithm implements HashAlgori
         if (obj == this) return true;
         return obj instanceof HashAlgorithm && super.equals(obj);
     }
-
 }

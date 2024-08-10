@@ -13,19 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package scrapi.impl.msg;
+package scrapi.msg;
 
-import scrapi.alg.Providable;
-import scrapi.alg.Randomizable;
-import scrapi.key.Keyable;
-import scrapi.key.PrivateKey;
-import scrapi.msg.Signer;
+import scrapi.key.Password;
+import scrapi.key.PasswordGenerator;
 
-import java.util.function.Supplier;
-
-public interface SignerBuilder<K extends PrivateKey<?, ?>>
-        extends Providable<SignerBuilder<K>>,
-        Randomizable<SignerBuilder<K>>,
-        Keyable<K, SignerBuilder<K>>,
-        Supplier<Signer> {
+public interface PbeMacAlgorithm extends MacAlgorithm<Password, PbeHasherBuilder, PasswordGenerator> {
 }

@@ -94,9 +94,9 @@ public class JcaTemplate {
     private final Provider provider;
     private final SecureRandom secureRandom;
 
-    public JcaTemplate(String jcaName) {
-        this(jcaName, null);
-    }
+//    public JcaTemplate(String jcaName) {
+//        this(jcaName, null);
+//    }
 
     public JcaTemplate(String jcaName, Provider provider) {
         this(jcaName, provider, null);
@@ -488,8 +488,8 @@ public class JcaTemplate {
 
         @Override
         public MessageDigest doGet(String jcaName, Provider provider) throws NoSuchAlgorithmException {
-            MessageDigest digest = MessageDigest.getInstance(jcaName);
-            digest.reset();
+//            MessageDigest digest = MessageDigest.getInstance(jcaName);
+//            digest.reset();
             return provider != null ? MessageDigest.getInstance(jcaName, provider) : MessageDigest.getInstance(jcaName);
         }
     }

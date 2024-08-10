@@ -20,27 +20,36 @@ import scrapi.util.Bytes;
 
 final class DefaultSize implements Size {
 
-    static final Size ZERO = bits(0);
-
-    private static final int MAX_BITS = Integer.MAX_VALUE;
-    private static final int MAX_BYTES = Integer.MAX_VALUE / Byte.SIZE;
+    private static final int MIN_BITS = 0;
+    private static final int MAX_BITS = Integer.MAX_VALUE - 7;
+    private static final int MIN_BYTES = 0;
+    private static final int MAX_BYTES = MAX_BITS / Byte.SIZE;
+    private static final String MIN_BITS_MSG = "bits must be >= " + MIN_BITS;
     private static final String MAX_BITS_MSG = "bits must be <= " + MAX_BITS;
+    private static final String MIN_BYTES_MSG = "bytes must be >= " + MIN_BYTES;
     private static final String MAX_BYTES_MSG = "bytes must be <= " + MAX_BYTES;
+
+    static final Size ZERO = new DefaultSize(0);
+    static final Size MAX = new DefaultSize(MAX_BITS);
+
     private final int bits;
     private final int bytes;
 
     static Size bits(int bits) {
-        int val = Assert.lte(Assert.gte(bits, 0, "bits must be >= 0"), MAX_BITS, MAX_BITS_MSG);
-        return bits == 0 ? ZERO : new DefaultSize(val);
+        return switch (bits) {
+            case 0 -> ZERO;
+            case MAX_BITS -> MAX;
+            default -> new DefaultSize(bits);
+        };
     }
 
     static Size bytes(int bytes) {
-        int val = Assert.lte(Assert.gte(bytes, 0, "bytes must be >= 0"), MAX_BYTES, MAX_BYTES_MSG);
+        int val = Assert.lte(Assert.gte(bytes, MIN_BYTES, MIN_BYTES_MSG), MAX_BYTES, MAX_BYTES_MSG);
         return bits(val * Byte.SIZE);
     }
 
     private DefaultSize(int bits) {
-        this.bits = bits;
+        this.bits = Assert.lte(Assert.gte(bits, MIN_BITS, MIN_BITS_MSG), MAX_BITS, MAX_BITS_MSG);
         this.bytes = Bytes.length(bits);
     }
 

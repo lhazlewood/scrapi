@@ -13,13 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package scrapi.impl.msg;
+package scrapi.msg;
 
 import scrapi.key.Keyable;
-import scrapi.key.PublicKey;
-import scrapi.msg.Verifier;
+import scrapi.key.Password;
+import scrapi.key.PasswordStretcher;
 
 import java.util.function.Supplier;
 
-public interface VerifierBuilder<K extends PublicKey<?>> extends Keyable<K, VerifierBuilder<K>>, Supplier<Verifier> {
+public interface PbeHasherBuilder extends Keyable<Password, PbeHasherBuilder>, PasswordStretcher<PbeHasherBuilder>, Supplier<Hasher> {
 }

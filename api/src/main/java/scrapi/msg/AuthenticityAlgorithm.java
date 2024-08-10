@@ -27,27 +27,37 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 public interface AuthenticityAlgorithm<
-        PK extends ConfidentialKey<?>,
+        DK extends ConfidentialKey<?>,
         VK extends Key<?>,
-        P extends MessageConsumer<P> & Supplier<byte[]>,
+        D extends MessageConsumer<D> & Supplier<byte[]>,
         V extends MessageConsumer<V> & Predicate<byte[]>,
-        PP extends Keyable<PK, PP>,
-        VP extends Keyable<VK, VP>,
-        G extends KeyGenerator<PK, G>
+        DB extends Keyable<DK, DB> & Supplier<D>,
+        VB extends Keyable<VK, VB> & Supplier<V>,
+        G extends KeyGenerator<DK, G>
         >
-        extends IntegrityAlgorithm, KeyGeneratorSupplier<PK, G> {
+        extends IntegrityAlgorithm<D, V, DB, VB>, KeyGeneratorSupplier<DK, G> {
 
-    default P producer(PK key) {
-        Assert.notNull(key, "key cannot be null.");
-        return producer(c -> c.key(key));
+    default D key(DK key) {
+        Assert.notNull(key, "Key cannot be null.");
+        return creator().key(key).get();
     }
 
-    P producer(Consumer<PP> c);
-
-    default V verifier(VK key) {
-        Assert.notNull(key, "key cannot be null.");
-        return verifier(c -> c.key(key));
+    default D creator(Consumer<DB> c) {
+        Assert.notNull(c, "Consumer cannot be null.");
+        DB builder = creator();
+        c.accept(builder);
+        return builder.get();
     }
 
-    V verifier(Consumer<VP> c);
+    default V key(VK key) {
+        Assert.notNull(key, "Key cannot be null.");
+        return verifier().key(key).get();
+    }
+
+    default V verifier(Consumer<VB> c) {
+        Assert.notNull(c, "Consumer cannot be null.");
+        VB builder = verifier();
+        c.accept(builder);
+        return builder.get();
+    }
 }

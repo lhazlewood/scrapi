@@ -16,17 +16,13 @@
 package scrapi.impl.msg;
 
 import scrapi.impl.alg.AbstractAlgorithm;
-import scrapi.impl.key.SimpleKeyedParams;
 import scrapi.key.KeyGenerator;
 import scrapi.key.PrivateKey;
 import scrapi.key.PublicKey;
 import scrapi.msg.SignatureAlgorithm;
-import scrapi.msg.Signer;
-import scrapi.msg.Verifier;
 import scrapi.util.Assert;
 
 import java.security.Provider;
-import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 class DefaultSignatureAlgorithm<
@@ -34,7 +30,7 @@ class DefaultSignatureAlgorithm<
         R extends PrivateKey<?, U>,
         G extends KeyGenerator<R, G>>
         extends AbstractAlgorithm
-        implements SignatureAlgorithm<U, R, SimpleKeyedParams<R>, SimpleKeyedParams<U>, G> {
+        implements SignatureAlgorithm<U, R, DefaultSignerBuilder<R>, DefaultVerifierBuilder<U>, G> {
 
     private final Supplier<G> SUPPLIER;
 
@@ -44,17 +40,13 @@ class DefaultSignatureAlgorithm<
     }
 
     @Override
-    public Signer producer(Consumer<SimpleKeyedParams<R>> c) {
-        SimpleKeyedParams<R> p = new SimpleKeyedParams<>(this.ID, this.PROVIDER);
-        c.accept(p);
-        return new DefaultSigner(this.ID, this.PROVIDER, p.random(), p.key());
+    public DefaultSignerBuilder<R> creator() {
+        return new DefaultSignerBuilder<>(this.ID);
     }
 
     @Override
-    public Verifier verifier(Consumer<SimpleKeyedParams<U>> c) {
-        SimpleKeyedParams<U> p = new SimpleKeyedParams<>(this.ID, this.PROVIDER);
-        c.accept(p);
-        return new DefaultVerifier(this.ID, this.PROVIDER, p.key());
+    public DefaultVerifierBuilder<U> verifier() {
+        return new DefaultVerifierBuilder<>(this.ID);
     }
 
     @Override
