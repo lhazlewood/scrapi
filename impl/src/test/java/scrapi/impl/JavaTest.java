@@ -16,19 +16,26 @@
 package scrapi.impl;
 
 import scrapi.alg.Algs;
+import scrapi.key.OctetSecretKey;
+import scrapi.key.Password;
+import scrapi.key.RsaPrivateKey;
 import scrapi.key.RsaPublicKey;
 
 // various tests using the direct Java (not Groovy) APIs.
 public class JavaTest {
 
     void test() {
+        OctetSecretKey sk = null;
+        Password pass = null;
+        RsaPublicKey pub = null;
+        RsaPrivateKey priv = null;
         byte[] input = null;
-        Algs.Mac.HMD5.key(null).apply(input).get();
-        Algs.Mac.HMD5.creator(c -> c.key(null)).apply(new byte[21]).get();
-        Algs.Mac.PBEHS1.creator(c -> c.key(null).salt(null)).apply(new byte[21]).get();
-        Algs.Mac.PBEHS1.creator().key(null).salt(null).get().apply(new byte[21]).get();
+        Algs.Mac.HMD5.key(sk).apply(input).get();
+        Algs.Mac.HMD5.creator(c -> c.key(sk)).apply(new byte[21]).get();
+        Algs.Mac.PBEHS1.creator(c -> c.key(pass).salt(null)).apply(new byte[21]).get();
+        Algs.Mac.PBEHS1.creator().key(pass).salt(null).get().apply(new byte[21]).get();
         Algs.Sig.RS256.verifier(c -> c.key(null)).apply((byte) 'f').test(null);
-        Algs.Sig.RS256.key((RsaPublicKey) null).apply((byte) 'f').test(null);
+        Algs.Sig.RS256.key(pub).apply((byte) 'f').test(null);
     }
 
 //    void testWhatever() {
