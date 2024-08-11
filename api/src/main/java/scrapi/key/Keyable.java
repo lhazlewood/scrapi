@@ -31,7 +31,7 @@ public interface Keyable<K extends Key<?>, T> {
      * Accepts the specified key.
      *
      * @param key the key to accept.
-     * @return the key to accept.
+     * @return the associated object for method chaining.
      */
     T key(K key);
 

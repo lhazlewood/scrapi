@@ -24,7 +24,7 @@ import java.util.function.Supplier;
 class DefaultSignerBuilder<K extends PrivateKey<?, ?>> extends KeyableSupport<K, DefaultSignerBuilder<K>>
         implements Supplier<Signer> {
 
-    public DefaultSignerBuilder(String jcaName) {
+    DefaultSignerBuilder(String jcaName) {
         super(jcaName);
     }
 

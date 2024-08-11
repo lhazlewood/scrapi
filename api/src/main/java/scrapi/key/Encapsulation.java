@@ -15,7 +15,9 @@
  */
 package scrapi.key;
 
-public interface Encapsulation extends Keyed<ConfidentialKey<?>> {
+import java.util.function.Supplier;
+
+public interface Encapsulation extends Supplier<ConfidentialKey<?>> {
 
     byte[] ciphertext();
 }

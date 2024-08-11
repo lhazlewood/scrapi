@@ -24,7 +24,7 @@ import java.util.function.Supplier;
 class DefaultVerifierBuilder<K extends PublicKey<?>> extends KeyableSupport<K, DefaultVerifierBuilder<K>>
         implements Supplier<Verifier> {
 
-    public DefaultVerifierBuilder(String jcaName) {
+    DefaultVerifierBuilder(String jcaName) {
         super(jcaName);
     }
 

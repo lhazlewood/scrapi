@@ -21,7 +21,7 @@ import scrapi.util.Assert;
 import java.util.Objects;
 import java.util.function.Predicate;
 
-public class DefaultParameter<T> implements Parameter<T> {
+public final class DefaultParameter<T> implements Parameter<T> {
 
     private final String ID;
     private final String NAME;

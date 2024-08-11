@@ -18,7 +18,7 @@ package scrapi.impl.util;
 import scrapi.impl.lang.Assertion;
 import scrapi.lang.Identified;
 
-public interface Parameter<T> extends Identified<String>, Assertion<T> {
+public sealed interface Parameter<T> extends Identified<String>, Assertion<T> permits DefaultParameter {
 
     String name();
 

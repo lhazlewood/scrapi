@@ -24,9 +24,9 @@ import scrapi.msg.Hasher;
 import java.security.Provider;
 import java.util.function.Supplier;
 
-public class DefaultMacAlgorithm extends AbstractMacAlgorithm<OctetSecretKey, DefaultMacAlgorithm.DefaultMacHasherBuilder, OctetSecretKey.Generator> {
+class DefaultMacAlgorithm extends AbstractMacAlgorithm<OctetSecretKey, DefaultMacAlgorithm.DefaultMacHasherBuilder, OctetSecretKey.Generator> {
 
-    public DefaultMacAlgorithm(String id, Provider provider, Size digestSize) {
+    DefaultMacAlgorithm(String id, Provider provider, Size digestSize) {
         super(id, provider, digestSize, () -> new DefaultOctetSecretKeyGenerator(id, digestSize));
     }
 
@@ -35,7 +35,7 @@ public class DefaultMacAlgorithm extends AbstractMacAlgorithm<OctetSecretKey, De
         return new DefaultMacHasherBuilder(this.ID).provider(this.PROVIDER);
     }
 
-    public static class DefaultMacHasherBuilder extends KeyableSupport<OctetSecretKey, DefaultMacHasherBuilder>
+    static class DefaultMacHasherBuilder extends KeyableSupport<OctetSecretKey, DefaultMacHasherBuilder>
             implements Supplier<Hasher> {
 
         public DefaultMacHasherBuilder(String jcaName) {

@@ -31,13 +31,13 @@ import javax.crypto.spec.PBEParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.security.Provider;
 
-public class DefaultPbeMacAlgorithm
+class DefaultPbeMacAlgorithm
         extends AbstractMacAlgorithm<Password, PbeHasherBuilder, PasswordGenerator>
         implements PbeMacAlgorithm {
 
     protected final int DEFAULT_ITERATIONS;
 
-    protected DefaultPbeMacAlgorithm(String id, Provider provider, Size digestSize, int defaultIterations) {
+    DefaultPbeMacAlgorithm(String id, Provider provider, Size digestSize, int defaultIterations) {
         super(id, provider, digestSize, DefaultPasswordGenerator::new);
         this.DEFAULT_ITERATIONS = DefaultPassword.assertIterationsGte(defaultIterations);
     }
