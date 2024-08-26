@@ -13,16 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package scrapi.key;
+package scrapi.msg;
 
-import scrapi.alg.Randomizable;
+import scrapi.key.Password;
+import scrapi.key.PasswordGenerator;
+import scrapi.key.PasswordStretcher;
 
-import java.util.function.Supplier;
-
-public interface KeyGen<K extends Key<?>, R extends Supplier<K>, T extends KeyGen<K, R, T>>
-        extends Randomizable<T>, KeyFactory<K, R, T> {
-
-    default K generate() {
-        return get().get();
-    }
+public interface PasswordMacAlgorithm<S extends PasswordStretcher<S>> extends MacAlgorithm<Password, S, PasswordGenerator> {
 }

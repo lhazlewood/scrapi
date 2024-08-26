@@ -13,16 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package scrapi.impl.key;
+package scrapi.alg;
 
-import scrapi.key.Key;
+/**
+ * Interface implemented by {@code Object}s that allow configuration of a cryptographic {@link Size}, for example,
+ * block size, key length, etc.
+ *
+ * @param <T> the type of {@code Object} returned after setting the {@code SecureRandom}, usually for method chaining.
+ * @since SCRAPI_RELEASE_VERSION
+ */
+@FunctionalInterface
+public interface Sizeable<T> {
 
-import java.security.Provider;
-
-public class SimpleKeyedParams<K extends Key<?>> extends KeyableSupport<K, SimpleKeyedParams<K>> {
-
-    public SimpleKeyedParams(String jcaName, Provider provider) {
-        super(jcaName);
-        this.provider = provider;
-    }
+    /**
+     * Sets the cryptographic {@link Size}.
+     *
+     * @param s the cryptographic size.
+     * @return the associated object for method chaining.
+     */
+    T size(Size s);
 }

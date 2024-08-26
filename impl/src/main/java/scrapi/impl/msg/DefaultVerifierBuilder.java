@@ -19,17 +19,13 @@ import scrapi.impl.key.KeyableSupport;
 import scrapi.key.PublicKey;
 import scrapi.msg.Verifier;
 
-import java.util.function.Supplier;
-
-class DefaultVerifierBuilder<K extends PublicKey<?>> extends KeyableSupport<K, DefaultVerifierBuilder<K>>
-        implements Supplier<Verifier> {
+class DefaultVerifierBuilder<K extends PublicKey<?>> extends KeyableSupport<K, DefaultVerifierBuilder<K>> {
 
     DefaultVerifierBuilder(String jcaName) {
         super(jcaName);
     }
 
-    @Override
-    public Verifier get() {
+    Verifier get() {
         return new DefaultVerifier(this.jcaName, this.provider, this.key);
     }
 }

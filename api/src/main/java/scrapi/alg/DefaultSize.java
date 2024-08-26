@@ -21,9 +21,14 @@ import scrapi.util.Bytes;
 final class DefaultSize implements Size {
 
     private static final int MIN_BITS = 0;
-    private static final int MAX_BITS = Integer.MAX_VALUE - 7;
+
+    /**
+     * Any more than this would cause integer overflow when computing bytes via (bits + 7) / 8.
+     */
+    private static final int BIT_DIVISION_THRESHOLD = Integer.MAX_VALUE - 7;
+    private static final int MAX_BITS = Integer.MAX_VALUE;
     private static final int MIN_BYTES = 0;
-    private static final int MAX_BYTES = MAX_BITS / Byte.SIZE;
+    private static final int MAX_BYTES = (BIT_DIVISION_THRESHOLD / Byte.SIZE) + 1;
     private static final String MIN_BITS_MSG = "bits must be >= " + MIN_BITS;
     private static final String MAX_BITS_MSG = "bits must be <= " + MAX_BITS;
     private static final String MIN_BYTES_MSG = "bytes must be >= " + MIN_BYTES;
@@ -50,7 +55,11 @@ final class DefaultSize implements Size {
 
     private DefaultSize(int bits) {
         this.bits = Assert.lte(Assert.gte(bits, MIN_BITS, MIN_BITS_MSG), MAX_BITS, MAX_BITS_MSG);
-        this.bytes = Bytes.length(bits);
+        if (bits > BIT_DIVISION_THRESHOLD) { // (bits + 7) / 8 would cause integer overflow, just add explicitly:
+            this.bytes = MAX_BYTES;
+        } else {
+            this.bytes = Bytes.length(bits); // (bits + 7) / 8
+        }
     }
 
     @Override

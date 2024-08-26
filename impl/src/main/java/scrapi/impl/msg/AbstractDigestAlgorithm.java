@@ -19,21 +19,12 @@ import scrapi.alg.Size;
 import scrapi.impl.alg.AbstractAlgorithm;
 import scrapi.msg.DigestSized;
 import scrapi.msg.IntegrityAlgorithm;
-import scrapi.msg.MessageConsumer;
 import scrapi.util.Assert;
 import scrapi.util.Objects;
 
 import java.security.Provider;
-import java.util.function.Predicate;
-import java.util.function.Supplier;
 
-abstract class AbstractDigestAlgorithm<
-        D extends MessageConsumer<D> & Supplier<byte[]>,
-        V extends MessageConsumer<V> & Predicate<byte[]>,
-        DB extends Supplier<D>,
-        VB extends Supplier<V>
-        >
-        extends AbstractAlgorithm implements IntegrityAlgorithm<D, V, DB, VB>, DigestSized {
+abstract class AbstractDigestAlgorithm extends AbstractAlgorithm implements IntegrityAlgorithm, DigestSized {
 
     protected final Size DIGEST_SIZE;
 
@@ -55,7 +46,7 @@ abstract class AbstractDigestAlgorithm<
     @Override
     public boolean equals(Object obj) {
         if (obj == this) return true;
-        return obj instanceof AbstractDigestAlgorithm<?, ?, ?, ?> a &&
+        return obj instanceof AbstractDigestAlgorithm a &&
                 super.equals(a) && this.DIGEST_SIZE.equals(a.DIGEST_SIZE);
     }
 }

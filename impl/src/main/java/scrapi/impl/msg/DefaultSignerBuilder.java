@@ -19,17 +19,13 @@ import scrapi.impl.key.KeyableSupport;
 import scrapi.key.PrivateKey;
 import scrapi.msg.Signer;
 
-import java.util.function.Supplier;
-
-class DefaultSignerBuilder<K extends PrivateKey<?, ?>> extends KeyableSupport<K, DefaultSignerBuilder<K>>
-        implements Supplier<Signer> {
+class DefaultSignerBuilder<K extends PrivateKey<?, ?>> extends KeyableSupport<K, DefaultSignerBuilder<K>> {
 
     DefaultSignerBuilder(String jcaName) {
         super(jcaName);
     }
 
-    @Override
-    public Signer get() {
+    Signer get() {
         return new DefaultSigner(this.jcaName, this.provider, this.random, this.key);
     }
 }

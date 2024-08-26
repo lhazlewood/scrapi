@@ -20,9 +20,12 @@ import scrapi.key.KeyGenerator;
 import scrapi.key.PrivateKey;
 import scrapi.key.PublicKey;
 import scrapi.msg.SignatureAlgorithm;
+import scrapi.msg.Signer;
+import scrapi.msg.Verifier;
 import scrapi.util.Assert;
 
 import java.security.Provider;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 class DefaultSignatureAlgorithm<
@@ -40,13 +43,17 @@ class DefaultSignatureAlgorithm<
     }
 
     @Override
-    public DefaultSignerBuilder<R> creator() {
-        return new DefaultSignerBuilder<>(this.ID);
+    public Signer with(Consumer<DefaultSignerBuilder<R>> c) {
+        DefaultSignerBuilder<R> builder = new DefaultSignerBuilder<R>(this.ID).provider(this.PROVIDER);
+        c.accept(builder);
+        return builder.get();
     }
 
     @Override
-    public DefaultVerifierBuilder<U> verifier() {
-        return new DefaultVerifierBuilder<>(this.ID);
+    public Verifier verifier(Consumer<DefaultVerifierBuilder<U>> c) {
+        DefaultVerifierBuilder<U> builder = new DefaultVerifierBuilder<U>(this.ID).provider(this.PROVIDER);
+        c.accept(builder);
+        return builder.get();
     }
 
     @Override

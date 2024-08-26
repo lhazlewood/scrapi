@@ -16,12 +16,13 @@
 package scrapi.impl.key;
 
 import scrapi.alg.Size;
+import scrapi.key.KeyGenerator;
 import scrapi.key.OctetSecretKey;
 
 import javax.crypto.SecretKey;
 
-public class DefaultOctetSecretKeyGenerator extends AbstractKeyGenerator<OctetSecretKey, OctetSecretKey.Generator>
-        implements OctetSecretKey.Generator {
+public class DefaultOctetSecretKeyGenerator extends AbstractKeyGenerator<OctetSecretKey, DefaultOctetSecretKeyGenerator>
+        implements KeyGenerator<OctetSecretKey, DefaultOctetSecretKeyGenerator> {
 
     public DefaultOctetSecretKeyGenerator(String jcaName, Size minSize) {
         super(jcaName, minSize, minSize);

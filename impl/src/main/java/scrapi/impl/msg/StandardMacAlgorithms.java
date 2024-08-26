@@ -41,7 +41,7 @@ public final class StandardMacAlgorithms extends IdentifiableRegistry<String, Ma
     // https://docs.oracle.com/en/java/javase/21/docs/specs/security/standard-names.html#mac-algorithms
     // ------------------------------------------------------------------------------------------------
     private static List<MacAlgorithm<?, ?, ?>> createAlgs() {
-        Collection<HashAlgorithm> hashAlgs = Algs.Hash.get().values();
+        Collection<? extends HashAlgorithm> hashAlgs = Algs.Hash.get().values();
         List<MacAlgorithm<?, ?, ?>> macs = new ArrayList<>(hashAlgs.size() * 3);
         for (HashAlgorithm hashAlg : hashAlgs) {
 
@@ -70,8 +70,8 @@ public final class StandardMacAlgorithms extends IdentifiableRegistry<String, Ma
                 defaultIterations = 1_300_000;
             }
 
-            macs.add(new DefaultPbeMacAlgorithm("PBEWithHmac" + suffix, null, digestSize, defaultIterations));
-            macs.add(new DefaultPbeMacAlgorithm("HmacPBE" + suffix, null, digestSize, defaultIterations));
+            macs.add(new DefaultPasswordMacAlgorithm("PBEWithHmac" + suffix, null, digestSize, defaultIterations));
+            macs.add(new DefaultPasswordMacAlgorithm("HmacPBE" + suffix, null, digestSize, defaultIterations));
         }
         return Collections.immutable(macs);
     }

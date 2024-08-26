@@ -19,5 +19,5 @@ public interface PasswordStretcher<T extends PasswordStretcher<T>> extends Keyab
 
     T salt(byte[] salt);
 
-    T iterations(int iterations);
+    T cost(int i);
 }

@@ -20,6 +20,7 @@ import scrapi.key.OctetSecretKey;
 import scrapi.key.Password;
 import scrapi.key.RsaPrivateKey;
 import scrapi.key.RsaPublicKey;
+import scrapi.msg.MacAlgorithm;
 
 // various tests using the direct Java (not Groovy) APIs.
 public class JavaTest {
@@ -30,21 +31,26 @@ public class JavaTest {
         RsaPublicKey pub = null;
         RsaPrivateKey priv = null;
         byte[] input = null;
-        Algs.Mac.HMD5.key(sk).apply(input).get();
-        Algs.Mac.HMD5.creator(c -> c.key(sk)).apply(new byte[21]).get();
-        Algs.Mac.PBEHS1.creator(c -> c.key(pass).salt(null)).apply(new byte[21]).get();
-        Algs.Mac.PBEHS1.creator().key(pass).salt(null).get().apply(new byte[21]).get();
-        Algs.Sig.RS256.verifier(c -> c.key(null)).apply((byte) 'f').test(null);
-        Algs.Sig.RS256.key(pub).apply((byte) 'f').test(null);
+
+        Algs.Mac.HMD5.with(sk).apply(input).get();
+        Algs.Mac.HMD5.with(c -> c.key(sk)).apply(input).get();
+        Algs.Mac.HS256.with(sk).apply(input).get();
+
+        Algs.Mac.PBEHS1.with(c -> c.key(pass).salt(null)).apply(new byte[21]).get();
+
+        Algs.Sig.RS256.with(c -> c.key(priv)).apply(input).get();
+        Algs.Sig.RS256.with(priv).apply(input).get();
+        Algs.Sig.RS256.verifier(c -> c.key(pub)).apply(input).test(null);
+        Algs.Sig.RS256.with(pub).apply(input).test(null);
     }
 
 //    void testWhatever() {
 //        byte[] digestA = Algs.PBEMAC
-//                .with().password(pswd).salt(saltBytes).iterations(iterations).build()
+//                .with().password(pswd).salt(saltBytes).cost(cost).build()
 //                .apply(chunk1)/* ... */.apply(chunkN).get();
 //
 //        byte[] digestB = Algs.PBEMAC
-//                .with(p -> p.password(pswd).salt(saltBytes).iterations(iterations))
+//                .with(p -> p.password(pswd).salt(saltBytes).cost(cost))
 //                .apply(chunk1)/* ... */.apply(chunkN).get();
 //    }
 

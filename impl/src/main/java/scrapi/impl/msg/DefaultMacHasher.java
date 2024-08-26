@@ -36,7 +36,7 @@ class DefaultMacHasher extends AbstractMessageConsumer<Hasher> implements Hasher
     }
 
     DefaultMacHasher(String id, Provider provider, SymmetricKey key) {
-        Assert.notNull(key, "MAC with cannot be null.");
+        Assert.notNull(key, "MAC key cannot be null.");
         javax.crypto.SecretKey jcaKey = Assert.notNull(key.toJcaKey(), JCA_KEY_NOT_NULL);
         this.MAC = new JcaTemplate(id, provider).withMac(mac -> {
             mac.init(jcaKey);

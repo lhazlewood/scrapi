@@ -28,6 +28,7 @@ import javax.crypto.Mac
 import javax.crypto.spec.PBEParameterSpec
 import java.nio.ByteBuffer
 import java.security.MessageDigest
+import java.util.function.Consumer
 
 import static org.junit.jupiter.api.Assertions.assertEquals
 import static org.junit.jupiter.api.Assertions.assertTrue
@@ -85,14 +86,14 @@ class StandardMacAlgorithmsTest {
         def salt = Bytes.randomBits(alg.digestSize().bits())
         def iterations = DefaultPassword.MIN_ITERATIONS // keep password-based Mac tests fast
 
-        def configurer = { params ->
+        Consumer configurer = { params ->
             params.key(key)
             if (key instanceof Password) {
-                params.salt(salt).iterations(iterations)
+                params.salt(salt).cost(iterations)
             }
         }
         // Digest data using our API:
-        def hasher = alg.creator(configurer) as Hasher
+        def hasher = alg.with(configurer) as Hasher
         if (data) data.each { hasher.apply(it); if (it instanceof ByteBuffer) it.rewind() }
         def digest = hasher.get()
 

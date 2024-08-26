@@ -21,14 +21,20 @@ import scrapi.key.Keyable;
 import scrapi.key.PrivateKey;
 import scrapi.key.PublicKey;
 
-import java.util.function.Supplier;
-
 public interface SignatureAlgorithm<
         P extends PublicKey<?>,
         S extends PrivateKey<?, P>,
-        DB extends Keyable<S, DB> & Randomizable<DB> & Supplier<Signer>,
-        VB extends Keyable<P, VB> & Supplier<Verifier>,
+        SP extends Keyable<S, SP> & Randomizable<SP>,
+        VP extends Keyable<P, VP>,
         G extends KeyGenerator<S, G>
         >
-        extends AuthenticityAlgorithm<S, P, Signer, Verifier, DB, VB, G> {
+        extends AuthenticityAlgorithm<S, P, SP, VP, Signer, Verifier, G> {
+
+    default Signer with(S priv) {
+        return with(c -> c.key(priv));
+    }
+
+    default Verifier with(P pub) {
+        return verifier(c -> c.key(pub));
+    }
 }

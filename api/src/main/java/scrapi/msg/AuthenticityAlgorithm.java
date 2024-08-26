@@ -20,7 +20,6 @@ import scrapi.key.Key;
 import scrapi.key.KeyGenerator;
 import scrapi.key.KeyGeneratorSupplier;
 import scrapi.key.Keyable;
-import scrapi.util.Assert;
 
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -29,35 +28,15 @@ import java.util.function.Supplier;
 public interface AuthenticityAlgorithm<
         DK extends ConfidentialKey<?>,
         VK extends Key<?>,
+        DP extends Keyable<DK, DP>,
+        VP extends Keyable<VK, VP>,
         D extends MessageConsumer<D> & Supplier<byte[]>,
         V extends MessageConsumer<V> & Predicate<byte[]>,
-        DB extends Keyable<DK, DB> & Supplier<D>,
-        VB extends Keyable<VK, VB> & Supplier<V>,
         G extends KeyGenerator<DK, G>
         >
-        extends IntegrityAlgorithm<D, V, DB, VB>, KeyGeneratorSupplier<DK, G> {
+        extends IntegrityAlgorithm, KeyGeneratorSupplier<DK, G> {
 
-    default D key(DK key) {
-        Assert.notNull(key, "Key cannot be null.");
-        return creator().key(key).get();
-    }
+    D with(Consumer<DP> c);
 
-    default D creator(Consumer<DB> c) {
-        Assert.notNull(c, "Consumer cannot be null.");
-        DB builder = creator();
-        c.accept(builder);
-        return builder.get();
-    }
-
-    default V key(VK key) {
-        Assert.notNull(key, "Key cannot be null.");
-        return verifier().key(key).get();
-    }
-
-    default V verifier(Consumer<VB> c) {
-        Assert.notNull(c, "Consumer cannot be null.");
-        VB builder = verifier();
-        c.accept(builder);
-        return builder.get();
-    }
+    V verifier(Consumer<VP> c);
 }
