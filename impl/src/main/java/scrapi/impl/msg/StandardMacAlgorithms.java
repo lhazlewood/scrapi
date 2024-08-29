@@ -49,7 +49,7 @@ public final class StandardMacAlgorithms extends IdentifiableRegistry<String, Ma
 
             String suffix = suffix(hashAlg);
             String id = "Hmac" + suffix;
-            Size digestSize = hashAlg.digestSize();
+            Size digestSize = hashAlg.size();
             macs.add(new DefaultMacAlgorithm(id, null, digestSize));
 
             // Standard PBEWith* and HmacPBE* algs only support SHA1 and SHA2 family algorithms, so if we've

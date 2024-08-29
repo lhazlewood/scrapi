@@ -15,6 +15,7 @@
  */
 package scrapi.msg;
 
+import scrapi.alg.Sized;
 import scrapi.key.KeyGenerator;
 import scrapi.key.Keyable;
 import scrapi.key.SymmetricKey;
@@ -26,7 +27,7 @@ public interface MacAlgorithm<
         P extends Keyable<K, P>,
         G extends KeyGenerator<K, G>
         >
-        extends AuthenticityAlgorithm<K, K, P, P, Hasher, Hasher, G>, DigestSized {
+        extends AuthenticityAlgorithm<K, K, P, P, Hasher, Hasher, G>, Sized {
 
     default Hasher verifier(Consumer<P> c) {
         return with(c);

@@ -83,7 +83,7 @@ class StandardMacAlgorithmsTest {
 
         def key = alg.keygen().get() as SymmetricKey
 
-        def salt = Bytes.randomBits(alg.digestSize().bits())
+        def salt = Bytes.randomBits(alg.size().bits())
         def iterations = DefaultPassword.MIN_ITERATIONS // keep password-based Mac tests fast
 
         Consumer configurer = { params ->
@@ -111,7 +111,7 @@ class StandardMacAlgorithmsTest {
 
         // Assert that our Digest result is identical to the JCA output, and our verify implementation does the same:
         assertTrue MessageDigest.isEqual(jcaDigest, digest)
-        assertEquals alg.digestSize().bits(), Bytes.bitLength(digest)
+        assertEquals alg.size().bits(), Bytes.bitLength(digest)
         hasher = alg.verifier(configurer)
         if (data) data.each { hasher.apply(it); if (it instanceof ByteBuffer) it.rewind() }
         assertTrue hasher.test(digest)
@@ -137,7 +137,7 @@ class StandardMacAlgorithmsTest {
     @Test
     void digestExactLengths() {
         Algs.Mac.get().values().each {
-            byte[] data = Bytes.randomBits(it.digestSize().bits())
+            byte[] data = Bytes.randomBits(it.size().bits())
             roundtrip(it, data)
         }
     }
@@ -145,7 +145,7 @@ class StandardMacAlgorithmsTest {
     @Test
     void digestSmallerLengths() {
         Algs.Mac.get().values().each {
-            byte[] data = Bytes.randomBits(it.digestSize().bits() - Byte.SIZE) // 1 byte less than digest length
+            byte[] data = Bytes.randomBits(it.size().bits() - Byte.SIZE) // 1 byte less than digest length
             roundtrip(it, data)
         }
     }
@@ -153,7 +153,7 @@ class StandardMacAlgorithmsTest {
     @Test
     void digestLargerLengths() {
         Algs.Mac.get().values().each {
-            def bits = it.digestSize().bits()
+            def bits = it.size().bits()
             def a = Bytes.randomBits(bits)
             def b = Bytes.randomBits(bits)
             def c = Bytes.randomBits(bits)

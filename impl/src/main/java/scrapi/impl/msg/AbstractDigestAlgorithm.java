@@ -16,15 +16,15 @@
 package scrapi.impl.msg;
 
 import scrapi.alg.Size;
+import scrapi.alg.Sized;
 import scrapi.impl.alg.AbstractAlgorithm;
-import scrapi.msg.DigestSized;
 import scrapi.msg.IntegrityAlgorithm;
 import scrapi.util.Assert;
 import scrapi.util.Objects;
 
 import java.security.Provider;
 
-abstract class AbstractDigestAlgorithm extends AbstractAlgorithm implements IntegrityAlgorithm, DigestSized {
+abstract class AbstractDigestAlgorithm extends AbstractAlgorithm implements IntegrityAlgorithm, Sized {
 
     protected final Size DIGEST_SIZE;
 
@@ -34,7 +34,7 @@ abstract class AbstractDigestAlgorithm extends AbstractAlgorithm implements Inte
     }
 
     @Override
-    public Size digestSize() {
+    public Size size() {
         return this.DIGEST_SIZE;
     }
 

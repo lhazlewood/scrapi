@@ -13,11 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package scrapi.msg;
+package scrapi.alg;
 
-import scrapi.alg.Size;
+/**
+ * Interface implemented by {@code Object}s that report a relevant cryptographic {@link Size}, for example,
+ * block size, digest size, etc.
+ *
+ * @since SCRAPI_RELEASE_VERSION
+ */
+@FunctionalInterface
+public interface Sized {
 
-public interface DigestSized {
+    /**
+     * Returns the object's associated cryptographic {@link Size}.
+     *
+     * @return the object's associated cryptographic {@link Size}.
+     */
+    Size size();
 
-    Size digestSize();
 }

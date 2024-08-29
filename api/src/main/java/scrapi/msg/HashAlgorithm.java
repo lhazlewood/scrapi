@@ -15,7 +15,9 @@
  */
 package scrapi.msg;
 
+import scrapi.alg.Sized;
+
 import java.util.function.Supplier;
 
-public interface HashAlgorithm extends IntegrityAlgorithm, DigestSized, Supplier<Hasher> {
+public interface HashAlgorithm extends IntegrityAlgorithm, Sized, Supplier<Hasher> {
 }
