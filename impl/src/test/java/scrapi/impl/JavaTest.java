@@ -32,6 +32,8 @@ public class JavaTest {
         RsaPrivateKey priv = null;
         byte[] input = null;
 
+        Algs.Hash.SHA3_256.get().apply(input).test(input);
+
         Algs.Mac.HMD5.with(sk).apply(input).get();
         Algs.Mac.HMD5.with(c -> c.key(sk)).apply(input).get();
         Algs.Mac.HS256.with(sk).apply(input).get();

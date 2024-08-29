@@ -21,12 +21,25 @@ import scrapi.key.Keyable;
 import scrapi.key.PrivateKey;
 import scrapi.key.PublicKey;
 
-public interface SignatureAlgorithm<
-        S extends PrivateKey<?, P>,
-        P extends PublicKey<?>,
+/**
+ * A Unary {@code SignatureAlgorithm} requires only a single {@code key} parameter to produce either a
+ * {@link Signer} or {@link Verifier}.
+ *
+ * @since SCRAPI_RELEASE_VERSION
+ */
+public interface UnarySignatureAlgorithm<
+        S extends PrivateKey<?, P>, P extends PublicKey<?>,
         SP extends Keyable<S, SP> & Randomizable<SP>,
         VP extends Keyable<P, VP>,
         G extends KeyGenerator<S, G>
         >
-        extends AuthenticityAlgorithm<S, P, SP, VP, Signer, Verifier, G> {
+        extends SignatureAlgorithm<S, P, SP, VP, G> {
+
+    default Signer with(S priv) {
+        return with(c -> c.key(priv));
+    }
+
+    default Verifier with(P pub) {
+        return verifier(c -> c.key(pub));
+    }
 }

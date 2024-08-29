@@ -24,6 +24,7 @@ import scrapi.msg.MacAlgorithm;
 import scrapi.msg.PasswordMacAlgorithm;
 import scrapi.msg.SignatureAlgorithm;
 import scrapi.msg.UnaryMacAlgorithm;
+import scrapi.msg.UnarySignatureAlgorithm;
 import scrapi.util.Classes;
 
 public final class Algs {
@@ -186,17 +187,17 @@ public final class Algs {
             return REGISTRY;
         }
 
-        public static final SignatureAlgorithm<RsaPublicKey, RsaPrivateKey, ?, ?, ?> RS1 = Algs.get(get(), "SHA1withRSA");
-        public static final SignatureAlgorithm<RsaPublicKey, RsaPrivateKey, ?, ?, ?> RS224 = Algs.get(get(), "SHA224withRSA");
-        public static final SignatureAlgorithm<RsaPublicKey, RsaPrivateKey, ?, ?, ?> RS256 = Algs.get(get(), "SHA256withRSA");
-        public static final SignatureAlgorithm<RsaPublicKey, RsaPrivateKey, ?, ?, ?> RS384 = Algs.get(get(), "SHA384withRSA");
-        public static final SignatureAlgorithm<RsaPublicKey, RsaPrivateKey, ?, ?, ?> RS512 = Algs.get(get(), "SHA512withRSA");
-        public static final SignatureAlgorithm<RsaPublicKey, RsaPrivateKey, ?, ?, ?> RS512_224 = Algs.get(get(), "SHA512/224withRSA");
-        public static final SignatureAlgorithm<RsaPublicKey, RsaPrivateKey, ?, ?, ?> RS512_256 = Algs.get(get(), "SHA512/256withRSA");
-        public static final SignatureAlgorithm<RsaPublicKey, RsaPrivateKey, ?, ?, ?> RS3_224 = Algs.get(get(), "SHA3-224withRSA");
-        public static final SignatureAlgorithm<RsaPublicKey, RsaPrivateKey, ?, ?, ?> RS3_256 = Algs.get(get(), "SHA3-256withRSA");
-        public static final SignatureAlgorithm<RsaPublicKey, RsaPrivateKey, ?, ?, ?> RS3_384 = Algs.get(get(), "SHA3-384withRSA");
-        public static final SignatureAlgorithm<RsaPublicKey, RsaPrivateKey, ?, ?, ?> RS3_512 = Algs.get(get(), "SHA3-512withRSA");
+        public static final UnarySignatureAlgorithm<RsaPrivateKey, RsaPublicKey, ?, ?, ?> RS1 = Algs.get(get(), "SHA1withRSA");
+        public static final UnarySignatureAlgorithm<RsaPrivateKey, RsaPublicKey, ?, ?, ?> RS224 = Algs.get(get(), "SHA224withRSA");
+        public static final UnarySignatureAlgorithm<RsaPrivateKey, RsaPublicKey, ?, ?, ?> RS256 = Algs.get(get(), "SHA256withRSA");
+        public static final UnarySignatureAlgorithm<RsaPrivateKey, RsaPublicKey, ?, ?, ?> RS384 = Algs.get(get(), "SHA384withRSA");
+        public static final UnarySignatureAlgorithm<RsaPrivateKey, RsaPublicKey, ?, ?, ?> RS512 = Algs.get(get(), "SHA512withRSA");
+        public static final UnarySignatureAlgorithm<RsaPrivateKey, RsaPublicKey, ?, ?, ?> RS512_224 = Algs.get(get(), "SHA512/224withRSA");
+        public static final UnarySignatureAlgorithm<RsaPrivateKey, RsaPublicKey, ?, ?, ?> RS512_256 = Algs.get(get(), "SHA512/256withRSA");
+        public static final UnarySignatureAlgorithm<RsaPrivateKey, RsaPublicKey, ?, ?, ?> RS3_224 = Algs.get(get(), "SHA3-224withRSA");
+        public static final UnarySignatureAlgorithm<RsaPrivateKey, RsaPublicKey, ?, ?, ?> RS3_256 = Algs.get(get(), "SHA3-256withRSA");
+        public static final UnarySignatureAlgorithm<RsaPrivateKey, RsaPublicKey, ?, ?, ?> RS3_384 = Algs.get(get(), "SHA3-384withRSA");
+        public static final UnarySignatureAlgorithm<RsaPrivateKey, RsaPublicKey, ?, ?, ?> RS3_512 = Algs.get(get(), "SHA3-512withRSA");
 
     }
 }
