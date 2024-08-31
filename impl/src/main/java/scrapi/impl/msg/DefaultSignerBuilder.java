@@ -17,15 +17,21 @@ package scrapi.impl.msg;
 
 import scrapi.impl.key.KeyableSupport;
 import scrapi.key.PrivateKey;
+import scrapi.msg.SignatureAlgorithm;
 import scrapi.msg.Signer;
+import scrapi.util.Assert;
 
-class DefaultSignerBuilder<K extends PrivateKey<?, ?>> extends KeyableSupport<K, DefaultSignerBuilder<K>> {
+class DefaultSignerBuilder<K extends PrivateKey<?, ?>, A extends SignatureAlgorithm<K, ?, ?, ?, ?, A>>
+        extends KeyableSupport<K, DefaultSignerBuilder<K, A>> {
 
-    DefaultSignerBuilder(String jcaName) {
-        super(jcaName);
+    private final A alg;
+
+    DefaultSignerBuilder(A alg) {
+        super(Assert.notNull(alg, "alg must not be null.").id());
+        this.alg = alg;
     }
 
-    Signer get() {
-        return new DefaultSigner(this.jcaName, this.provider, this.random, this.key);
+    Signer<A> get() {
+        return new DefaultSigner<>(this.alg, this.provider, this.random, this.key);
     }
 }

@@ -74,7 +74,7 @@ class StandardHashAlgorithmsTest {
     @Test
     void digestNoData() {
         Algs.Hash.get().values().each {
-            byte[] digest = it.get().get() // no 'apply' methods called, no data processed
+            byte[] digest = it.get().get().octets() // no 'apply' methods called, no data processed
             def jcaDigest = MessageDigest.getInstance(it.id()).digest()
             assertTrue MessageDigest.isEqual(jcaDigest, digest) // assert same result as JCA
             assertEquals it.size().bits(), Bytes.bitLength(digest)
@@ -85,7 +85,7 @@ class StandardHashAlgorithmsTest {
     void digestOneByte() {
         Algs.Hash.get().values().each {
             def b = Bytes.random(1)[0]
-            byte[] digest = it.get().apply(b).get()
+            byte[] digest = it.get().apply(b).get().octets()
             def jca = MessageDigest.getInstance(it.id())
             jca.update(b)
             def jcaDigest = jca.digest()
@@ -98,7 +98,7 @@ class StandardHashAlgorithmsTest {
     void digestByteBuffer() {
         Algs.Hash.get().values().each {
             def buf = ByteBuffer.wrap(Bytes.random(16))
-            byte[] digest = it.get().apply(buf).get()
+            byte[] digest = it.get().apply(buf).get().octets()
 
             buf.rewind() // to use in jca digest calculation:
             def jca = MessageDigest.getInstance(it.id())
@@ -115,7 +115,7 @@ class StandardHashAlgorithmsTest {
     void digestExactLengths() {
         Algs.Hash.get().values().each {
             byte[] data = Bytes.randomBits(it.size().bits())
-            byte[] digest = it.get().apply(data).get()
+            byte[] digest = it.get().apply(data).get().octets()
             assertEquals it.size().bits(), Bytes.bitLength(digest)
         }
     }
@@ -124,7 +124,7 @@ class StandardHashAlgorithmsTest {
     void applyArrayWithLength() {
         Algs.Hash.get().values().each {
             byte[] data = Bytes.randomBits(it.size().bits())
-            byte[] digest = it.get().apply(data, 0, data.length).get()
+            byte[] digest = it.get().apply(data, 0, data.length).get().octets()
             assertEquals it.size().bits(), Bytes.bitLength(digest)
         }
     }
@@ -133,7 +133,7 @@ class StandardHashAlgorithmsTest {
     void digestSmallerLengths() {
         Algs.Hash.get().values().each { alg ->
             byte[] data = Bytes.randomBits(alg.size().bits() - Byte.SIZE) // 1 byte less than digest length
-            byte[] digest = alg.get().apply(data).get()
+            byte[] digest = alg.get().apply(data).get().octets()
             assertEquals alg.size().bits(), Bytes.bitLength(digest) // digest is still same as alg digest length
         }
     }
@@ -144,7 +144,7 @@ class StandardHashAlgorithmsTest {
             def hasher = alg.get()
             // multiple .apply calls larger than bitlength
             3.times { hasher.apply(Bytes.randomBits(alg.size().bits())) }
-            byte[] digest = hasher.get()
+            byte[] digest = hasher.get().octets()
             assertEquals alg.size().bits(), Bytes.bitLength(digest) // digest is still same as alg bitlength
         }
     }
@@ -153,7 +153,7 @@ class StandardHashAlgorithmsTest {
     void verify() {
         Algs.Hash.get().values().each {
             byte[] data = Bytes.randomBits(it.size().bits())
-            byte[] digest = it.get().apply(data).get()
+            byte[] digest = it.get().apply(data).get().octets()
             byte[] jcaDigest = MessageDigest.getInstance(it.id()).digest(data)
             assertTrue MessageDigest.isEqual(digest, jcaDigest)
             assertTrue it.get().apply(data).test(digest)

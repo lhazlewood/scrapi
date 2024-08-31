@@ -17,8 +17,11 @@ package scrapi.msg;
 
 import scrapi.lang.SecurityException;
 
+import java.io.Serial;
+
 public class MessageException extends SecurityException {
 
+    @Serial
     private static final long serialVersionUID = 3151558165317465591L;
 
     public MessageException(String message, Throwable t) {

@@ -28,14 +28,16 @@ import scrapi.key.PublicKey;
  * @since SCRAPI_RELEASE_VERSION
  */
 public interface UnarySignatureAlgorithm<
-        S extends PrivateKey<?, P>, P extends PublicKey<?>,
+        S extends PrivateKey<?, P>,
+        P extends PublicKey<?>,
         SP extends Keyable<S, SP> & Randomizable<SP>,
         VP extends Keyable<P, VP>,
-        G extends KeyGenerator<S, G>
+        G extends KeyGenerator<S, G>,
+        T extends UnarySignatureAlgorithm<S, P, SP, VP, G, T>
         >
-        extends SignatureAlgorithm<S, P, SP, VP, G> {
+        extends SignatureAlgorithm<S, P, SP, VP, G, T> {
 
-    default Signer with(S priv) {
+    default Signer<T> with(S priv) {
         return with(c -> c.key(priv));
     }
 

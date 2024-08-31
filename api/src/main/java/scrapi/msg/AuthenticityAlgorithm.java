@@ -30,9 +30,11 @@ public interface AuthenticityAlgorithm<
         VK extends Key<?>,
         DP extends Keyable<DK, DP>,
         VP extends Keyable<VK, VP>,
-        D extends MessageConsumer<D> & Supplier<byte[]>,
+        I extends Digest<T>,
+        D extends MessageConsumer<D> & Supplier<I>,
         V extends MessageConsumer<V> & Predicate<byte[]>,
-        G extends KeyGenerator<DK, G>
+        G extends KeyGenerator<DK, G>,
+        T extends AuthenticityAlgorithm<DK, VK, DP, VP, I, D, V, G, T>
         >
         extends IntegrityAlgorithm, KeyGeneratorSupplier<DK, G> {
 

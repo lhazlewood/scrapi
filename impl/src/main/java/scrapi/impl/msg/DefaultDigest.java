@@ -15,38 +15,43 @@
  */
 package scrapi.impl.msg;
 
-import scrapi.alg.Size;
-import scrapi.alg.Sized;
-import scrapi.impl.alg.AbstractAlgorithm;
+import scrapi.msg.Digest;
 import scrapi.msg.IntegrityAlgorithm;
 import scrapi.util.Assert;
 import scrapi.util.Objects;
 
-import java.security.Provider;
+import java.security.MessageDigest;
 
-abstract class AbstractDigestAlgorithm extends AbstractAlgorithm implements IntegrityAlgorithm, Sized {
+class DefaultDigest<A extends IntegrityAlgorithm> implements Digest<A> {
 
-    protected final Size DIGEST_SIZE;
+    private final A algorithm;
+    private final byte[] octets;
 
-    AbstractDigestAlgorithm(String id, Provider provider, Size digestSize) {
-        super(id, provider);
-        this.DIGEST_SIZE = Assert.notNull(digestSize, "digestSize cannot be null");
+    DefaultDigest(A algorithm, byte[] octets) {
+        this.algorithm = Assert.notNull(algorithm, "algorithm must not be null");
+        this.octets = Assert.notNull(octets, "octets must not be null");
     }
 
     @Override
-    public Size size() {
-        return this.DIGEST_SIZE;
+    public A algorithm() {
+        return this.algorithm;
+    }
+
+    @Override
+    public byte[] octets() {
+        return this.octets.clone();
     }
 
     @Override
     public int hashCode() {
-        return Objects.nullSafeHashCode(this.ID, this.DIGEST_SIZE);
+        return Objects.nullSafeHashCode(this.algorithm, this.octets);
     }
 
     @Override
     public boolean equals(Object obj) {
         if (obj == this) return true;
-        return obj instanceof IntegrityAlgorithm && obj instanceof Sized alg &&
-                super.equals(alg) && this.DIGEST_SIZE.equals(alg.size());
+        return obj instanceof Digest<?> d &&
+                this.algorithm.equals(d.algorithm()) &&
+                MessageDigest.isEqual(this.octets, d.octets());
     }
 }

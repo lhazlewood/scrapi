@@ -13,13 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package scrapi.impl.key;
+package scrapi.msg;
 
-import scrapi.key.Key;
+public interface Digest<A extends IntegrityAlgorithm> {
 
-public final class DefaultKeyable<K extends Key<?>> extends KeyableSupport<K, DefaultKeyable<K>> {
+    A algorithm();
 
-    public DefaultKeyable(String jcaName) {
-        super(jcaName);
-    }
+    byte[] octets();
 }

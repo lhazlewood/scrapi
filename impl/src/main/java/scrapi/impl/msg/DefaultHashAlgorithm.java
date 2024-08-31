@@ -17,6 +17,7 @@ package scrapi.impl.msg;
 
 import scrapi.alg.Size;
 import scrapi.impl.jca.JcaTemplate;
+import scrapi.msg.Digest;
 import scrapi.msg.HashAlgorithm;
 import scrapi.msg.Hasher;
 import scrapi.util.Assert;
@@ -41,8 +42,8 @@ class DefaultHashAlgorithm extends AbstractDigestAlgorithm implements HashAlgori
     }
 
     @Override
-    public Hasher get() {
-        return new JcaMessageDigester(this.ID, this.PROVIDER);
+    public Hasher<Digest<HashAlgorithm>> get() {
+        return new JcaMessageDigester(this, this.PROVIDER);
     }
 
     @Override

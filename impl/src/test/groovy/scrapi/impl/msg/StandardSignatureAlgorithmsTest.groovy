@@ -65,7 +65,7 @@ class StandardSignatureAlgorithmsTest {
         Algs.Sig.get().values().each { SignatureAlgorithm alg ->
             def size = Size.bits(2048) // keep build times short
             def priv = alg.keygen().size(size).get() as RsaPrivateKey
-            byte[] sig = alg.with(priv).get()
+            byte[] sig = alg.with(priv).get().octets()
             def jca = Signature.getInstance(alg.id() as String)
             jca.initSign(priv.toJcaKey())
             byte[] jcaSig = jca.sign()
@@ -86,7 +86,7 @@ class StandardSignatureAlgorithmsTest {
 
             byte b = Bytes.random(1)[0]
 
-            byte[] sig = alg.with(priv).apply(b).get()
+            byte[] sig = alg.with(priv).apply(b).get().octets()
             def jca = Signature.getInstance(alg.id() as String)
             jca.initSign(priv.toJcaKey())
             jca.update(b)

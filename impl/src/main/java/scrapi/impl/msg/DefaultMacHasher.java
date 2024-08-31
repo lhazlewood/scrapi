@@ -15,62 +15,25 @@
  */
 package scrapi.impl.msg;
 
-import scrapi.impl.jca.JcaTemplate;
 import scrapi.key.SymmetricKey;
-import scrapi.msg.Hasher;
-import scrapi.util.Assert;
+import scrapi.msg.Digest;
+import scrapi.msg.MacAlgorithm;
 
 import javax.crypto.Mac;
-import java.nio.ByteBuffer;
-import java.security.MessageDigest;
 import java.security.Provider;
 
-class DefaultMacHasher extends AbstractMessageConsumer<Hasher> implements Hasher {
+class DefaultMacHasher<A extends MacAlgorithm<?, ?, Digest<A>, ?, ?>> extends AbstractMacHasher<Digest<A>, A> {
 
-    public static final String JCA_KEY_NOT_NULL = SymmetricKey.class.getName() + " toJcaKey() value cannot be null.";
-
-    private final Mac MAC;
-
-    DefaultMacHasher(Mac mac) {
-        this.MAC = Assert.notNull(mac, "Mac cannot be null");
+    DefaultMacHasher(A alg, Mac mac) {
+        super(alg, mac);
     }
 
-    DefaultMacHasher(String id, Provider provider, SymmetricKey key) {
-        Assert.notNull(key, "MAC key cannot be null.");
-        javax.crypto.SecretKey jcaKey = Assert.notNull(key.toJcaKey(), JCA_KEY_NOT_NULL);
-        this.MAC = new JcaTemplate(id, provider).withMac(mac -> {
-            mac.init(jcaKey);
-            return mac;
-        });
+    DefaultMacHasher(A alg, Provider provider, SymmetricKey key) {
+        super(alg, provider, key);
     }
 
     @Override
-    protected void doApply(byte input) {
-        this.MAC.update(input);
-    }
-
-    @Override
-    protected void doApply(byte[] input) {
-        this.MAC.update(input);
-    }
-
-    @Override
-    protected void doApply(byte[] input, int offset, int len) {
-        this.MAC.update(input, offset, len);
-    }
-
-    @Override
-    protected void doApply(ByteBuffer input) {
-        this.MAC.update(input);
-    }
-
-    @Override
-    public byte[] get() {
-        return this.MAC.doFinal();
-    }
-
-    @Override
-    public boolean test(byte[] bytes) {
-        return MessageDigest.isEqual(get(), bytes); // constant time operation
+    public Digest<A> get() {
+        return new DefaultDigest<>(this.alg, this.MAC.doFinal());
     }
 }

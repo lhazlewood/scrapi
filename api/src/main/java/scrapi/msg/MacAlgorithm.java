@@ -25,11 +25,13 @@ import java.util.function.Consumer;
 public interface MacAlgorithm<
         K extends SymmetricKey,
         P extends Keyable<K, P>,
-        G extends KeyGenerator<K, G>
+        D extends Digest<T>,
+        G extends KeyGenerator<K, G>,
+        T extends MacAlgorithm<K, P, D, G, T>
         >
-        extends AuthenticityAlgorithm<K, K, P, P, Hasher, Hasher, G>, Sized {
+        extends AuthenticityAlgorithm<K, K, P, P, D, Hasher<D>, Hasher<D>, G, T>, Sized {
 
-    default Hasher verifier(Consumer<P> c) {
+    default Hasher<D> verifier(Consumer<P> c) {
         return with(c);
     }
 }

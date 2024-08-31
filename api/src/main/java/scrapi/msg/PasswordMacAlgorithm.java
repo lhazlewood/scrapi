@@ -19,5 +19,10 @@ import scrapi.key.Password;
 import scrapi.key.PasswordGenerator;
 import scrapi.key.PasswordStretcher;
 
-public interface PasswordMacAlgorithm<S extends PasswordStretcher<S>> extends MacAlgorithm<Password, S, PasswordGenerator> {
+public interface PasswordMacAlgorithm<
+        S extends PasswordStretcher<S>,
+        D extends PasswordDigest<T>,
+        T extends PasswordMacAlgorithm<S, D, T>
+        >
+        extends MacAlgorithm<Password, S, D, PasswordGenerator, T> {
 }

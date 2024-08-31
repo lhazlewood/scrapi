@@ -17,25 +17,39 @@ package scrapi.impl.msg;
 
 import scrapi.key.PrivateKey;
 import scrapi.msg.MessageException;
+import scrapi.msg.Signature;
+import scrapi.msg.SignatureAlgorithm;
 import scrapi.msg.Signer;
+import scrapi.util.Assert;
 
 import java.security.Provider;
 import java.security.SecureRandom;
 import java.security.SignatureException;
 
-class DefaultSigner extends AbstractSignatureConsumer<PrivateKey<?, ?>, Signer> implements Signer {
+class DefaultSigner<A extends SignatureAlgorithm<?, ?, ?, ?, ?, A>>
+        extends AbstractSignatureConsumer<PrivateKey<?, ?>, Signer<A>>
+        implements Signer<A> {
 
-    DefaultSigner(String id, Provider provider, SecureRandom random, PrivateKey<?, ?> key) {
-        super(id, provider, random, key);
+    protected final A alg;
+
+    DefaultSigner(A alg, Provider provider, SecureRandom random, PrivateKey<?, ?> key) {
+        super(Assert.notNull(alg, "alg must not be null.").id(), provider, random, key);
+        this.alg = alg;
     }
 
     @Override
-    public byte[] get() {
+    public Signature<A> get() {
         try {
-            return this.SIG.sign();
+            return new DefaultSignature<>(this.alg, this.SIG.sign());
         } catch (SignatureException e) {
             String msg = "Unable to produce signature: " + e.getMessage();
             throw new MessageException(msg, e);
+        }
+    }
+
+    private static class DefaultSignature<A extends SignatureAlgorithm<?, ?, ?, ?, ?, A>> extends DefaultDigest<A> implements Signature<A> {
+        DefaultSignature(A algorithm, byte[] octets) {
+            super(algorithm, octets);
         }
     }
 }

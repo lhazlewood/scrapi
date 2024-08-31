@@ -16,18 +16,23 @@
 package scrapi.impl.msg;
 
 import scrapi.impl.jca.JcaTemplate;
+import scrapi.msg.Digest;
+import scrapi.msg.HashAlgorithm;
 import scrapi.msg.Hasher;
+import scrapi.util.Assert;
 
 import java.nio.ByteBuffer;
 import java.security.MessageDigest;
 import java.security.Provider;
 
-class JcaMessageDigester extends AbstractMessageConsumer<Hasher> implements Hasher {
+class JcaMessageDigester extends AbstractMessageConsumer<Hasher<Digest<HashAlgorithm>>> implements Hasher<Digest<HashAlgorithm>> {
 
+    private final HashAlgorithm alg;
     private final MessageDigest MD;
 
-    JcaMessageDigester(String jcaName, Provider provider) {
-        this.MD = new JcaTemplate(jcaName, provider).withMessageDigest(md -> md);
+    JcaMessageDigester(HashAlgorithm alg, Provider provider) {
+        this.alg = Assert.notNull(alg, "alg must not be null");
+        this.MD = new JcaTemplate(alg.id(), provider).withMessageDigest(md -> md);
     }
 
     @Override
@@ -51,12 +56,12 @@ class JcaMessageDigester extends AbstractMessageConsumer<Hasher> implements Hash
     }
 
     @Override
-    public byte[] get() {
-        return this.MD.digest();
+    public Digest<HashAlgorithm> get() {
+        return new DefaultDigest<>(this.alg, this.MD.digest());
     }
 
     @Override
     public boolean test(byte[] bytes) {
-        return MessageDigest.isEqual(get(), bytes);
+        return MessageDigest.isEqual(get().octets(), bytes);
     }
 }

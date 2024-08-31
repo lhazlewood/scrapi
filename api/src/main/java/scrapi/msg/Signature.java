@@ -13,13 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package scrapi.impl.key;
+package scrapi.msg;
 
-import scrapi.key.Key;
-
-public final class DefaultKeyable<K extends Key<?>> extends KeyableSupport<K, DefaultKeyable<K>> {
-
-    public DefaultKeyable(String jcaName) {
-        super(jcaName);
-    }
+public interface Signature<A extends SignatureAlgorithm<?, ?, ?, ?, ?, ?>> extends Digest<A> {
 }

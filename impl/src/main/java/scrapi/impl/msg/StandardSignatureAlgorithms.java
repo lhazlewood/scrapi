@@ -20,14 +20,14 @@ import scrapi.impl.lang.IdentifiableRegistry;
 import scrapi.msg.SignatureAlgorithm;
 import scrapi.util.Collections;
 
-public final class StandardSignatureAlgorithms extends IdentifiableRegistry<String, SignatureAlgorithm<?, ?, ?, ?, ?>> {
+public final class StandardSignatureAlgorithms extends IdentifiableRegistry<String, SignatureAlgorithm<?, ?, ?, ?, ?, ?>> {
 
-    private static SignatureAlgorithm<?, ?, ?, ?, ?> rsa(String id) {
+    private static SignatureAlgorithm<?, ?, ?, ?, ?, ?> rsa(String id) {
         return new DefaultSignatureAlgorithm<>(id, null, DefaultRsaPrivateKeyGenerator::new);
     }
 
     public StandardSignatureAlgorithms() {
-        super("Signature Algorithm", Collections.<SignatureAlgorithm<?, ?, ?, ?, ?>>of(
+        super("Signature Algorithm", Collections.<SignatureAlgorithm<?, ?, ?, ?, ?, ?>>of(
                 rsa("SHA1withRSA"),
                 rsa("SHA224withRSA"),
                 rsa("SHA256withRSA"),

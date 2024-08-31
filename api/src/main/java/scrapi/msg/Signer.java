@@ -17,5 +17,6 @@ package scrapi.msg;
 
 import java.util.function.Supplier;
 
-public interface Signer extends MessageConsumer<Signer>, Supplier<byte[]> {
+public interface Signer<A extends SignatureAlgorithm<?, ?, ?, ?, ?, ?>>
+        extends MessageConsumer<Signer<A>>, Supplier<Signature<A>> {
 }

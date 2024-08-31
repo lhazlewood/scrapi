@@ -23,8 +23,10 @@ import scrapi.key.Password;
 import scrapi.key.PasswordGenerator;
 import scrapi.key.PasswordStretcher;
 import scrapi.msg.Hasher;
+import scrapi.msg.PasswordDigest;
 import scrapi.msg.PasswordMacAlgorithm;
 import scrapi.util.Assert;
+import scrapi.util.Bytes;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.PBEParameterSpec;
@@ -32,8 +34,18 @@ import javax.crypto.spec.SecretKeySpec;
 import java.security.Provider;
 import java.util.function.Consumer;
 
-class DefaultPasswordMacAlgorithm extends AbstractMacAlgorithm<Password, DefaultPasswordMacAlgorithm.Builder, PasswordGenerator>
-        implements PasswordMacAlgorithm<DefaultPasswordMacAlgorithm.Builder> {
+class DefaultPasswordMacAlgorithm extends AbstractMacAlgorithm<
+        Password,
+        DefaultPasswordMacAlgorithm.Builder,
+        PasswordDigest<DefaultPasswordMacAlgorithm>,
+        PasswordGenerator,
+        DefaultPasswordMacAlgorithm
+        >
+        implements PasswordMacAlgorithm<
+        DefaultPasswordMacAlgorithm.Builder,
+        PasswordDigest<DefaultPasswordMacAlgorithm>,
+        DefaultPasswordMacAlgorithm
+        > {
 
     protected final int DEFAULT_ITERATIONS;
 
@@ -43,20 +55,28 @@ class DefaultPasswordMacAlgorithm extends AbstractMacAlgorithm<Password, Default
     }
 
     @Override
-    public Hasher with(Consumer<Builder> c) {
-        Builder builder = new Builder(this.ID);
+    public Hasher<PasswordDigest<DefaultPasswordMacAlgorithm>> with(Consumer<Builder> c) {
+        Builder builder = new Builder(this);
         builder.provider(this.PROVIDER).cost(this.DEFAULT_ITERATIONS);
         c.accept(builder);
         return builder.get();
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) return true;
+        return obj instanceof PasswordMacAlgorithm && super.equals(obj);
+    }
+
     static class Builder extends KeyableSupport<Password, Builder> implements PasswordStretcher<Builder> {
 
+        private final DefaultPasswordMacAlgorithm alg;
         private byte[] salt;
         private int iterations;
 
-        private Builder(String jcaName) {
-            super(jcaName);
+        private Builder(DefaultPasswordMacAlgorithm alg) {
+            super(Assert.notNull(alg, "alg must not be null.").id());
+            this.alg = alg;
         }
 
         @Override
@@ -71,17 +91,17 @@ class DefaultPasswordMacAlgorithm extends AbstractMacAlgorithm<Password, Default
             return self();
         }
 
-        private Hasher get() {
+        private Hasher<PasswordDigest<DefaultPasswordMacAlgorithm>> get() {
             Assert.notNull(this.key, "Password cannot be null or empty.");
-            Assert.notEmpty(this.salt, "salt cannot be null or empty.");
             DefaultPassword.assertIterationsGte(this.iterations);
+            final byte[] salt = !Bytes.isEmpty(this.salt) ? this.salt : Bytes.random(this.alg.size().bytes());
             Mac m = jca().withMac(mac -> {
                 SecretKeySpec keySpec = DefaultPassword.toJcaKey(this.key.chars());
-                PBEParameterSpec spec = new PBEParameterSpec(this.salt, this.iterations);
+                PBEParameterSpec spec = new PBEParameterSpec(salt, this.iterations);
                 mac.init(keySpec, spec);
                 return mac;
             });
-            return new DefaultMacHasher(m);
+            return new DefaultPasswordMacHasher<>(this.alg, m, salt, this.iterations);
         }
     }
 }

@@ -32,9 +32,15 @@ import java.util.function.Supplier;
 class DefaultSignatureAlgorithm<
         S extends PrivateKey<?, V>,
         V extends PublicKey<?>,
-        G extends KeyGenerator<S, G>>
+        G extends KeyGenerator<S, G>
+        >
         extends AbstractAlgorithm
-        implements UnarySignatureAlgorithm<S, V, DefaultSignerBuilder<S>, DefaultVerifierBuilder<V>, G> {
+        implements UnarySignatureAlgorithm<
+        S,
+        V,
+        DefaultSignerBuilder<S, DefaultSignatureAlgorithm<S, V, G>>,
+        DefaultVerifierBuilder<V>, G,
+        DefaultSignatureAlgorithm<S, V, G>> {
 
     private final Supplier<G> SUPPLIER;
 
@@ -44,8 +50,9 @@ class DefaultSignatureAlgorithm<
     }
 
     @Override
-    public Signer with(Consumer<DefaultSignerBuilder<S>> c) {
-        DefaultSignerBuilder<S> builder = new DefaultSignerBuilder<S>(this.ID).provider(this.PROVIDER);
+    public Signer<DefaultSignatureAlgorithm<S, V, G>> with(Consumer<DefaultSignerBuilder<S, DefaultSignatureAlgorithm<S, V, G>>> c) {
+        DefaultSignerBuilder<S, DefaultSignatureAlgorithm<S, V, G>> builder =
+                new DefaultSignerBuilder<>(this).provider(this.PROVIDER);
         c.accept(builder);
         return builder.get();
     }

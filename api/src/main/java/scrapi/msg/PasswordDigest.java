@@ -13,13 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package scrapi.impl.key;
+package scrapi.msg;
 
-import scrapi.key.Key;
+public interface PasswordDigest<A extends PasswordMacAlgorithm<?, ?, ?>> extends Digest<A> {
 
-public final class DefaultKeyable<K extends Key<?>> extends KeyableSupport<K, DefaultKeyable<K>> {
+    byte[] salt();
 
-    public DefaultKeyable(String jcaName) {
-        super(jcaName);
-    }
+    int cost();
 }

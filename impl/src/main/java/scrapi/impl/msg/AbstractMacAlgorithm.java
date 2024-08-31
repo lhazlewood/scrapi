@@ -19,6 +19,7 @@ import scrapi.alg.Size;
 import scrapi.key.KeyGenerator;
 import scrapi.key.Keyable;
 import scrapi.key.SymmetricKey;
+import scrapi.msg.Digest;
 import scrapi.msg.MacAlgorithm;
 import scrapi.util.Assert;
 
@@ -28,9 +29,11 @@ import java.util.function.Supplier;
 abstract class AbstractMacAlgorithm<
         K extends SymmetricKey,
         DB extends Keyable<K, DB>,
-        G extends KeyGenerator<K, G>
+        D extends Digest<T>,
+        G extends KeyGenerator<K, G>,
+        T extends MacAlgorithm<K, DB, D, G, T>
         >
-        extends AbstractDigestAlgorithm implements MacAlgorithm<K, DB, G> {
+        extends AbstractDigestAlgorithm implements MacAlgorithm<K, DB, D, G, T> {
 
     private final Supplier<G> keygen;
 

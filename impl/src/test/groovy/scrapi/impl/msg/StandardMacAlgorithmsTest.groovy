@@ -95,7 +95,7 @@ class StandardMacAlgorithmsTest {
         // Digest data using our API:
         def hasher = alg.with(configurer) as Hasher
         if (data) data.each { hasher.apply(it); if (it instanceof ByteBuffer) it.rewind() }
-        def digest = hasher.get()
+        def digest = hasher.get().octets()
 
         // Digest the same data using the raw JCA API directly:
         def jca = Mac.getInstance(alg.id() as String)

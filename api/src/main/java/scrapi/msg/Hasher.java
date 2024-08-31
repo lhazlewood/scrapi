@@ -18,5 +18,6 @@ package scrapi.msg;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
-public interface Hasher extends MessageConsumer<Hasher>, Supplier<byte[]>, Predicate<byte[]> {
+public interface Hasher<D extends Digest<?>>
+        extends MessageConsumer<Hasher<D>>, Supplier<D>, Predicate<byte[]> {
 }

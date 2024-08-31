@@ -26,7 +26,8 @@ public interface SignatureAlgorithm<
         P extends PublicKey<?>,
         SP extends Keyable<S, SP> & Randomizable<SP>,
         VP extends Keyable<P, VP>,
-        G extends KeyGenerator<S, G>
+        G extends KeyGenerator<S, G>,
+        T extends SignatureAlgorithm<S, P, SP, VP, G, T>
         >
-        extends AuthenticityAlgorithm<S, P, SP, VP, Signer, Verifier, G> {
+        extends AuthenticityAlgorithm<S, P, SP, VP, Signature<T>, Signer<T>, Verifier, G, T> {
 }
