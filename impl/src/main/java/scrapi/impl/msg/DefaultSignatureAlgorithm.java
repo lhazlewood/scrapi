@@ -50,17 +50,17 @@ class DefaultSignatureAlgorithm<
     }
 
     @Override
-    public Signer<DefaultSignatureAlgorithm<S, V, G>> with(Consumer<DefaultSignerBuilder<S, DefaultSignatureAlgorithm<S, V, G>>> c) {
+    public Signer<DefaultSignatureAlgorithm<S, V, G>> with(Consumer<DefaultSignerBuilder<S, DefaultSignatureAlgorithm<S, V, G>>> p) {
         DefaultSignerBuilder<S, DefaultSignatureAlgorithm<S, V, G>> builder =
                 new DefaultSignerBuilder<>(this).provider(this.PROVIDER);
-        c.accept(builder);
+        p.accept(builder);
         return builder.get();
     }
 
     @Override
-    public Verifier verifier(Consumer<DefaultVerifierBuilder<V>> c) {
+    public Verifier verifier(Consumer<DefaultVerifierBuilder<V>> p) {
         DefaultVerifierBuilder<V> builder = new DefaultVerifierBuilder<V>(this.ID).provider(this.PROVIDER);
-        c.accept(builder);
+        p.accept(builder);
         return builder.get();
     }
 

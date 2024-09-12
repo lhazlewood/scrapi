@@ -19,6 +19,9 @@ import scrapi.impl.key.DefaultPassword;
 import scrapi.msg.PasswordDigest;
 import scrapi.msg.PasswordMacAlgorithm;
 import scrapi.util.Assert;
+import scrapi.util.Objects;
+
+import java.security.MessageDigest;
 
 class DefaultPasswordDigest<A extends PasswordMacAlgorithm<?, ?, ?>> extends DefaultDigest<A> implements PasswordDigest<A> {
 
@@ -39,5 +42,17 @@ class DefaultPasswordDigest<A extends PasswordMacAlgorithm<?, ?, ?>> extends Def
     @Override
     public int cost() {
         return this.cost;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.nullSafeHashCode(this.algorithm, this.octets, this.salt, this.cost);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) return true;
+        return obj instanceof PasswordDigest<?> pd && super.equals(pd) &&
+                this.cost == pd.cost() && MessageDigest.isEqual(this.salt, pd.salt());
     }
 }

@@ -46,9 +46,9 @@ class DefaultMacAlgorithm extends AbstractMacAlgorithm<
     }
 
     @Override
-    public Hasher<Digest<DefaultMacAlgorithm>> with(Consumer<DefaultKeyable<OctetSecretKey>> c) {
+    public Hasher<Digest<DefaultMacAlgorithm>> with(Consumer<DefaultKeyable<OctetSecretKey>> p) {
         var param = new DefaultKeyable<OctetSecretKey>(this.ID).provider(this.PROVIDER);
-        c.accept(param);
+        p.accept(param);
         return new DefaultMacHasher<>(this, param.provider(), param.key());
     }
 }

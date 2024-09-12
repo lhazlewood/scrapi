@@ -20,6 +20,8 @@ import scrapi.key.OctetSecretKey;
 import scrapi.key.Password;
 import scrapi.key.RsaPrivateKey;
 import scrapi.key.RsaPublicKey;
+import scrapi.msg.MacAlgorithm;
+import scrapi.msg.UnaryMacAlgorithm;
 
 // various tests using the direct Java (not Groovy) APIs.
 public class JavaTest {
@@ -35,7 +37,7 @@ public class JavaTest {
 
         Algs.Mac.HMD5.with(sk).apply(input).get().octets();
         Algs.Mac.HMD5.with(c -> c.key(sk)).apply(input).get();
-        Algs.Mac.HS256.with(sk).apply(input).get();
+        Algs.Mac.HS256.with(sk).apply(input).get().octets();
 
         Algs.Mac.PBEHS1.with(c -> c.key(pass).salt(null)).apply(new byte[21]).get();
 

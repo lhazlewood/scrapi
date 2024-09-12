@@ -31,7 +31,7 @@ public interface MacAlgorithm<
         >
         extends AuthenticityAlgorithm<K, K, P, P, D, Hasher<D>, Hasher<D>, G, T>, Sized {
 
-    default Hasher<D> verifier(Consumer<P> c) {
-        return with(c);
+    default Hasher<D> verifier(Consumer<P> p) {
+        return with(p);
     }
 }

@@ -24,8 +24,8 @@ import java.security.MessageDigest;
 
 class DefaultDigest<A extends IntegrityAlgorithm> implements Digest<A> {
 
-    private final A algorithm;
-    private final byte[] octets;
+    protected final A algorithm;
+    protected final byte[] octets;
 
     DefaultDigest(A algorithm, byte[] octets) {
         this.algorithm = Assert.notNull(algorithm, "algorithm must not be null");

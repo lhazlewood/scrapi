@@ -38,7 +38,7 @@ public interface AuthenticityAlgorithm<
         >
         extends IntegrityAlgorithm, KeyGeneratorSupplier<DK, G> {
 
-    D with(Consumer<DP> c);
+    D with(Consumer<DP> p);
 
-    V verifier(Consumer<VP> c);
+    V verifier(Consumer<VP> p);
 }

@@ -55,10 +55,10 @@ class DefaultPasswordMacAlgorithm extends AbstractMacAlgorithm<
     }
 
     @Override
-    public Hasher<PasswordDigest<DefaultPasswordMacAlgorithm>> with(Consumer<Builder> c) {
+    public Hasher<PasswordDigest<DefaultPasswordMacAlgorithm>> with(Consumer<Builder> p) {
         Builder builder = new Builder(this);
         builder.provider(this.PROVIDER).cost(this.DEFAULT_ITERATIONS);
-        c.accept(builder);
+        p.accept(builder);
         return builder.get();
     }
 
