@@ -15,7 +15,6 @@
  */
 package scrapi.impl.msg;
 
-import scrapi.alg.Algs;
 import scrapi.alg.Size;
 import scrapi.impl.lang.IdentifiableRegistry;
 import scrapi.msg.HashAlgorithm;
@@ -41,11 +40,11 @@ public final class StandardMacAlgorithms extends IdentifiableRegistry<String, Ma
     // https://docs.oracle.com/en/java/javase/21/docs/specs/security/standard-names.html#mac-algorithms
     // ------------------------------------------------------------------------------------------------
     private static List<MacAlgorithm<?, ?, ?, ?, ?>> createAlgs() {
-        Collection<? extends HashAlgorithm> hashAlgs = Algs.Hash.get().values();
+        Collection<HashAlgorithm> hashAlgs = HashAlgorithm.registry().values();
         List<MacAlgorithm<?, ?, ?, ?, ?>> macs = new ArrayList<>(hashAlgs.size() * 3);
         for (HashAlgorithm hashAlg : hashAlgs) {
 
-            if (Algs.Hash.MD2.equals(hashAlg)) continue; // no JCA standard hmac alg for this one
+            if (HashAlgorithm.MD2.equals(hashAlg)) continue; // no JCA standard hmac alg for this one
 
             String suffix = suffix(hashAlg);
             String id = "Hmac" + suffix;

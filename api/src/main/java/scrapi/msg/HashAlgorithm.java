@@ -16,8 +16,41 @@
 package scrapi.msg;
 
 import scrapi.alg.Sized;
+import scrapi.lang.Registry;
 
 import java.util.function.Supplier;
 
 public interface HashAlgorithm extends IntegrityAlgorithm, Sized, Supplier<Hasher<Digest<HashAlgorithm>>> {
+
+    /**
+     * Returns a registry of all
+     * <a href="https://docs.oracle.com/en/java/javase/21/docs/specs/security/standard-names.html#messagedigest-algorithms">Java
+     * Standard Hash (aka Message Digest) Algorithms</a>.
+     *
+     * @return a registry of all
+     * <a href="https://docs.oracle.com/en/java/javase/21/docs/specs/security/standard-names.html#messagedigest-algorithms">Java
+     * Standard Hash (aka Message Digest) Algorithms</a>.
+     */
+    static Registry<String, HashAlgorithm> registry() {
+        return HashAlgs.REGISTRY;
+    }
+
+    static HashAlgorithm get(String id) {
+        return registry().forKey(id);
+    }
+
+    HashAlgorithm MD2 = get("MD2");
+    HashAlgorithm MD5 = get("MD5");
+    HashAlgorithm SHA_1 = get("SHA-1");
+    HashAlgorithm SHA_224 = get("SHA-224");
+    HashAlgorithm SHA_256 = get("SHA-256");
+    HashAlgorithm SHA_384 = get("SHA-384");
+    HashAlgorithm SHA_512 = get("SHA-512");
+    HashAlgorithm SHA_512_224 = get("SHA-512/224");
+    HashAlgorithm SHA_512_256 = get("SHA-512/256");
+    HashAlgorithm SHA3_224 = get("SHA3-224");
+    HashAlgorithm SHA3_256 = get("SHA3-256");
+    HashAlgorithm SHA3_384 = get("SHA3-384");
+    HashAlgorithm SHA3_512 = get("SHA3-512");
+
 }

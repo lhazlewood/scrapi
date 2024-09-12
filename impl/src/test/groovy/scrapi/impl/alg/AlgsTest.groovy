@@ -19,6 +19,7 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import scrapi.alg.Algs
+import scrapi.msg.HashAlgs
 
 import java.security.Provider
 import java.security.Security
@@ -29,7 +30,7 @@ class AlgsTest {
     @Test
     void privateCtors() {
         new Algs()
-        new Algs.Hash()
+        new HashAlgs()
         new Algs.Mac()
         new Algs.Sig()
     }

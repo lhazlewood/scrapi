@@ -20,6 +20,7 @@ import scrapi.key.OctetSecretKey;
 import scrapi.key.Password;
 import scrapi.key.RsaPrivateKey;
 import scrapi.key.RsaPublicKey;
+import scrapi.msg.HashAlgorithm;
 import scrapi.msg.MacAlgorithm;
 import scrapi.msg.UnaryMacAlgorithm;
 
@@ -33,7 +34,7 @@ public class JavaTest {
         RsaPrivateKey priv = null;
         byte[] input = null;
 
-        Algs.Hash.SHA3_256.get().apply(input).test(input);
+        HashAlgorithm.SHA3_256.get().apply(input).test(input);
 
         Algs.Mac.HMD5.with(sk).apply(input).get().octets();
         Algs.Mac.HMD5.with(c -> c.key(sk)).apply(input).get();
