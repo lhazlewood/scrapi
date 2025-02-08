@@ -1,5 +1,5 @@
 /*
- * Copyright © 2024 Les Hazlewood
+ * Copyright © 2025 Les Hazlewood
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,18 @@
  */
 package scrapi.key;
 
-public interface Encapsulation<K extends ConfidentialKey<?>> extends Keyed<K> {
+import scrapi.util.Assert;
 
-    byte[] ciphertext();
+@SuppressWarnings("ClassCanBeRecord") // https://github.com/openclover/clover/issues/270
+class DefaultKeyResult<T extends Key<?>> implements Keyed<T> {
+
+    private final T key;
+
+    DefaultKeyResult(T key) {
+        this.key = Assert.notNull(key, "Key cannot be null.");
+    }
+
+    public T key() {
+        return this.key;
+    }
 }

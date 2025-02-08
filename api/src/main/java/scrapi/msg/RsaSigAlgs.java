@@ -1,5 +1,5 @@
 /*
- * Copyright © 2024 Les Hazlewood
+ * Copyright © 2025 Les Hazlewood
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,9 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package scrapi.key;
+package scrapi.msg;
 
-public interface Encapsulation<K extends ConfidentialKey<?>> extends Keyed<K> {
+import scrapi.lang.Registry;
+import scrapi.util.Classes;
 
-    byte[] ciphertext();
+final class RsaSigAlgs {
+
+    //prevent instantiation
+    private RsaSigAlgs() {
+    }
+
+    private static final String IMPL_CLASSNAME = "scrapi.impl.msg.StandardRsaSignatureAlgorithms";
+    static final Registry<String, RsaSignatureAlgorithm<?, ?, ?>> REGISTRY = Classes.newInstance(IMPL_CLASSNAME);
 }

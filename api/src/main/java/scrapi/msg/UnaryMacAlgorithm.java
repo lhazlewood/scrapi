@@ -27,10 +27,10 @@ import scrapi.util.Assert;
 public interface UnaryMacAlgorithm<
         K extends SymmetricKey,
         P extends Keyable<K, P>,
-        D extends Digest<T>,
         G extends KeyGenerator<K, G>,
-        T extends UnaryMacAlgorithm<K, P, D, G, T>
-        > extends MacAlgorithm<K, P, D, G, T> {
+        D extends Digest<T>,
+        T extends UnaryMacAlgorithm<K, P, G, D, T>
+        > extends MacAlgorithm<K, P, G, D, T> {
 
     default Hasher<D> with(K key) {
         Assert.notNull(key, "Key cannot be null.");

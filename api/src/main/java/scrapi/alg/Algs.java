@@ -19,7 +19,6 @@ import scrapi.key.OctetSecretKey;
 import scrapi.key.RsaPrivateKey;
 import scrapi.key.RsaPublicKey;
 import scrapi.lang.Registry;
-import scrapi.msg.HashAlgorithm;
 import scrapi.msg.MacAlgorithm;
 import scrapi.msg.PasswordMacAlgorithm;
 import scrapi.msg.SignatureAlgorithm;

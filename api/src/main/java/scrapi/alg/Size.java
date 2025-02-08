@@ -43,7 +43,7 @@ import scrapi.util.Bytes;
  * <blockquote><pre>
  * alg.keyLength(Size.{@link #bytes() bytes}(32));</pre></blockquote>
  *
- * <p>But the API implementor might prefer the length in bits, since bits are regularly encountered in algorithm
+ * <p>But the API implementor might prefer the length in bits, since bit counts are regularly encountered in algorithm
  * design. The implementation can easily obtain the bit value as desired, for example:</p>
  *
  * <blockquote><pre>

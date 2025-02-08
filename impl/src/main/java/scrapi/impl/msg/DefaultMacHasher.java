@@ -22,7 +22,7 @@ import scrapi.msg.MacAlgorithm;
 import javax.crypto.Mac;
 import java.security.Provider;
 
-class DefaultMacHasher<A extends MacAlgorithm<?, ?, Digest<A>, ?, ?>> extends AbstractMacHasher<Digest<A>, A> {
+class DefaultMacHasher<A extends MacAlgorithm<?, ?, ?, Digest<A>, ?>> extends AbstractMacHasher<Digest<A>, A> {
 
     DefaultMacHasher(A alg, Mac mac) {
         super(alg, mac);

@@ -27,7 +27,7 @@ import java.nio.ByteBuffer;
 import java.security.MessageDigest;
 import java.security.Provider;
 
-abstract class AbstractMacHasher<D extends Digest<A>, A extends MacAlgorithm<?, ?, D, ?, ?>>
+abstract class AbstractMacHasher<D extends Digest<A>, A extends MacAlgorithm<?, ?, ?, D, ?>>
         extends AbstractMessageConsumer<Hasher<D>> implements Hasher<D> {
 
     public static final String JCA_KEY_NOT_NULL = SymmetricKey.class.getName() + " toJcaKey() value cannot be null.";

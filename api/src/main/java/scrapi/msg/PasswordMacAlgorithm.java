@@ -24,5 +24,5 @@ public interface PasswordMacAlgorithm<
         D extends PasswordDigest<T>,
         T extends PasswordMacAlgorithm<S, D, T>
         >
-        extends MacAlgorithm<Password, S, D, PasswordGenerator, T> {
+        extends MacAlgorithm<Password, S, PasswordGenerator, D, T> {
 }

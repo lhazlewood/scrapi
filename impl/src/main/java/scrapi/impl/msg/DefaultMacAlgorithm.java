@@ -29,15 +29,15 @@ import java.util.function.Consumer;
 class DefaultMacAlgorithm extends AbstractMacAlgorithm<
         OctetSecretKey,
         DefaultKeyable<OctetSecretKey>,
-        Digest<DefaultMacAlgorithm>,
         DefaultOctetSecretKeyGenerator,
+        Digest<DefaultMacAlgorithm>,
         DefaultMacAlgorithm
         >
         implements UnaryMacAlgorithm<
         OctetSecretKey,
         DefaultKeyable<OctetSecretKey>,
-        Digest<DefaultMacAlgorithm>,
         DefaultOctetSecretKeyGenerator,
+        Digest<DefaultMacAlgorithm>,
         DefaultMacAlgorithm
         > {
 

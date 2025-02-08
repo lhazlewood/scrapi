@@ -106,7 +106,7 @@
         <bouncycastle.version>1.76</bouncycastle.version>
         <easymock.version>3.6</easymock.version>
         <junit.version>5.10.0</junit.version>
-        <clover.version>4.5.0</clover.version>
+        <clover.version>4.5.2</clover.version>
         <clover.db>${scrapi.root}/target/clover/clover.db</clover.db>
         <surefire.argLine/>
         <test.addOpens>

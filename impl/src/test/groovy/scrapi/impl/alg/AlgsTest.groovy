@@ -42,8 +42,8 @@ class AlgsTest {
         Security.addProvider(new BouncyCastleProvider())
         def providers = Security.getProviders()
         def services = providers.collectMany { it.getServices() }
-        def macServices = services.findAll { s -> s.type.equals('Mac') /*&& !s.algorithm.startsWith('Ssl')*/ }
-        macServices.eachWithIndex { Provider.Service service, int i ->
+        services = services.findAll { s -> s.type.equals('Mac') /*&& !s.algorithm.startsWith('Ssl')*/ }
+        services.eachWithIndex { Provider.Service service, int i ->
             println "${i + 1}: $service"
         }
     }

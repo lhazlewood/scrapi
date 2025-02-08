@@ -35,22 +35,18 @@ public interface HashAlgorithm extends IntegrityAlgorithm, Sized, Supplier<Hashe
         return HashAlgs.REGISTRY;
     }
 
-    static HashAlgorithm get(String id) {
-        return registry().forKey(id);
-    }
-
-    HashAlgorithm MD2 = get("MD2");
-    HashAlgorithm MD5 = get("MD5");
-    HashAlgorithm SHA_1 = get("SHA-1");
-    HashAlgorithm SHA_224 = get("SHA-224");
-    HashAlgorithm SHA_256 = get("SHA-256");
-    HashAlgorithm SHA_384 = get("SHA-384");
-    HashAlgorithm SHA_512 = get("SHA-512");
-    HashAlgorithm SHA_512_224 = get("SHA-512/224");
-    HashAlgorithm SHA_512_256 = get("SHA-512/256");
-    HashAlgorithm SHA3_224 = get("SHA3-224");
-    HashAlgorithm SHA3_256 = get("SHA3-256");
-    HashAlgorithm SHA3_384 = get("SHA3-384");
-    HashAlgorithm SHA3_512 = get("SHA3-512");
+    HashAlgorithm MD2 = registry().forKey("MD2");
+    HashAlgorithm MD5 = registry().forKey("MD5");
+    HashAlgorithm SHA_1 = registry().forKey("SHA-1");
+    HashAlgorithm SHA_224 = registry().forKey("SHA-224");
+    HashAlgorithm SHA_256 = registry().forKey("SHA-256");
+    HashAlgorithm SHA_384 = registry().forKey("SHA-384");
+    HashAlgorithm SHA_512 = registry().forKey("SHA-512");
+    HashAlgorithm SHA_512_224 = registry().forKey("SHA-512/224");
+    HashAlgorithm SHA_512_256 = registry().forKey("SHA-512/256");
+    HashAlgorithm SHA3_224 = registry().forKey("SHA3-224");
+    HashAlgorithm SHA3_256 = registry().forKey("SHA3-256");
+    HashAlgorithm SHA3_384 = registry().forKey("SHA3-384");
+    HashAlgorithm SHA3_512 = registry().forKey("SHA3-512");
 
 }

@@ -37,8 +37,8 @@ import java.util.function.Consumer;
 class DefaultPasswordMacAlgorithm extends AbstractMacAlgorithm<
         Password,
         DefaultPasswordMacAlgorithm.Builder,
-        PasswordDigest<DefaultPasswordMacAlgorithm>,
         PasswordGenerator,
+        PasswordDigest<DefaultPasswordMacAlgorithm>,
         DefaultPasswordMacAlgorithm
         >
         implements PasswordMacAlgorithm<

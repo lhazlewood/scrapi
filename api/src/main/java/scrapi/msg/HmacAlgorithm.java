@@ -1,5 +1,5 @@
 /*
- * Copyright © 2024 Les Hazlewood
+ * Copyright © 2025 Les Hazlewood
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,9 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package scrapi.key;
+package scrapi.msg;
 
-import java.util.function.Supplier;
+import scrapi.key.KeyGenerator;
+import scrapi.key.Keyable;
+import scrapi.key.OctetSecretKey;
 
-public interface Pbkdf<T extends Pbkdf<T>> extends PasswordStretcher<T>, Supplier<OctetSecretKey> {
+public interface HmacAlgorithm<P extends Keyable<OctetSecretKey, P>, G extends KeyGenerator<OctetSecretKey, G>>
+        extends UnaryMacAlgorithm<
+        OctetSecretKey,
+        P,
+        G,
+        Digest<HmacAlgorithm<P, G>>,
+        HmacAlgorithm<P, G>> {
 }

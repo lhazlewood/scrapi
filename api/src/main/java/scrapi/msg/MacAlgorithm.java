@@ -25,9 +25,9 @@ import java.util.function.Consumer;
 public interface MacAlgorithm<
         K extends SymmetricKey,
         P extends Keyable<K, P>,
-        D extends Digest<T>,
         G extends KeyGenerator<K, G>,
-        T extends MacAlgorithm<K, P, D, G, T>
+        D extends Digest<T>,
+        T extends MacAlgorithm<K, P, G, D, T>
         >
         extends AuthenticityAlgorithm<K, K, P, P, D, Hasher<D>, Hasher<D>, G, T>, Sized {
 

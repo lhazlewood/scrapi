@@ -1,5 +1,5 @@
 /*
- * Copyright © 2024 Les Hazlewood
+ * Copyright © 2025 Les Hazlewood
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,9 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package scrapi.key;
+package scrapi.msg;
 
-public interface Encapsulation<K extends ConfidentialKey<?>> extends Keyed<K> {
+import scrapi.key.PasswordStretcher;
 
-    byte[] ciphertext();
+public interface PbeMacAlgorithm extends PasswordMacAlgorithm<PbeMacAlgorithm.Stretcher, PasswordDigest<PbeMacAlgorithm>, PbeMacAlgorithm> {
+
+    interface Stretcher extends PasswordStretcher<Stretcher> {
+    }
 }

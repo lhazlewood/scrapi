@@ -33,4 +33,8 @@ public interface Keyed<K extends Key<?>> {
      * @return a key.
      */
     K key();
+
+    static <K extends Key<?>> Keyed<K> of(K key) {
+        return new DefaultKeyResult<>(key);
+    }
 }

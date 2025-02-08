@@ -29,11 +29,11 @@ import java.util.function.Supplier;
 abstract class AbstractMacAlgorithm<
         K extends SymmetricKey,
         DB extends Keyable<K, DB>,
-        D extends Digest<T>,
         G extends KeyGenerator<K, G>,
-        T extends MacAlgorithm<K, DB, D, G, T>
+        D extends Digest<T>,
+        T extends MacAlgorithm<K, DB, G, D, T>
         >
-        extends AbstractDigestAlgorithm implements MacAlgorithm<K, DB, D, G, T> {
+        extends AbstractDigestAlgorithm implements MacAlgorithm<K, DB, G, D, T> {
 
     private final Supplier<G> keygen;
 
