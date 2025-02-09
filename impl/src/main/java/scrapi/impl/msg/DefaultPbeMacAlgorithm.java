@@ -38,7 +38,7 @@ import java.util.function.Consumer;
 
 class DefaultPbeMacAlgorithm extends AbstractMacAlgorithm<
         Password,
-        PbeMacAlgorithm.Stretcher,
+        PbeMacAlgorithm.Params,
         PasswordGenerator,
         PasswordDigest<PbeMacAlgorithm>,
         PbeMacAlgorithm
@@ -74,7 +74,7 @@ class DefaultPbeMacAlgorithm extends AbstractMacAlgorithm<
     }
 
     @Override
-    public Hasher<PasswordDigest<PbeMacAlgorithm>> with(Consumer<PbeMacAlgorithm.Stretcher> p) {
+    public Hasher<PasswordDigest<PbeMacAlgorithm>> with(Consumer<Params> p) {
         Builder builder = new Builder(this);
         builder.provider(this.PROVIDER).cost(this.DEFAULT_ITERATIONS);
         p.accept(builder);
@@ -87,7 +87,7 @@ class DefaultPbeMacAlgorithm extends AbstractMacAlgorithm<
         return obj instanceof PasswordMacAlgorithm && super.equals(obj);
     }
 
-    static class Builder extends KeyableSupport<Password, PbeMacAlgorithm.Stretcher> implements PbeMacAlgorithm.Stretcher {
+    static class Builder extends KeyableSupport<Password, Params> implements Params {
 
         private final PbeMacAlgorithm alg;
         private byte[] salt;
@@ -99,13 +99,13 @@ class DefaultPbeMacAlgorithm extends AbstractMacAlgorithm<
         }
 
         @Override
-        public PbeMacAlgorithm.Stretcher salt(byte[] salt) {
+        public Params salt(byte[] salt) {
             this.salt = Assert.notEmpty(salt, "salt cannot be null or empty").clone();
             return self();
         }
 
         @Override
-        public PbeMacAlgorithm.Stretcher cost(int i) {
+        public Params cost(int i) {
             this.iterations = DefaultPassword.assertIterationsGte(i);
             return self();
         }

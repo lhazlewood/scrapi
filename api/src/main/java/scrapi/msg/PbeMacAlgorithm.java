@@ -18,9 +18,9 @@ package scrapi.msg;
 import scrapi.key.PasswordStretcher;
 import scrapi.lang.Registry;
 
-public interface PbeMacAlgorithm extends PasswordMacAlgorithm<PbeMacAlgorithm.Stretcher, PasswordDigest<PbeMacAlgorithm>, PbeMacAlgorithm> {
+public interface PbeMacAlgorithm extends PasswordMacAlgorithm<PbeMacAlgorithm.Params, PasswordDigest<PbeMacAlgorithm>, PbeMacAlgorithm> {
 
-    interface Stretcher extends PasswordStretcher<Stretcher> {
+    interface Params extends PasswordStretcher<Params> {
     }
 
     /**
