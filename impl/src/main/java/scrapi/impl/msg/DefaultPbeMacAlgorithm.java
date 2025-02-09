@@ -16,15 +16,17 @@
 package scrapi.impl.msg;
 
 import scrapi.alg.Size;
+import scrapi.alg.Sized;
 import scrapi.impl.key.DefaultPassword;
 import scrapi.impl.key.DefaultPasswordGenerator;
 import scrapi.impl.key.KeyableSupport;
 import scrapi.key.Password;
 import scrapi.key.PasswordGenerator;
-import scrapi.key.PasswordStretcher;
 import scrapi.msg.Hasher;
+import scrapi.msg.HmacAlgorithm;
 import scrapi.msg.PasswordDigest;
 import scrapi.msg.PasswordMacAlgorithm;
+import scrapi.msg.PbeMacAlgorithm;
 import scrapi.util.Assert;
 import scrapi.util.Bytes;
 
@@ -34,28 +36,45 @@ import javax.crypto.spec.SecretKeySpec;
 import java.security.Provider;
 import java.util.function.Consumer;
 
-class DefaultPasswordMacAlgorithm extends AbstractMacAlgorithm<
+class DefaultPbeMacAlgorithm extends AbstractMacAlgorithm<
         Password,
-        DefaultPasswordMacAlgorithm.Builder,
+        PbeMacAlgorithm.Stretcher,
         PasswordGenerator,
-        PasswordDigest<DefaultPasswordMacAlgorithm>,
-        DefaultPasswordMacAlgorithm
+        PasswordDigest<PbeMacAlgorithm>,
+        PbeMacAlgorithm
         >
-        implements PasswordMacAlgorithm<
-        DefaultPasswordMacAlgorithm.Builder,
-        PasswordDigest<DefaultPasswordMacAlgorithm>,
-        DefaultPasswordMacAlgorithm
-        > {
+        implements PbeMacAlgorithm {
+
+    private static int defaultIterations(Sized alg) {
+        int defaultIterations; // https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html
+        int bits = alg.size().bits();
+        if (bits >= 512) {
+            defaultIterations = 210_000;
+        } else if (bits >= 384) {
+            defaultIterations = 415_000;
+        } else if (bits >= 256) {
+            defaultIterations = 600_000;
+        } else if (bits >= 224) {
+            defaultIterations = 900_000;
+        } else {
+            defaultIterations = 1_300_000;
+        }
+        return defaultIterations;
+    }
 
     protected final int DEFAULT_ITERATIONS;
 
-    DefaultPasswordMacAlgorithm(String id, Provider provider, Size digestSize, int defaultIterations) {
+    DefaultPbeMacAlgorithm(HmacAlgorithm hmacAlg) {
+        this("PBEWith" + hmacAlg.id(), null, hmacAlg.size(), defaultIterations(hmacAlg));
+    }
+
+    private DefaultPbeMacAlgorithm(String id, Provider provider, Size digestSize, int defaultIterations) {
         super(id, provider, digestSize, DefaultPasswordGenerator::new);
         this.DEFAULT_ITERATIONS = DefaultPassword.assertIterationsGte(defaultIterations);
     }
 
     @Override
-    public Hasher<PasswordDigest<DefaultPasswordMacAlgorithm>> with(Consumer<Builder> p) {
+    public Hasher<PasswordDigest<PbeMacAlgorithm>> with(Consumer<PbeMacAlgorithm.Stretcher> p) {
         Builder builder = new Builder(this);
         builder.provider(this.PROVIDER).cost(this.DEFAULT_ITERATIONS);
         p.accept(builder);
@@ -68,30 +87,30 @@ class DefaultPasswordMacAlgorithm extends AbstractMacAlgorithm<
         return obj instanceof PasswordMacAlgorithm && super.equals(obj);
     }
 
-    static class Builder extends KeyableSupport<Password, Builder> implements PasswordStretcher<Builder> {
+    static class Builder extends KeyableSupport<Password, PbeMacAlgorithm.Stretcher> implements PbeMacAlgorithm.Stretcher {
 
-        private final DefaultPasswordMacAlgorithm alg;
+        private final PbeMacAlgorithm alg;
         private byte[] salt;
         private int iterations;
 
-        private Builder(DefaultPasswordMacAlgorithm alg) {
+        private Builder(PbeMacAlgorithm alg) {
             super(Assert.notNull(alg, "alg must not be null.").id());
             this.alg = alg;
         }
 
         @Override
-        public Builder salt(byte[] salt) {
+        public PbeMacAlgorithm.Stretcher salt(byte[] salt) {
             this.salt = Assert.notEmpty(salt, "salt cannot be null or empty").clone();
             return self();
         }
 
         @Override
-        public Builder cost(int i) {
+        public PbeMacAlgorithm.Stretcher cost(int i) {
             this.iterations = DefaultPassword.assertIterationsGte(i);
             return self();
         }
 
-        private Hasher<PasswordDigest<DefaultPasswordMacAlgorithm>> get() {
+        private Hasher<PasswordDigest<PbeMacAlgorithm>> get() {
             Assert.notNull(this.key, "Password cannot be null or empty.");
             DefaultPassword.assertIterationsGte(this.iterations);
             final byte[] salt = !Bytes.isEmpty(this.salt) ? this.salt : Bytes.random(this.alg.size().bytes());

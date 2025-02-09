@@ -18,12 +18,38 @@ package scrapi.msg;
 import scrapi.key.KeyGenerator;
 import scrapi.key.Keyable;
 import scrapi.key.OctetSecretKey;
+import scrapi.lang.Registry;
 
-public interface HmacAlgorithm<P extends Keyable<OctetSecretKey, P>, G extends KeyGenerator<OctetSecretKey, G>>
-        extends UnaryMacAlgorithm<
+public interface HmacAlgorithm extends UnaryMacAlgorithm<
         OctetSecretKey,
-        P,
-        G,
-        Digest<HmacAlgorithm<P, G>>,
-        HmacAlgorithm<P, G>> {
+        Keyable.Param<OctetSecretKey>,
+        KeyGenerator.Basic<OctetSecretKey>,
+        Digest<HmacAlgorithm>,
+        HmacAlgorithm> {
+
+    /**
+     * Returns a registry of all
+     * <a href="https://docs.oracle.com/en/java/javase/21/docs/specs/security/standard-names.html#messagedigest-algorithms">Java
+     * Standard HMAC Message Digest Algorithms</a>.
+     *
+     * @return a registry of all
+     * <a href="https://docs.oracle.com/en/java/javase/21/docs/specs/security/standard-names.html#messagedigest-algorithms">Java
+     * Standard HMAC Message Digest Algorithms</a>.
+     */
+    static Registry<String, HmacAlgorithm> registry() {
+        return HmacAlgs.REGISTRY;
+    }
+
+    HmacAlgorithm HMD5 = registry().forKey("HmacMD5");
+    HmacAlgorithm HS1 = registry().forKey("HmacSHA1");
+    HmacAlgorithm HS224 = registry().forKey("HmacSHA224");
+    HmacAlgorithm HS256 = registry().forKey("HmacSHA256");
+    HmacAlgorithm HS384 = registry().forKey("HmacSHA384");
+    HmacAlgorithm HS512 = registry().forKey("HmacSHA512");
+    HmacAlgorithm HS512_224 = registry().forKey("HmacSHA512/224");
+    HmacAlgorithm HS512_256 = registry().forKey("HmacSHA512/256");
+    HmacAlgorithm HS3_224 = registry().forKey("HmacSHA3-224");
+    HmacAlgorithm HS3_256 = registry().forKey("HmacSHA3-256");
+    HmacAlgorithm HS3_384 = registry().forKey("HmacSHA3-384");
+    HmacAlgorithm HS3_512 = registry().forKey("HmacSHA3-512");
 }

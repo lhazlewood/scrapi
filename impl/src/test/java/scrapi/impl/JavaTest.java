@@ -21,6 +21,7 @@ import scrapi.key.Password;
 import scrapi.key.RsaPrivateKey;
 import scrapi.key.RsaPublicKey;
 import scrapi.msg.HashAlgorithm;
+import scrapi.msg.HmacAlgorithm;
 
 // various tests using the direct Java (not Groovy) APIs.
 public class JavaTest {
@@ -36,12 +37,12 @@ public class JavaTest {
 
         HashAlgorithm.SHA3_256.get().apply(input).test(input);
 
-        Algs.Mac.HMD5.with(sk).apply(input).get().octets();
+        HmacAlgorithm.HMD5.with(sk).apply(input).get().octets();
 
-        Algs.Mac.HMD5.with(c -> c.key(sk)).apply(input).get();
-        Algs.Mac.HS256.with(sk).apply(input).get().octets();
+        HmacAlgorithm.HMD5.with(c -> c.key(sk)).apply(input).get();
+        HmacAlgorithm.HS256.with(sk).apply(input).get().octets();
 
-        Algs.Mac.PBEHS1.with(c -> c.key(pass).salt(salt).cost(iterations)).apply(input).get();
+        //HmacAlgorithm.PBEHS1.with(c -> c.key(pass).salt(salt).cost(iterations)).apply(input).get();
 
         Algs.Sig.RS256.with(c -> c.key(priv)).apply(input).get().octets();
         byte[] signature = Algs.Sig.RS256.with(priv).apply(input).get().octets();

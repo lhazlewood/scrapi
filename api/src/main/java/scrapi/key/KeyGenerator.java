@@ -30,4 +30,7 @@ import java.util.function.Supplier;
  */
 public interface KeyGenerator<K extends ConfidentialKey<?>, T extends KeyGenerator<K, T>>
         extends Providable<T>, Randomizable<T>, Supplier<K> {
+
+    interface Basic<K extends ConfidentialKey<?>> extends KeyGenerator<K, Basic<K>> {
+    }
 }

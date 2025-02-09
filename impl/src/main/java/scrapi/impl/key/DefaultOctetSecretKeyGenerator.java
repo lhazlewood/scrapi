@@ -21,8 +21,8 @@ import scrapi.key.OctetSecretKey;
 
 import javax.crypto.SecretKey;
 
-public class DefaultOctetSecretKeyGenerator extends AbstractKeyGenerator<OctetSecretKey, DefaultOctetSecretKeyGenerator>
-        implements KeyGenerator<OctetSecretKey, DefaultOctetSecretKeyGenerator> {
+public class DefaultOctetSecretKeyGenerator extends AbstractKeyGenerator<OctetSecretKey, KeyGenerator.Basic<OctetSecretKey>>
+        implements KeyGenerator<OctetSecretKey, KeyGenerator.Basic<OctetSecretKey>>, KeyGenerator.Basic<OctetSecretKey> {
 
     public DefaultOctetSecretKeyGenerator(String jcaName, Size minSize) {
         super(jcaName, minSize, minSize);

@@ -35,4 +35,6 @@ public interface Keyable<K extends Key<?>, T> {
      */
     T key(K key);
 
+    interface Param<K extends Key<?>> extends Keyable<K, Param<K>> {}
+
 }

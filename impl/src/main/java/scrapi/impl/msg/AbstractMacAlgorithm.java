@@ -20,8 +20,10 @@ import scrapi.key.KeyGenerator;
 import scrapi.key.Keyable;
 import scrapi.key.SymmetricKey;
 import scrapi.msg.Digest;
+import scrapi.msg.HashAlgorithm;
 import scrapi.msg.MacAlgorithm;
 import scrapi.util.Assert;
+import scrapi.util.Strings;
 
 import java.security.Provider;
 import java.util.function.Supplier;
@@ -34,6 +36,14 @@ abstract class AbstractMacAlgorithm<
         T extends MacAlgorithm<K, DB, G, D, T>
         >
         extends AbstractDigestAlgorithm implements MacAlgorithm<K, DB, G, D, T> {
+
+    protected static String suffix(HashAlgorithm alg) {
+        String id = alg.id();
+        if (!id.startsWith("SHA3-")) {
+            id = id.replace("-", Strings.EMPTY);
+        }
+        return id;
+    }
 
     private final Supplier<G> keygen;
 

@@ -16,8 +16,9 @@
 package scrapi.impl.key;
 
 import scrapi.key.Key;
+import scrapi.key.Keyable;
 
-public final class DefaultKeyable<K extends Key<?>> extends KeyableSupport<K, DefaultKeyable<K>> {
+public final class DefaultKeyable<K extends Key<?>> extends KeyableSupport<K, Keyable.Param<K>> implements Keyable.Param<K> {
 
     public DefaultKeyable(String jcaName) {
         super(jcaName);

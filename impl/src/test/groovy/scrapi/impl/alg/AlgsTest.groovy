@@ -31,7 +31,6 @@ class AlgsTest {
     void privateCtors() {
         new Algs()
         new HashAlgs()
-        new Algs.Mac()
         new Algs.Sig()
     }
 
@@ -42,7 +41,10 @@ class AlgsTest {
         Security.addProvider(new BouncyCastleProvider())
         def providers = Security.getProviders()
         def services = providers.collectMany { it.getServices() }
-        services = services.findAll { s -> s.type.equals('Mac') /*&& !s.algorithm.startsWith('Ssl')*/ }
+        services = services.findAll { s ->
+            def alg = s.algorithm.toLowerCase(Locale.US)
+            s.type.equals('Mac') && !alg.startsWith('ssl') && alg.startsWith('pbe')// && !alg.startsWith('hmacpbe')
+        }
         services.eachWithIndex { Provider.Service service, int i ->
             println "${i + 1}: $service"
         }
