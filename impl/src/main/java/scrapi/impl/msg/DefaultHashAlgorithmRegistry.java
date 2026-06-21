@@ -19,12 +19,12 @@ import scrapi.impl.lang.IdentifiableRegistry;
 import scrapi.msg.HashAlgorithm;
 import scrapi.util.Collections;
 
-public final class StandardHashAlgorithms extends IdentifiableRegistry<String, HashAlgorithm> {
+public final class DefaultHashAlgorithmRegistry extends IdentifiableRegistry<String, HashAlgorithm> {
 
     // ----------------------------------------------------------------------------------------------------------
     // https://docs.oracle.com/en/java/javase/21/docs/specs/security/standard-names.html#messagedigest-algorithms
     // ----------------------------------------------------------------------------------------------------------
-    public StandardHashAlgorithms() {
+    public DefaultHashAlgorithmRegistry() {
         super("Hash Algorithm", Collections.<HashAlgorithm>of(
                 new DefaultHashAlgorithm("MD2"),
                 new DefaultHashAlgorithm("MD5"),

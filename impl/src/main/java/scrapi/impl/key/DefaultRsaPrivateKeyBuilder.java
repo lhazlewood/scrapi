@@ -133,7 +133,7 @@ public class DefaultRsaPrivateKeyBuilder
     }
 
     @Override
-    public RsaPrivateKey.Builder add(Consumer<RsaPrimeFactor.Mutator<?>> c) {
+    public RsaPrivateKey.Builder add(Consumer<RsaPrimeFactor.Params<?>> c) {
         Assert.notNull(c, "Consumer cannot be null.");
         RsaPrimeFactor.Builder b = RsaPrimeFactor.builder();
         c.accept(b);

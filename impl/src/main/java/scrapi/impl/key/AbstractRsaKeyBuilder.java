@@ -22,8 +22,8 @@ import scrapi.key.RsaKey;
 import java.math.BigInteger;
 import java.util.function.Supplier;
 
-abstract class AbstractRsaKeyBuilder<K extends RsaKey<?>, T extends Providable<T> & Supplier<K> & RsaKey.Mutator<T>>
-        extends AbstractKeyFactory<K, T> implements RsaKey.Mutator<T> {
+abstract class AbstractRsaKeyBuilder<K extends RsaKey<?>, T extends Providable<T> & Supplier<K> & RsaKey.Params<T>>
+        extends AbstractKeyFactory<K, T> implements RsaKey.Params<T> {
 
     private static final String SIZE_NAME = AbstractRsaKey.N.name() + " size";
 

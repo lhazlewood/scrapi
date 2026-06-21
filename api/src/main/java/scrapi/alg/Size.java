@@ -116,6 +116,6 @@ public sealed interface Size extends Comparable<Size> permits DefaultSize {
      * @return the Size of the specified {@code bytes} array.
      */
     static Size of(byte[] bytes) {
-        return DefaultSize.bytes(Bytes.length(bytes));
+        return bytes(Bytes.length(bytes));
     }
 }

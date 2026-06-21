@@ -35,7 +35,7 @@ public interface RsaKey<K extends java.security.Key> extends AsymmetricKey<K> {
      */
     BigInteger publicExponent();
 
-    interface Mutator<T extends Mutator<T>> {
+    interface Params<T extends Params<T>> {
 
         T modulus(BigInteger modulus);
 

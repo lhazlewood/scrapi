@@ -21,7 +21,7 @@ import java.util.Optional;
 
 public interface Key<K extends java.security.Key> {
 
-    //TODO: I think we need metadata representable here, for example a key's intended/allowed usages
+    //TODO: I think we need optional metadata representable here, for example a key's intended/allowed usages
     // and other metadata important for key usage, e.g. the key's algorithm, family, etc.
 
     Optional<Size> size();

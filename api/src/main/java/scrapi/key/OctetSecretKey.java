@@ -35,11 +35,11 @@ public interface OctetSecretKey extends SymmetricKey {
 
     Optional<byte[]> octets();
 
-    interface Mutator<T extends Mutator<T>> {
+    interface Params<T extends Params<T>> {
         T octets(byte[] octets);
     }
 
-    interface Builder extends Mutator<Builder>, Providable<Builder>, Supplier<OctetSecretKey> {
+    interface Builder extends Params<Builder>, Providable<Builder>, Supplier<OctetSecretKey> {
     }
 
 }

@@ -36,7 +36,7 @@ abstract class AbstractKey<K extends java.security.Key> implements Key<K>, scrap
     static final Cleaner cleaner = Cleaner.create();
 
     protected final K key;
-    private transient boolean destroyed;
+    private transient volatile boolean destroyed;
     private final Cleaner.Cleanable cleanable;
 
     protected AbstractKey(final K key) {

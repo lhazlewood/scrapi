@@ -24,6 +24,6 @@ final class HashAlgs {
     private HashAlgs() {
     }
 
-    private static final String IMPL_CLASSNAME = "scrapi.impl.msg.StandardHashAlgorithms";
+    private static final String IMPL_CLASSNAME = "scrapi.impl.msg.DefaultHashAlgorithmRegistry";
     static final Registry<String, HashAlgorithm> REGISTRY = Classes.newInstance(IMPL_CLASSNAME);
 }

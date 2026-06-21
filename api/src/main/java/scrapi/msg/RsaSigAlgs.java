@@ -24,6 +24,6 @@ final class RsaSigAlgs {
     private RsaSigAlgs() {
     }
 
-    private static final String IMPL_CLASSNAME = "scrapi.impl.msg.StandardRsaSignatureAlgorithms";
+    private static final String IMPL_CLASSNAME = "scrapi.impl.msg.DefaultRsaSignatureAlgorithmRegistry";
     static final Registry<String, RsaSignatureAlgorithm<?, ?, ?>> REGISTRY = Classes.newInstance(IMPL_CLASSNAME);
 }

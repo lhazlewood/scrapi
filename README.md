@@ -238,7 +238,7 @@ Additionally, even if a key's encoded bytes are not available (e.g. external in 
 to supply length metadata even without supplying the key material/encoded bytes, but `java.security.Key` and its
 sub-interfaces do not support such introspection.
 
-Consequently, all `scrapi.key.Key` instances have a `Optional<Integer> bitLength()` method to ensure key 
+Consequently, all `scrapi.key.Key` instances have a `Optional<Size> size()` method to ensure key 
 size can be represented if possible, even if they key material may not be present.
 
 #### Public Key derivation

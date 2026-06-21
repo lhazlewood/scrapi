@@ -46,7 +46,7 @@ public interface RsaPrimeFactor {
      */
     BigInteger coefficient();
 
-    interface Mutator<T extends Mutator<T>> {
+    interface Params<T extends Params<T>> {
 
         T prime(BigInteger prime);
 
@@ -55,7 +55,7 @@ public interface RsaPrimeFactor {
         T coefficient(BigInteger coefficient);
     }
 
-    interface Builder extends Mutator<Builder>, Supplier<RsaPrimeFactor> {
+    interface Builder extends Params<Builder>, Supplier<RsaPrimeFactor> {
     }
 
     static Builder builder() {

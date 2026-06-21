@@ -32,11 +32,11 @@ public interface PrivateKey<K extends java.security.PrivateKey, P extends Public
         return new KeyPair(jcaPub, jcaPriv);
     }
 
-    interface Mutator<U extends PublicKey<?>, T extends Mutator<U, T>> {
+    interface Params<U extends PublicKey<?>, T extends Params<U, T>> {
         T publicKey(U publicKey);
     }
 
     interface Builder<P extends PublicKey<?>, K extends PrivateKey<?, P>, T extends Builder<P, K, T>>
-            extends Mutator<P, T>, Providable<T>, Supplier<K> {
+            extends Params<P, T>, Providable<T>, Supplier<K> {
     }
 }

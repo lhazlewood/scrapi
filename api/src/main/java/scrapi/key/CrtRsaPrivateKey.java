@@ -76,7 +76,7 @@ public interface CrtRsaPrivateKey extends RsaPrivateKey {
      */
     List<RsaPrimeFactor> otherFactors();
 
-    interface Mutator<T extends Mutator<T>> extends RsaPrivateKey.Mutator<T> {
+    interface Params<T extends Params<T>> extends RsaPrivateKey.Params<T> {
 
         T firstFactor(BigInteger firstFactor);
 
@@ -90,9 +90,9 @@ public interface CrtRsaPrivateKey extends RsaPrivateKey {
 
         T add(RsaPrimeFactor factor);
 
-        T add(Consumer<RsaPrimeFactor.Mutator<?>> c);
+        T add(Consumer<RsaPrimeFactor.Params<?>> c);
     }
 
-    interface Builder extends Mutator<Builder>, PrivateKey.Builder<RsaPublicKey, CrtRsaPrivateKey, Builder> {
+    interface Builder extends Params<Builder>, PrivateKey.Builder<RsaPublicKey, CrtRsaPrivateKey, Builder> {
     }
 }

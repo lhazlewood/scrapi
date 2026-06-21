@@ -25,11 +25,11 @@ import java.security.MessageDigest
 import static org.junit.jupiter.api.Assertions.assertEquals
 import static org.junit.jupiter.api.Assertions.assertTrue
 
-class StandardHashAlgorithmsTest {
+class HashAlgorithmTest {
 
     @Test
     void equality() {
-        assertEquals HashAlgorithm.registry(), new StandardHashAlgorithms()
+        assertEquals HashAlgorithm.registry(), new DefaultHashAlgorithmRegistry()
     }
 
     @Test

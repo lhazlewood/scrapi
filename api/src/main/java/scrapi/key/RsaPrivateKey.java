@@ -30,11 +30,11 @@ public interface RsaPrivateKey extends PrivateKey<java.security.PrivateKey, RsaP
      */
     Optional<BigInteger> privateExponent();
 
-    interface Mutator<T extends Mutator<T>> extends RsaKey.Mutator<T>, PrivateKey.Mutator<RsaPublicKey, T> {
+    interface Params<T extends Params<T>> extends RsaKey.Params<T>, PrivateKey.Params<RsaPublicKey, T> {
         T privateExponent(BigInteger privateExponent);
     }
 
-    interface Builder extends PrivateKey.Builder<RsaPublicKey, RsaPrivateKey, Builder>, CrtRsaPrivateKey.Mutator<Builder> {
+    interface Builder extends PrivateKey.Builder<RsaPublicKey, RsaPrivateKey, Builder>, CrtRsaPrivateKey.Params<Builder> {
     }
 
 }

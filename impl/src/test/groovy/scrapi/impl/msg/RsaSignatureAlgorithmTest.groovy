@@ -16,9 +16,9 @@
 package scrapi.impl.msg
 
 import org.junit.jupiter.api.Test
-import scrapi.alg.Algs
 import scrapi.alg.Size
 import scrapi.key.RsaPrivateKey
+import scrapi.msg.RsaSignatureAlgorithm
 import scrapi.msg.SignatureAlgorithm
 import scrapi.util.Bytes
 
@@ -28,41 +28,45 @@ import java.security.Signature
 import static org.junit.jupiter.api.Assertions.assertEquals
 import static org.junit.jupiter.api.Assertions.assertTrue
 
-class StandardSignatureAlgorithmsTest {
+class RsaSignatureAlgorithmTest {
 
     static void assertId(String algId, SignatureAlgorithm alg) {
         assertEquals algId, alg.id()
     }
 
+    protected static Collection<RsaSignatureAlgorithm> values() {
+        return RsaSignatureAlgorithm.registry().values();
+    }
+
     @Test
     void equality() {
-        assertEquals Algs.Sig.get(), new StandardSignatureAlgorithms()
+        assertEquals RsaSignatureAlgorithm.registry(), new DefaultRsaSignatureAlgorithmRegistry()
     }
 
     @Test
     void count() {
-        assertEquals 11, Algs.Sig.get().size()
+        assertEquals 11, values().size()
     }
 
     @SuppressWarnings('GrDeprecatedAPIUsage')
     @Test
-    void instances() {
-        assertId 'SHA1withRSA', Algs.Sig.RS1
-        assertId 'SHA224withRSA', Algs.Sig.RS224
-        assertId 'SHA256withRSA', Algs.Sig.RS256
-        assertId 'SHA384withRSA', Algs.Sig.RS384
-        assertId 'SHA512withRSA', Algs.Sig.RS512
-        assertId 'SHA512/224withRSA', Algs.Sig.RS512_224
-        assertId 'SHA512/256withRSA', Algs.Sig.RS512_256
-        assertId 'SHA3-224withRSA', Algs.Sig.RS3_224
-        assertId 'SHA3-256withRSA', Algs.Sig.RS3_256
-        assertId 'SHA3-384withRSA', Algs.Sig.RS3_384
-        assertId 'SHA3-512withRSA', Algs.Sig.RS3_512
+    void ids() {
+        assertId 'SHA1withRSA', RsaSignatureAlgorithm.RS1
+        assertId 'SHA224withRSA', RsaSignatureAlgorithm.RS224
+        assertId 'SHA256withRSA', RsaSignatureAlgorithm.RS256
+        assertId 'SHA384withRSA', RsaSignatureAlgorithm.RS384
+        assertId 'SHA512withRSA', RsaSignatureAlgorithm.RS512
+        assertId 'SHA512/224withRSA', RsaSignatureAlgorithm.RS512_224
+        assertId 'SHA512/256withRSA', RsaSignatureAlgorithm.RS512_256
+        assertId 'SHA3-224withRSA', RsaSignatureAlgorithm.RS3_224
+        assertId 'SHA3-256withRSA', RsaSignatureAlgorithm.RS3_256
+        assertId 'SHA3-384withRSA', RsaSignatureAlgorithm.RS3_384
+        assertId 'SHA3-512withRSA', RsaSignatureAlgorithm.RS3_512
     }
 
     @Test
     void digestNoData() {
-        Algs.Sig.get().values().each { SignatureAlgorithm alg ->
+        values().each { SignatureAlgorithm alg ->
             def size = Size.bits(2048) // keep build times short
             def priv = alg.keygen().size(size).get() as RsaPrivateKey
             byte[] sig = alg.with(priv).get().octets()
@@ -80,7 +84,7 @@ class StandardSignatureAlgorithmsTest {
 
     @Test
     void digestOneByte() {
-        Algs.Sig.get().values().each { SignatureAlgorithm alg ->
+        values().each { SignatureAlgorithm alg ->
             def size = Size.bits(2048) // keep build times short
             def priv = alg.keygen().size(size).get() as RsaPrivateKey
 
